@@ -226,6 +226,10 @@ MVP の考え方：初心者の私が RUNTEQ で学んだ **基本中の基本**
 - デプロイ先：MVP の公開の Issue で、サポートの続いているサービスを比べて決める（基礎で公開した経験がないため、この Issue には余裕を持たせる）
 - 使用予定ライブラリ：bcrypt（ログイン）、rspec-rails・factory_bot_rails・capybara（テスト）。本リリースで carrierwave（画像）、ransack（検索）
 
+**画面遷移図（Figma）**
+
+https://www.figma.com/design/3SMp8sQ41aKrFwpXr2hHTG/%E7%94%BB%E9%9D%A2%E9%81%B7%E7%A7%BB%E5%9B%B3%E4%BD%9C%E6%88%90%E3%83%AF%E3%83%BC%E3%82%AF--%E3%82%B3%E3%83%94%E3%83%BC-?node-id=1-444
+
 **データベースの設計（ER図）と設計の意図**
 
 ![MOGA ER図（MVP）](MOGA_ER図_下書き.png)
