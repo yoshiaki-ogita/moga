@@ -1,0 +1,54 @@
+/* TOPページ：薄いブルー単色の濃淡 */
+.top {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 80px 16px;
+  text-align: center;
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif;
+  color: #0d3c61;
+}
+
+.top__title {
+  font-size: 3rem;
+  letter-spacing: 0.2em;
+  margin: 0;
+}
+
+.top__catch {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1565c0;
+  margin: 8px 0 24px;
+}
+
+.top__lead {
+  line-height: 1.9;
+  margin-bottom: 40px;
+}
+
+.top__buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+.button {
+  display: inline-block;
+  min-width: 240px;
+  padding: 14px 24px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.button--primary {
+  background: #1565c0;
+  color: #fff;
+}
+
+.button--secondary {
+  background: #e3f2fd;
+  color: #1565c0;
+  border: 1px solid #90caf9;
+}
