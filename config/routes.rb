@@ -23,6 +23,6 @@ Rails.application.routes.draw do
   # ログイン後のHome（曼荼羅）
   get "home", to: "home#index", as: :home
 
-  # 大窓（局面）の画面（小窓は #14 で作る）
-  resources :phases, only: %i[show]
+  # 大窓（局面）の画面と、名前の編集（#13）。小窓は #14 で作る
+  resources :phases, only: %i[show edit update]
 end
