@@ -10,6 +10,8 @@
   <% end %>
   <p><%= link_to "この大窓の名前を直す", edit_phase_path(@phase) %></p>
 
+  <%= render "shared/pie", percent: @phase.progress_percent, label: "この大窓の進捗率（小窓 #{@phase.windows.size} 個の平均）" %>
+
   <%# 小窓を 3×3 のマスに並べる（#15）。真ん中が大窓、まわりに窓1〜8 を時計回り %>
   <div class="mandala">
     <% PhasesController::WINDOW_ORDER.each do |number| %>

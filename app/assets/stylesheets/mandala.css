@@ -146,7 +146,7 @@ a.mandala__cell:hover {
   background: #e3f2fd;
 }
 
-.entry-table__number {
+.entry-table td.entry-table__number {
   text-align: right;
 }
 
@@ -158,4 +158,46 @@ a.mandala__cell:hover {
 
 .entry-table__actions form {
   margin: 0;
+}
+
+/* 進捗率の円グラフ（#29）。conic-gradient で、% の分だけ青く塗る */
+.pie-box {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0 0 16px;
+}
+
+.pie {
+  --pct: 0;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: conic-gradient(#1565c0 calc(var(--pct) * 1%), #e3f2fd 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pie__value {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.pie-box__label,
+.pie-box__fraction {
+  margin: 0;
+}
+
+.pie-box__fraction {
+  font-size: 0.9rem;
+  color: #1565c0;
 }
