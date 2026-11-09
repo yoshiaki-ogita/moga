@@ -3,12 +3,16 @@ ja:
   activerecord:
     models:
       user: ユーザー
+      phase: 大窓
     attributes:
       user:
         name: 名前
         email: メールアドレス
         password: パスワード
         password_confirmation: パスワード（確認）
+      phase:
+        code: 記号
+        name: 大窓の名前
   errors:
     format: "%{attribute}%{message}"
     messages:
@@ -18,6 +22,7 @@ ja:
       confirmation: と%{attribute}の入力が一致しません
       too_long: は%{count}文字以内で入力してください
       too_short: は%{count}文字以上で入力してください
+      inclusion: は一覧にありません
   helpers:
     submit:
       create: 登録する

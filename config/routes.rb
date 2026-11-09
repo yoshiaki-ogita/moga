@@ -20,6 +20,9 @@ Rails.application.routes.draw do
   post "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy", as: :logout
 
-  # ログイン後のHome（曼荼羅の中身は #12 で作る）
+  # ログイン後のHome（曼荼羅）
   get "home", to: "home#index", as: :home
+
+  # 大窓（局面）の画面（小窓は #14 で作る）
+  resources :phases, only: %i[show]
 end

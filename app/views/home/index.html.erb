@@ -1,8 +1,23 @@
 <% content_for(:title, "Home｜MOGA") %>
 
-<main class="form-page">
-  <h1 class="form-page__title">Home</h1>
-  <p>ようこそ、<%= current_user.name %>さん</p>
-  <%= button_to "ログアウト", logout_path, method: :delete, class: "button button--secondary" %>
-  <%# 曼荼羅（中心に本人、まわりに大窓A〜H）は #12 で作る %>
+<main class="mandala-page">
+  <p class="breadcrumb">Home</p>
+
+  <div class="mandala">
+    <% HomeController::MANDALA_ORDER.each do |code| %>
+      <% if code == :me %>
+        <div class="mandala__cell mandala__cell--me">
+          <span class="mandala__me-name"><%= current_user.name %></span>
+        </div>
+      <% else %>
+        <% phase = @phases[code] %>
+        <%= link_to phase_path(phase), class: "mandala__cell" do %>
+          <span class="mandala__code"><%= phase.code %></span>
+          <span class="mandala__name"><%= phase.name %></span>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <%= button_to "ログアウト", logout_path, method: :delete, class: "button button--secondary mandala-page__logout" %>
 </main>

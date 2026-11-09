@@ -19,7 +19,7 @@ RSpec.describe "Users（ユーザー登録）", type: :request do
       expect { post users_path, params: valid_params }.to change(User, :count).by(1)
       expect(response).to redirect_to(home_path)
       follow_redirect!
-      expect(response.body).to include("ようこそ、荻田さん")
+      expect(response.body).to include("荻田").and include("局面A")
     end
 
     it "同じメールアドレスでは登録できない" do
