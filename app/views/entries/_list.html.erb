@@ -1,0 +1,26 @@
+<%# 記録の一覧（#25）。新しい日付が上（11/7 決裁） %>
+<h3>これまでの記録（<%= entries.size %>）</h3>
+<% if entries.any? %>
+  <table class="entry-table">
+    <thead>
+      <tr>
+        <th>記録した日</th>
+        <th>やった数</th>
+        <th>できた数</th>
+        <th>題名</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% entries.each do |entry| %>
+        <tr id="<%= dom_id(entry) %>">
+          <td><%= entry.recorded_on.strftime("%Y年%-m月%-d日") %></td>
+          <td class="entry-table__number"><%= entry.attempted_count %></td>
+          <td class="entry-table__number"><%= entry.achieved_count %></td>
+          <td><%= entry.title %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>記録はまだありません。下の欄から、今日の記録を書いてみましょう。</p>
+<% end %>
