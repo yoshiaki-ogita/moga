@@ -34,6 +34,8 @@ Rails.application.routes.draw do
           patch :undone
         end
       end
+      # 記録の作成（#24）
+      resources :entries, only: %i[create]
     end
   end
 end
