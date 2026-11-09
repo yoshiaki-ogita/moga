@@ -1,0 +1,40 @@
+<% content_for(:title, "ユーザー登録｜MOGA") %>
+
+<main class="form-page">
+  <h1 class="form-page__title">ユーザー登録</h1>
+
+  <%= form_with model: @user, class: "form" do |f| %>
+    <% if @user.errors.any? %>
+      <ul class="form__errors">
+        <% @user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <div class="form__field">
+      <%= f.label :name %>
+      <%= f.text_field :name, autocomplete: "name" %>
+    </div>
+
+    <div class="form__field">
+      <%= f.label :email %>
+      <%= f.email_field :email, autocomplete: "email" %>
+    </div>
+
+    <div class="form__field">
+      <%= f.label :password %>
+      <%= f.password_field :password, autocomplete: "new-password" %>
+      <small>8文字以上</small>
+    </div>
+
+    <div class="form__field">
+      <%= f.label :password_confirmation %>
+      <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+    </div>
+
+    <%= f.submit "登録する", class: "button button--primary" %>
+  <% end %>
+
+  <p><%= link_to "TOPへ戻る", root_path %></p>
+</main>

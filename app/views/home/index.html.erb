@@ -1,0 +1,9 @@
+<% content_for(:title, "Home｜MOGA") %>
+
+<main class="form-page">
+  <h1 class="form-page__title">Home</h1>
+  <% if logged_in? %>
+    <p>ようこそ、<%= current_user.name %>さん</p>
+  <% end %>
+  <%# 曼荼羅（中心に本人、まわりに大窓A〜H）は #12 で作る %>
+</main>

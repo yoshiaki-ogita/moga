@@ -33,7 +33,9 @@ module Moga
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
-    # config.time_zone = "Central Time (US & Canada)"
+    # 日本時間・日本語で動かす（記録の日付を日本の日付で残すため）
+    config.time_zone = "Tokyo"
+    config.i18n.default_locale = :ja
     # config.eager_load_paths << Rails.root.join("extras")
 
     # Don't generate system test files.
