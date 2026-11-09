@@ -1,0 +1,11 @@
+<% content_for(:title, "#{@phase.code} #{@phase.name}｜MOGA") %>
+
+<main class="mandala-page">
+  <p class="breadcrumb"><%= link_to "Home", home_path %> ＞ <%= @phase.code %> <%= @phase.name %></p>
+
+  <h1 class="mandala-page__title"><%= @phase.code %> <%= @phase.name %></h1>
+  <%# 小窓（窓1〜8）は #14 で作る。名前の編集は #13 %>
+  <p>この大窓の小窓は、これから作ります。</p>
+
+  <p><%= link_to "Homeへ戻る", home_path %></p>
+</main>

@@ -16,7 +16,7 @@ RSpec.describe "Sessions（ログイン・ログアウト）", type: :request do
       post login_path, params: { email: "ogita@example.com", password: "password123" }
       expect(response).to redirect_to(home_path)
       follow_redirect!
-      expect(response.body).to include("ようこそ、荻田さん")
+      expect(response.body).to include("荻田").and include("局面A")
     end
 
     it "パスワードが違うとログインできない" do
