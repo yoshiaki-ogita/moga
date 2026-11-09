@@ -1,14 +1,14 @@
-# 開発用：docker compose up で MySQL と Rails を起動する
+# 開発用：docker compose up で PostgreSQL と Rails を起動する
 services:
   db:
-    image: mysql:8.4
+    image: postgres:17
     environment:
-      MYSQL_ROOT_PASSWORD: password   # 開発用のみ（本番では使わない）
+      POSTGRES_PASSWORD: password   # 開発用のみ（本番では使わない）
       TZ: Asia/Tokyo
     volumes:
-      - mysql_data:/var/lib/mysql
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-ppassword"]
+      test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 5s
       timeout: 5s
       retries: 20
@@ -33,5 +33,5 @@ services:
     stdin_open: true
 
 volumes:
-  mysql_data:
+  postgres_data:
   bundle:

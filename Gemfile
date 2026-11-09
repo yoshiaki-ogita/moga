@@ -4,8 +4,9 @@ source "https://rubygems.org"
 gem "rails", "~> 8.1.4", ">= 8.1.4.1"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
-# Use mysql as the database for Active Record
-gem "mysql2", "~> 0.5"
+# Use postgresql as the database for Active Record
+# （RUNTEQ 運営のお勧め：Render × Neon はどちらも PostgreSQL のため、11/9 に MySQL から切り替え）
+gem "pg", "~> 1.1"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
