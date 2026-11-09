@@ -11,4 +11,10 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "static_pages#top"
+
+  # ユーザー登録（S2）
+  resources :users, only: %i[new create]
+
+  # ログイン後のHome（曼荼羅の中身は #12 で作る）
+  get "home", to: "home#index", as: :home
 end

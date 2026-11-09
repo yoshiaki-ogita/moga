@@ -1,0 +1,23 @@
+# 日本語の表示（画面の項目名とエラーメッセージ）
+ja:
+  activerecord:
+    models:
+      user: ユーザー
+    attributes:
+      user:
+        name: 名前
+        email: メールアドレス
+        password: パスワード
+        password_confirmation: パスワード（確認）
+  errors:
+    format: "%{attribute}%{message}"
+    messages:
+      blank: を入力してください
+      taken: はすでに使われています
+      invalid: の形式が正しくありません
+      confirmation: と%{attribute}の入力が一致しません
+      too_long: は%{count}文字以内で入力してください
+      too_short: は%{count}文字以上で入力してください
+  helpers:
+    submit:
+      create: 登録する

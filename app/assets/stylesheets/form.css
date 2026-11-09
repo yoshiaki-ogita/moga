@@ -1,0 +1,48 @@
+/* 登録・ログインなどの入力画面：TOPと同じ薄いブルー単色の濃淡 */
+.form-page {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 48px 16px;
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif;
+  color: #0d3c61;
+}
+
+.form-page__title {
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form__field input {
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid #90caf9;
+  border-radius: 8px;
+}
+
+.form__errors {
+  background: #e3f2fd;
+  border-left: 4px solid #1565c0;
+  padding: 12px 12px 12px 32px;
+  margin: 0;
+}
+
+.flash {
+  max-width: 480px;
+  margin: 16px auto 0;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: #e3f2fd;
+  color: #0d3c61;
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif;
+}
