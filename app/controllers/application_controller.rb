@@ -23,4 +23,17 @@ class ApplicationController < ActionController::Base
   def logged_in?
     current_user.present?
   end
+
+  # ログアウトする（セッションを空にする）
+  def log_out
+    reset_session
+    @current_user = nil
+  end
+
+  # ログインしていない人を TOP ページへ戻す（11/7 決裁）
+  def require_login
+    return if logged_in?
+
+    redirect_to root_path, alert: "ログインしてください"
+  end
 end
