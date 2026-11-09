@@ -4,6 +4,7 @@ ja:
     models:
       user: ユーザー
       phase: 大窓
+      window: 小窓
     attributes:
       user:
         name: 名前
@@ -13,6 +14,15 @@ ja:
       phase:
         code: 記号
         name: 大窓の名前
+      window:
+        number: 番号
+        title: 小窓の題名
+        measure: 数え方
+    enums:
+      window:
+        measure:
+          plan_count: 課題型（済んだ課題 ÷ 課題）
+          achievement_rate: 達成率型（できた数 ÷ やった数）
   errors:
     format: "%{attribute}%{message}"
     messages:

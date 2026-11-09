@@ -1,0 +1,11 @@
+<% content_for(:title, "小窓を作る｜MOGA") %>
+
+<main class="form-page">
+  <p class="breadcrumb"><%= link_to "Home", home_path %> ＞ <%= link_to "#{@phase.code} #{@phase.name}", phase_path(@phase) %> ＞ 小窓を作る</p>
+
+  <h1 class="form-page__title">小窓を作る</h1>
+
+  <%= render "form", window: @window, numbers: @phase.free_window_numbers %>
+
+  <p><%= link_to "戻る", phase_path(@phase) %></p>
+</main>

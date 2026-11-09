@@ -46,3 +46,28 @@
   color: #0d3c61;
   font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif;
 }
+
+/* 選ぶ欄（数え方のラジオボタンなど） */
+.form__field select {
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid #90caf9;
+  border-radius: 8px;
+  background: #fff;
+}
+
+fieldset.form__field {
+  border: 1px solid #90caf9;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+fieldset.form__field label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+fieldset.form__field input[type="radio"] {
+  padding: 0;
+}
