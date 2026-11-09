@@ -1,0 +1,29 @@
+<% content_for(:title, "課題を直す｜MOGA") %>
+
+<main class="form-page">
+  <p class="breadcrumb">
+    <%= link_to "Home", home_path %> ＞
+    <%= link_to "#{@phase.code} #{@phase.name}", phase_path(@phase) %> ＞
+    <%= link_to "窓#{@window.number} #{@window.title}", window_path(@window) %> ＞ 課題を直す
+  </p>
+
+  <h1 class="form-page__title">課題を直す</h1>
+
+  <%= form_with model: @plan, class: "form" do |f| %>
+    <% if @plan.errors.any? %>
+      <ul class="form__errors">
+        <% @plan.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    <% end %>
+    <div class="form__field">
+      <%= f.label :title %>
+      <%= f.text_field :title %>
+      <small>50文字まで</small>
+    </div>
+    <%= f.submit "保存する", class: "button button--primary" %>
+  <% end %>
+
+  <p><%= link_to "戻る", window_path(@window) %></p>
+</main>

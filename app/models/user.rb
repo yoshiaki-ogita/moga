@@ -5,6 +5,7 @@ class User < ApplicationRecord
   # 大窓（局面）A〜H。利用者を消すと大窓も一緒に消える
   has_many :phases, dependent: :destroy
   has_many :windows, through: :phases
+  has_many :plans, through: :windows
 
   # 登録と同時に大窓 A〜H を8つ作る（11/7 決裁）
   after_create :ensure_default_phases
