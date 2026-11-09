@@ -9,19 +9,28 @@
     <p>ここにあなたの夢の名前をつけましょう。</p>
   <% end %>
   <p><%= link_to "この大窓の名前を直す", edit_phase_path(@phase) %></p>
-  <%# 小窓の一覧（3×3 のマスに並べるのは #15） %>
-  <% if @phase.windows.any? %>
-    <ul>
-      <% @phase.windows.each do |window| %>
-        <li>窓<%= window.number %> <%= window.title %></li>
+
+  <%# 小窓を 3×3 のマスに並べる（#15）。真ん中が大窓、まわりに窓1〜8 を時計回り %>
+  <div class="mandala">
+    <% PhasesController::WINDOW_ORDER.each do |number| %>
+      <% if number == :phase %>
+        <div class="mandala__cell mandala__cell--me">
+          <span class="mandala__code"><%= @phase.code %></span>
+          <span class="mandala__me-name"><%= @phase.name %></span>
+        </div>
+      <% elsif (window = @windows[number]) %>
+        <div class="mandala__cell">
+          <span class="mandala__code"><%= number %></span>
+          <span class="mandala__name"><%= window.title %></span>
+        </div>
+      <% else %>
+        <%= link_to new_phase_window_path(@phase, number: number), class: "mandala__cell mandala__cell--empty" do %>
+          <span class="mandala__code"><%= number %></span>
+          <span class="mandala__name">＋ 小窓を作る</span>
+        <% end %>
       <% end %>
-    </ul>
-  <% else %>
-    <p>まだ小窓がありません。</p>
-  <% end %>
-  <% if @phase.free_window_numbers.any? %>
-    <p><%= link_to "＋ 小窓を作る", new_phase_window_path(@phase) %></p>
-  <% end %>
+    <% end %>
+  </div>
 
   <p><%= link_to "Homeへ戻る", home_path %></p>
 </main>

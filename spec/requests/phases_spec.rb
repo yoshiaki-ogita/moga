@@ -52,3 +52,35 @@ RSpec.describe "大窓の名前の編集（#13）", type: :request do
     expect(response).to redirect_to(root_path)
   end
 end
+
+RSpec.describe "大窓の画面に小窓が並ぶ（#15）", type: :request do
+  let(:user) { create(:user, password: "password123") }
+  let(:phase) { user.phases.find_by(code: "A") }
+
+  before do
+    post login_path, params: { email: user.email, password: "password123" }
+  end
+
+  it "中心に大窓の名前、まわりに小窓の題名が並ぶ" do
+    phase.update!(name: "社労士受験合格")
+    phase.windows.create!(number: 1, title: "労働基準法")
+    phase.windows.create!(number: 2, title: "労災保険法")
+    get phase_path(phase)
+    expect(response.body).to include("社労士受験合格", "労働基準法", "労災保険法")
+  end
+
+  it "まだ小窓がない番号には「＋ 小窓を作る」が出て、その番号で作成画面に進む" do
+    phase.windows.create!(number: 1, title: "労働基準法")
+    get phase_path(phase)
+    expect(response.body.scan("＋ 小窓を作る").size).to eq(7)
+    expect(response.body).to include(new_phase_window_path(phase, number: 2))
+  end
+
+  it "その大窓の小窓だけが並ぶ（ほかの大窓の小窓は出ない）" do
+    phase.windows.create!(number: 1, title: "労働基準法")
+    user.phases.find_by(code: "B").windows.create!(number: 1, title: "地震・津波")
+    get phase_path(phase)
+    expect(response.body).to include("労働基準法")
+    expect(response.body).not_to include("地震・津波")
+  end
+end
