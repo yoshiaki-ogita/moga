@@ -19,10 +19,10 @@
           <span class="mandala__me-name"><%= @phase.name %></span>
         </div>
       <% elsif (window = @windows[number]) %>
-        <div class="mandala__cell">
+        <%= link_to window_path(window), class: "mandala__cell" do %>
           <span class="mandala__code"><%= number %></span>
           <span class="mandala__name"><%= window.title %></span>
-        </div>
+        <% end %>
       <% else %>
         <%= link_to new_phase_window_path(@phase, number: number), class: "mandala__cell mandala__cell--empty" do %>
           <span class="mandala__code"><%= number %></span>

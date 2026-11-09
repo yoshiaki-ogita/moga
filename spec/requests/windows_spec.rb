@@ -59,3 +59,40 @@ RSpec.describe "空いたマスから小窓を作る（#15）", type: :request d
     expect(response.body).to include('<option selected="selected" value="5">窓5</option>')
   end
 end
+
+RSpec.describe "小窓の詳細（#16）", type: :request do
+  let(:user) { create(:user, password: "password123") }
+  let(:phase) { user.phases.find_by(code: "A") }
+
+  before do
+    post login_path, params: { email: user.email, password: "password123" }
+  end
+
+  it "大窓の画面の小窓を押すと、詳細画面が開く" do
+    window = phase.windows.create!(number: 1, title: "労働基準法", measure: :achievement_rate)
+    get phase_path(phase)
+    expect(response.body).to include(window_path(window))
+
+    get window_path(window)
+    expect(response).to have_http_status(:ok)
+    expect(response.body).to include("窓1 労働基準法", "達成率型", "記録")
+  end
+
+  it "課題型なら、課題の入口が出る" do
+    window = phase.windows.create!(number: 2, title: "第1章〜第4章", measure: :plan_count)
+    get window_path(window)
+    expect(response.body).to include("課題型", "<h2>課題</h2>")
+  end
+
+  it "パンくずに Home ＞ 大窓 ＞ 小窓 が出る" do
+    window = phase.windows.create!(number: 1, title: "労働基準法")
+    get window_path(window)
+    expect(response.body).to include("A 局面A", "窓1 労働基準法", home_path)
+  end
+
+  it "他人の小窓は開けない" do
+    other_window = create(:user).phases.find_by(code: "A").windows.create!(number: 1, title: "他人の窓")
+    get window_path(other_window)
+    expect(response).to have_http_status(:not_found)
+  end
+end
