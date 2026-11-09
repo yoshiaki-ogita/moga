@@ -15,6 +15,11 @@ Rails.application.routes.draw do
   # ユーザー登録（S2）
   resources :users, only: %i[new create]
 
+  # ログイン（S3）・ログアウト
+  get "login", to: "sessions#new", as: :login
+  post "login", to: "sessions#create"
+  delete "logout", to: "sessions#destroy", as: :logout
+
   # ログイン後のHome（曼荼羅の中身は #12 で作る）
   get "home", to: "home#index", as: :home
 end
