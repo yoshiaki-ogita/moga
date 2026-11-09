@@ -95,3 +95,31 @@ RSpec.describe "課題の編集（#21）", type: :request do
     expect(other_plan.reload.title).to eq("他人の課題")
   end
 end
+
+RSpec.describe "課題の削除（#22）", type: :request do
+  let(:user) { create(:user, password: "password123") }
+  let(:window) { user.phases.find_by(code: "B").windows.create!(number: 1, title: "地震・津波・火山", measure: :plan_count) }
+  let!(:plan) { window.plans.create!(title: "第1章 地震を読む") }
+
+  before do
+    post login_path, params: { email: user.email, password: "password123" }
+  end
+
+  it "一覧に確認つきの「消す」がある" do
+    get window_path(window)
+    expect(response.body).to include("data-turbo-confirm", "課題「第1章 地震を読む」を消します")
+  end
+
+  it "削除すると一覧から消える" do
+    expect { delete plan_path(plan) }.to change(Plan, :count).by(-1)
+    expect(response).to redirect_to(window_path(window))
+    follow_redirect!
+    expect(response.body).to include("まだ（0）")
+  end
+
+  it "他人の課題は消せない" do
+    other_plan = create(:user).phases.find_by(code: "B").windows.create!(number: 1, title: "他人の窓").plans.create!(title: "他人の課題")
+    expect { delete plan_path(other_plan) }.not_to change(Plan, :count)
+    expect(response).to have_http_status(:not_found)
+  end
+end
