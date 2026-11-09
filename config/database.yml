@@ -49,20 +49,6 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  primary: &primary_production
-    <<: *default
-    database: moga_production
-    username: moga
-    password: <%= ENV["MOGA_DATABASE_PASSWORD"] %>
-  cache:
-    <<: *primary_production
-    database: moga_production_cache
-    migrations_paths: db/cache_migrate
-  queue:
-    <<: *primary_production
-    database: moga_production_queue
-    migrations_paths: db/queue_migrate
-  cable:
-    <<: *primary_production
-    database: moga_production_cable
-    migrations_paths: db/cable_migrate
+  # 本番（Render）では、Neon の接続先を環境変数 DATABASE_URL で渡す（#6）
+  <<: *default
+  url: <%= ENV["DATABASE_URL"] %>
