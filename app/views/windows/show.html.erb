@@ -1,11 +1,8 @@
 <% content_for(:title, "窓#{@window.number} #{@window.title}｜MOGA") %>
 
 <main class="mandala-page">
-  <p class="breadcrumb">
-    <%= link_to "Home", home_path %> ＞
-    <%= link_to "#{@phase.code} #{@phase.name}", phase_path(@phase) %> ＞
-    窓<%= @window.number %> <%= @window.title %>
-  </p>
+  <%# 現在地（#31） %>
+  <%= breadcrumb(["Home", home_path], ["#{@phase.code} #{@phase.name}", phase_path(@phase)], "窓#{@window.number} #{@window.title}") %>
 
   <h1 class="mandala-page__title">窓<%= @window.number %> <%= @window.title %></h1>
   <p><%= Window.human_attribute_name(:measure) %>：<%= t("activerecord.enums.window.measure.#{@window.measure}") %></p>

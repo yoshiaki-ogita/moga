@@ -1,7 +1,8 @@
 <% content_for(:title, "#{@phase.code} の名前を直す｜MOGA") %>
 
 <main class="form-page">
-  <p class="breadcrumb"><%= link_to "Home", home_path %> ＞ <%= link_to "#{@phase.code} #{@phase.name_was}", phase_path(@phase) %> ＞ 名前を直す</p>
+  <%# 現在地（#31） %>
+  <%= breadcrumb(["Home", home_path], ["#{@phase.code} #{@phase.name_was}", phase_path(@phase)], "名前を直す") %>
 
   <h1 class="form-page__title">大窓 <%= @phase.code %> の名前</h1>
 

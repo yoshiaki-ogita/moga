@@ -1,7 +1,8 @@
 <% content_for(:title, "#{@phase.code} #{@phase.name}｜MOGA") %>
 
 <main class="mandala-page">
-  <p class="breadcrumb"><%= link_to "Home", home_path %> ＞ <%= @phase.code %> <%= @phase.name %></p>
+  <%# 現在地（#31） %>
+  <%= breadcrumb(["Home", home_path], "#{@phase.code} #{@phase.name}") %>
 
   <h1 class="mandala-page__title"><%= @phase.code %> <%= @phase.name %></h1>
   <%# まだ最初の仮の名前（局面A など）のときは、名前をつけるよう声をかける %>
