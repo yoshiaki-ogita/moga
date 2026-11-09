@@ -4,7 +4,6 @@ development:
 test:
   adapter: test
 
+# MVP では即時配信（Action Cable）を使わないので、本番も Redis なしの async にする（#6）
 production:
-  adapter: redis
-  url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
-  channel_prefix: moga_production
+  adapter: async
