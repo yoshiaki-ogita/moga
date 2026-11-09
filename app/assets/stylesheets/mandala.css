@@ -149,3 +149,13 @@ a.mandala__cell:hover {
 .entry-table__number {
   text-align: right;
 }
+
+.entry-table__actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.entry-table__actions form {
+  margin: 0;
+}

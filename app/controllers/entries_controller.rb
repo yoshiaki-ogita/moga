@@ -3,7 +3,7 @@ class EntriesController < ApplicationController
   # 自分の小窓だけを探す（他人の小窓には記録を書けない＝404）
   before_action :set_window, only: %i[create]
   # 自分の記録だけを探す（他人の記録は直せない＝404）
-  before_action :set_entry, only: %i[edit update]
+  before_action :set_entry, only: %i[edit update destroy]
 
   # 記録を書く（#24）。入力欄は小窓の詳細画面にある
   def create
@@ -27,6 +27,12 @@ class EntriesController < ApplicationController
     else
       render :edit, status: :unprocessable_content
     end
+  end
+
+  # 記録を消す（#27）
+  def destroy
+    @entry.destroy!
+    redirect_to window_path(@window), notice: "#{@entry.recorded_on.strftime('%-m月%-d日')}の記録を消しました", status: :see_other
   end
 
   private

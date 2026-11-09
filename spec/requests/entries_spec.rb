@@ -94,3 +94,32 @@ RSpec.describe "記録の編集（#26）", type: :request do
     expect(other_entry.reload.achieved_count).to eq(1)
   end
 end
+
+RSpec.describe "記録の削除（#27）", type: :request do
+  let(:user) { create(:user, password: "password123") }
+  let(:window) { user.phases.find_by(code: "A").windows.create!(number: 1, title: "労働基準法", measure: :achievement_rate) }
+  let!(:entry) { window.entries.create!(recorded_on: Date.new(2026, 11, 10), attempted_count: 20, achieved_count: 16) }
+
+  before do
+    post login_path, params: { email: user.email, password: "password123" }
+  end
+
+  it "一覧に確認つきの「消す」がある" do
+    get window_path(window)
+    expect(response.body).to include("data-turbo-confirm", "11月10日の記録を消します")
+  end
+
+  it "削除すると一覧から消える" do
+    expect { delete entry_path(entry) }.to change(Entry, :count).by(-1)
+    expect(response).to redirect_to(window_path(window))
+    follow_redirect!
+    expect(response.body).to include("これまでの記録（0）")
+  end
+
+  it "他人の記録は消せない" do
+    other_entry = create(:user).phases.find_by(code: "A").windows.create!(number: 1, title: "他人の窓", measure: :achievement_rate)
+                               .entries.create!(recorded_on: Date.current, attempted_count: 1, achieved_count: 1)
+    expect { delete entry_path(other_entry) }.not_to change(Entry, :count)
+    expect(response).to have_http_status(:not_found)
+  end
+end
