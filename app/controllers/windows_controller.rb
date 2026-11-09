@@ -3,7 +3,7 @@ class WindowsController < ApplicationController
   # 自分の大窓だけを探す（他人の大窓には小窓を作れない＝404）
   before_action :set_phase, only: %i[new create]
   # 自分の小窓だけを探す（他人の小窓は開けない＝404）
-  before_action :set_window, only: %i[show edit update]
+  before_action :set_window, only: %i[show edit update destroy]
 
   # 小窓の詳細（#16）
   def show
@@ -42,6 +42,12 @@ class WindowsController < ApplicationController
     else
       render :new, status: :unprocessable_content
     end
+  end
+
+  # 小窓を消す（#18）。中の課題・記録も一緒に消える（11/7 決裁。課題・記録の表は #19・#24 で足す）
+  def destroy
+    @window.destroy!
+    redirect_to phase_path(@phase), notice: "小窓「#{@window.title}」を消しました", status: :see_other
   end
 
   private

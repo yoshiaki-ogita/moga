@@ -139,3 +139,36 @@ RSpec.describe "小窓の編集（#17）", type: :request do
     expect(other_window.reload.title).to eq("他人の窓")
   end
 end
+
+RSpec.describe "小窓の削除（#18）", type: :request do
+  let(:user) { create(:user, password: "password123") }
+  let(:phase) { user.phases.find_by(code: "A") }
+  let!(:window) { phase.windows.create!(number: 1, title: "労働基準法") }
+
+  before do
+    post login_path, params: { email: user.email, password: "password123" }
+  end
+
+  it "詳細画面に、確認つきの削除ボタンがある" do
+    get window_path(window)
+    expect(response.body).to include("この小窓を消す", "data-turbo-confirm")
+  end
+
+  it "削除すると、大窓の画面から消える" do
+    expect { delete window_path(window) }.to change(Window, :count).by(-1)
+    expect(response).to redirect_to(phase_path(phase))
+    follow_redirect!
+    expect(response.body).to include("小窓「労働基準法」を消しました")
+    expect(response.body.scan("＋ 小窓を作る").size).to eq(8)
+  end
+
+  it "大窓を消すと、中の小窓も残らない" do
+    expect { phase.destroy }.to change(Window, :count).by(-1)
+  end
+
+  it "他人の小窓は消せない" do
+    other_window = create(:user).phases.find_by(code: "A").windows.create!(number: 1, title: "他人の窓")
+    expect { delete window_path(other_window) }.not_to change(Window, :count)
+    expect(response).to have_http_status(:not_found)
+  end
+end

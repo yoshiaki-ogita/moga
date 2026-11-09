@@ -20,5 +20,10 @@
     <p>記録の一覧は、これから作ります（#24〜#27）。</p>
   <% end %>
 
+  <%# 消す前に確認を出す（11/7 決裁） %>
+  <%= button_to "この小窓を消す", window_path(@window), method: :delete,
+        form: { data: { turbo_confirm: "小窓「#{@window.title}」を消します。中の課題・記録も一緒に消えて、元に戻せません。よろしいですか？" } },
+        class: "button button--secondary" %>
+
   <p><%= link_to "#{@phase.code} #{@phase.name} へ戻る", phase_path(@phase) %></p>
 </main>
