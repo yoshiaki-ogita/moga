@@ -70,14 +70,14 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      mysql:
-        image: mysql:8.4
+      postgres:
+        image: postgres:17
         env:
-          MYSQL_ROOT_PASSWORD: password
+          POSTGRES_PASSWORD: password
         ports:
-          - 3306:3306
+          - 5432:5432
         options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1 -ppassword"
+          --health-cmd="pg_isready -U postgres"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=10
@@ -88,8 +88,8 @@ jobs:
       DB_PASSWORD: password
 
     steps:
-      - name: Install MySQL client library
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y default-libmysqlclient-dev
+      - name: Install PostgreSQL client library
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y libpq-dev
 
       - name: Checkout code
         uses: actions/checkout@v6

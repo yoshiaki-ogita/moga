@@ -1,19 +1,13 @@
-# MySQL. Versions 5.6.4 and up are supported.
+# PostgreSQL（11/9 に MySQL から切り替え。RUNTEQ 運営のお勧め：Render × Neon）
 #
-# Install the MySQL driver
-#   gem install mysql2
-#
-# Ensure the MySQL gem is defined in your Gemfile
-#   gem "mysql2"
-#
-# And be sure to use new-style password hashing:
-#   https://dev.mysql.com/doc/refman/5.7/en/password-hashing.html
+# 開発・テストは docker compose の db（postgres）につなぐ。
+# パスワードは開発用のみ。本番は DATABASE_URL（#6 で設定）を使う。
 #
 default: &default
-  adapter: mysql2
-  encoding: utf8mb4
+  adapter: postgresql
+  encoding: unicode
   max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: root
+  username: <%= ENV.fetch("DB_USERNAME") { "postgres" } %>
   password: <%= ENV.fetch("DB_PASSWORD") { "" } %>
   host: <%= ENV.fetch("DB_HOST") { "127.0.0.1" } %>
 
@@ -35,7 +29,7 @@ test:
 # Instead, provide the password or a full connection URL as an environment
 # variable when you boot the app. For example:
 #
-#   DATABASE_URL="mysql2://myuser:mypass@localhost/somedatabase"
+#   DATABASE_URL="postgres://myuser:mypass@localhost/somedatabase"
 #
 # If the connection URL is provided in the special DATABASE_URL environment
 # variable, Rails will automatically merge its configuration values on top of
@@ -49,7 +43,7 @@ test:
 # environment variables. The variable name is formed by concatenating the
 # connection name with `_DATABASE_URL`. For example:
 #
-#   CACHE_DATABASE_URL="mysql2://cacheuser:cachepass@localhost/cachedatabase"
+#   CACHE_DATABASE_URL="postgres://cacheuser:cachepass@localhost/cachedatabase"
 #
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
