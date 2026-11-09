@@ -50,6 +50,9 @@ group :development, :test do
 
   # Testing framework [https://rspec.info/]
   gem "rspec-rails"
+
+  # Test data factories [https://github.com/thoughtbot/factory_bot_rails]
+  gem "factory_bot_rails"
 end
 
 group :development do
