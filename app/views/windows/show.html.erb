@@ -9,6 +9,7 @@
 
   <h1 class="mandala-page__title">窓<%= @window.number %> <%= @window.title %></h1>
   <p><%= Window.human_attribute_name(:measure) %>：<%= t("activerecord.enums.window.measure.#{@window.measure}") %></p>
+  <p><%= link_to "この小窓を直す", edit_window_path(@window) %></p>
 
   <%# 数え方で、見る物が変わる。課題型＝課題（#19〜#23）、達成率型＝記録（#24〜#27） %>
   <% if @window.plan_count? %>

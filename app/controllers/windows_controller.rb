@@ -3,10 +3,23 @@ class WindowsController < ApplicationController
   # 自分の大窓だけを探す（他人の大窓には小窓を作れない＝404）
   before_action :set_phase, only: %i[new create]
   # 自分の小窓だけを探す（他人の小窓は開けない＝404）
-  before_action :set_window, only: %i[show]
+  before_action :set_window, only: %i[show edit update]
 
   # 小窓の詳細（#16）
   def show
+  end
+
+  # 小窓の題名・数え方を直す画面（#17）
+  def edit
+  end
+
+  # 小窓を保存し直す（#17）。数え方を変えたら、％は新しい数え方で計算し直される（11/7 決裁）
+  def update
+    if @window.update(window_params)
+      redirect_to window_path(@window), notice: "小窓「#{@window.title}」を直しました"
+    else
+      render :edit, status: :unprocessable_content
+    end
   end
 
   # 小窓を作る画面（#14）
