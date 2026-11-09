@@ -1,5 +1,6 @@
-<%# 記録を書く入力欄（#24）。記録した日は、最初から今日（11/7 決裁） %>
-<%= form_with model: entry, url: window_entries_path(window), class: "form" do |f| %>
+<%# 記録を書く入力欄（#24）。記録した日は、最初から今日（11/7 決裁）
+    直す画面（#26）でも同じ欄を使う。新しい記録なら「記録する」、直す時は「保存する」 %>
+<%= form_with model: entry, url: (entry.new_record? ? window_entries_path(window) : entry_path(entry)), class: "form" do |f| %>
   <% if entry.errors.any? %>
     <ul class="form__errors">
       <% entry.errors.full_messages.each do |message| %>
@@ -27,5 +28,5 @@
     <%= f.label :body, "本文（なくてもよい）" %>
     <%= f.text_area :body, rows: 3 %>
   </div>
-  <%= f.submit "記録する", class: "button button--primary" %>
+  <%= f.submit (entry.new_record? ? "記録する" : "保存する"), class: "button button--primary" %>
 <% end %>

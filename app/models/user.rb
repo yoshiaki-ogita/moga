@@ -6,6 +6,7 @@ class User < ApplicationRecord
   has_many :phases, dependent: :destroy
   has_many :windows, through: :phases
   has_many :plans, through: :windows
+  has_many :entries, through: :windows
 
   # 登録と同時に大窓 A〜H を8つ作る（11/7 決裁）
   after_create :ensure_default_phases
