@@ -74,3 +74,35 @@ a.mandala__cell:hover {
   border-style: dashed;
   color: #1565c0;
 }
+
+/* 課題の一覧（#20） */
+.plan-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+}
+
+.plan-list__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid #90caf9;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  background: #fff;
+}
+
+.plan-list__item--done {
+  background: #e3f2fd;
+}
+
+.plan-list__title {
+  flex: 1;
+}
+
+.plan-list__done-at {
+  font-size: 0.85rem;
+  color: #1565c0;
+}
