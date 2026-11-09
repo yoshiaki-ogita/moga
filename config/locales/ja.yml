@@ -5,6 +5,7 @@ ja:
       user: ユーザー
       phase: 大窓
       window: 小窓
+      plan: 課題
     attributes:
       user:
         name: 名前
@@ -18,6 +19,9 @@ ja:
         number: 番号
         title: 小窓の題名
         measure: 数え方
+      plan:
+        title: 課題
+        done_at: 済んだ日時
     enums:
       window:
         measure:
