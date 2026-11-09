@@ -21,6 +21,17 @@ class User < ApplicationRecord
                     uniqueness: { case_sensitive: false }
   validates :password, length: { minimum: 8 }, allow_nil: true
 
+  # 全体の進捗率（#28）＝大窓 A〜H の進捗率の平均
+  def progress_rate
+    return 0.0 if phases.empty?
+
+    phases.sum(&:progress_rate) / phases.size
+  end
+
+  def progress_percent
+    (progress_rate * 100).round
+  end
+
   # 足りない大窓だけを「局面A」〜「局面H」の仮の名前で作る（何度呼んでも8つより増えない）
   def ensure_default_phases
     existing = phases.pluck(:code)
