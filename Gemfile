@@ -56,6 +56,11 @@ group :development, :test do
   gem "factory_bot_rails"
 end
 
+group :test do
+  # 利用者の操作の流れを、画面を通して確かめる（system spec #32）[https://github.com/teamcapybara/capybara]
+  gem "capybara"
+end
+
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
