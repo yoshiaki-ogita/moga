@@ -68,3 +68,9 @@ a.mandala__cell:hover {
 .mandala-page__logout {
   margin-top: 32px;
 }
+
+/* まだ小窓がないマス（#15）：点線の枠で「ここに作れる」ことを示す */
+.mandala__cell--empty {
+  border-style: dashed;
+  color: #1565c0;
+}

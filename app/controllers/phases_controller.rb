@@ -3,7 +3,15 @@ class PhasesController < ApplicationController
   # 自分の大窓だけを探す（他人の大窓の番号を打っても見つからない＝404）
   before_action :set_phase
 
+  # 小窓を 3×3 のマスに並べる順番（真ん中が大窓。窓1 から時計回り。Home と同じ並べ方）
+  #   1 2 3
+  #   8 ◯ 4
+  #   7 6 5
+  WINDOW_ORDER = [ 1, 2, 3, 8, :phase, 4, 7, 6, 5 ].freeze
+
+  # 大窓の画面：中心に大窓の名前、まわりに小窓（#15）
   def show
+    @windows = @phase.windows.index_by(&:number)
   end
 
   # 大窓の名前を直す画面（#13）

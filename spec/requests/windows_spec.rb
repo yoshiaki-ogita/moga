@@ -45,3 +45,17 @@ RSpec.describe "小窓の作成（#14）", type: :request do
     expect(other_phase.windows).to be_empty
   end
 end
+
+RSpec.describe "空いたマスから小窓を作る（#15）", type: :request do
+  let(:user) { create(:user, password: "password123") }
+  let(:phase) { user.phases.find_by(code: "A") }
+
+  before do
+    post login_path, params: { email: user.email, password: "password123" }
+  end
+
+  it "押したマスの番号が、最初から選ばれている" do
+    get new_phase_window_path(phase, number: 5)
+    expect(response.body).to include('<option selected="selected" value="5">窓5</option>')
+  end
+end
