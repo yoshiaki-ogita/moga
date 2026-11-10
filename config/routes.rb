@@ -26,6 +26,9 @@ Rails.application.routes.draw do
   # 大窓（局面）の画面と、名前の編集（#13）
   resources :phases, only: %i[show edit update] do
     # 小窓（窓 1〜8）の作成（#14）・詳細（#16）・編集（#17）・削除（#18）
-    resources :windows, only: %i[new create show edit update destroy], shallow: true
+    resources :windows, only: %i[new create show edit update destroy], shallow: true do
+      # 課題の作成（#19）
+      resources :plans, only: %i[create]
+    end
   end
 end

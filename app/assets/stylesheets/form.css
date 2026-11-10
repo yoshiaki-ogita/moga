@@ -71,3 +71,8 @@ fieldset.form__field label {
 fieldset.form__field input[type="radio"] {
   padding: 0;
 }
+
+/* 小窓の詳細画面の中に置く、小さな入力欄（課題・記録） */
+.form--inline {
+  margin: 16px 0;
+}

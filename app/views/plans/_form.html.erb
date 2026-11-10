@@ -1,0 +1,15 @@
+<%# 課題を足す入力欄（小窓の詳細画面に置く） %>
+<%= form_with model: plan, url: window_plans_path(window), class: "form form--inline" do |f| %>
+  <% if plan.errors.any? %>
+    <ul class="form__errors">
+      <% plan.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  <% end %>
+  <div class="form__field">
+    <%= f.label :title, "課題を足す" %>
+    <%= f.text_field :title, placeholder: "例：第1章 地震を読む" %>
+  </div>
+  <%= f.submit "足す", class: "button button--primary" %>
+<% end %>
