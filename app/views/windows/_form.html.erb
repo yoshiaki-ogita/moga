@@ -1,0 +1,33 @@
+<%# 小窓の入力欄（作成 #14・編集 #17 で使う） %>
+<%= form_with model: [ (window.new_record? ? window.phase : nil), window ].compact, class: "form" do |f| %>
+  <% if window.errors.any? %>
+    <ul class="form__errors">
+      <% window.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <div class="form__field">
+    <%= f.label :number %>
+    <%= f.select :number, numbers.map { |n| [ "窓#{n}", n ] } %>
+  </div>
+
+  <div class="form__field">
+    <%= f.label :title %>
+    <%= f.text_field :title, placeholder: "例：労働基準法" %>
+    <small>30文字まで</small>
+  </div>
+
+  <fieldset class="form__field">
+    <legend><%= Window.human_attribute_name(:measure) %></legend>
+    <% Window.measures.each_key do |measure| %>
+      <label>
+        <%= f.radio_button :measure, measure %>
+        <%= t("activerecord.enums.window.measure.#{measure}") %>
+      </label>
+    <% end %>
+  </fieldset>
+
+  <%= f.submit "保存する", class: "button button--primary" %>
+<% end %>
