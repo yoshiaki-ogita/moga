@@ -1,0 +1,23 @@
+<% content_for(:title, "窓#{@window.number} #{@window.title}｜MOGA") %>
+
+<main class="mandala-page">
+  <p class="breadcrumb">
+    <%= link_to "Home", home_path %> ＞
+    <%= link_to "#{@phase.code} #{@phase.name}", phase_path(@phase) %> ＞
+    窓<%= @window.number %> <%= @window.title %>
+  </p>
+
+  <h1 class="mandala-page__title">窓<%= @window.number %> <%= @window.title %></h1>
+  <p><%= Window.human_attribute_name(:measure) %>：<%= t("activerecord.enums.window.measure.#{@window.measure}") %></p>
+
+  <%# 数え方で、見る物が変わる。課題型＝課題（#19〜#23）、達成率型＝記録（#24〜#27） %>
+  <% if @window.plan_count? %>
+    <h2>課題</h2>
+    <p>課題の一覧は、これから作ります（#19〜#23）。</p>
+  <% else %>
+    <h2>記録</h2>
+    <p>記録の一覧は、これから作ります（#24〜#27）。</p>
+  <% end %>
+
+  <p><%= link_to "#{@phase.code} #{@phase.name} へ戻る", phase_path(@phase) %></p>
+</main>

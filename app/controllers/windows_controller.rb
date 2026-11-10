@@ -2,6 +2,12 @@ class WindowsController < ApplicationController
   before_action :require_login
   # 自分の大窓だけを探す（他人の大窓には小窓を作れない＝404）
   before_action :set_phase, only: %i[new create]
+  # 自分の小窓だけを探す（他人の小窓は開けない＝404）
+  before_action :set_window, only: %i[show]
+
+  # 小窓の詳細（#16）
+  def show
+  end
 
   # 小窓を作る画面（#14）
   def new
@@ -29,6 +35,11 @@ class WindowsController < ApplicationController
 
   def set_phase
     @phase = current_user.phases.find(params[:phase_id])
+  end
+
+  def set_window
+    @window = current_user.windows.find(params[:id])
+    @phase = @window.phase
   end
 
   def window_params
