@@ -59,6 +59,9 @@ end
 group :test do
   # 利用者の操作の流れを、画面を通して確かめる（system spec #32）[https://github.com/teamcapybara/capybara]
   gem "capybara"
+
+  # テストがコードのどこまでを守っているかを％で出す（#33）[https://github.com/simplecov-ruby/simplecov]
+  gem "simplecov", require: false
 end
 
 group :development do
