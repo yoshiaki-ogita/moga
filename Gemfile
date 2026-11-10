@@ -54,6 +54,9 @@ group :development, :test do
 
   # Test data factories [https://github.com/thoughtbot/factory_bot_rails]
   gem "factory_bot_rails"
+
+  # N+1問題（1マスずつDBに問い合わせること）を見つけて知らせる（#34）[https://github.com/flyerhzm/bullet]
+  gem "bullet"
 end
 
 group :test do

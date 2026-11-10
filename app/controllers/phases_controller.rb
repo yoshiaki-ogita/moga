@@ -12,7 +12,7 @@ class PhasesController < ApplicationController
   # 大窓の画面：中心に大窓の名前、まわりに小窓（#15）
   def show
     # 小窓・課題・記録をまとめて読み込む（進捗率を数える時に、1マスずつ問い合わせない）
-    ActiveRecord::Associations::Preloader.new(records: [ @phase ], associations: { windows: %i[plans entries] }).call
+    Window.preload_for_progress(@phase.windows.to_a)
     @windows = @phase.windows.index_by(&:number)
   end
 

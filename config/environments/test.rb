@@ -50,4 +50,12 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
+
+  # テスト中に N+1問題が出たら、エラーにして気づけるようにする（#34）
+  config.after_initialize do
+    Bullet.enable = true
+    # 課題は「済み」を数えるので中身ごと読み込む。件数だけを数える counter cache の提案は使わない
+    Bullet.counter_cache_enable = false
+    Bullet.raise = true
+  end
 end
