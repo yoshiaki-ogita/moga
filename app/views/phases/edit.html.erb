@@ -1,0 +1,27 @@
+<% content_for(:title, "#{@phase.code} の名前を直す｜MOGA") %>
+
+<main class="form-page">
+  <p class="breadcrumb"><%= link_to "Home", home_path %> ＞ <%= link_to "#{@phase.code} #{@phase.name_was}", phase_path(@phase) %> ＞ 名前を直す</p>
+
+  <h1 class="form-page__title">大窓 <%= @phase.code %> の名前</h1>
+
+  <%= form_with model: @phase, class: "form" do |f| %>
+    <% if @phase.errors.any? %>
+      <ul class="form__errors">
+        <% @phase.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <div class="form__field">
+      <%= f.label :name %>
+      <%= f.text_field :name, placeholder: "例：社労士受験合格" %>
+      <small>あなたの夢の名前をつけましょう（30文字まで）</small>
+    </div>
+
+    <%= f.submit "保存する", class: "button button--primary" %>
+  <% end %>
+
+  <p><%= link_to "戻る", phase_path(@phase) %></p>
+</main>

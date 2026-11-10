@@ -4,7 +4,12 @@
   <p class="breadcrumb"><%= link_to "Home", home_path %> ＞ <%= @phase.code %> <%= @phase.name %></p>
 
   <h1 class="mandala-page__title"><%= @phase.code %> <%= @phase.name %></h1>
-  <%# 小窓（窓1〜8）は #14 で作る。名前の編集は #13 %>
+  <%# まだ最初の仮の名前（局面A など）のときは、名前をつけるよう声をかける %>
+  <% if @phase.name == "局面#{@phase.code}" %>
+    <p>ここにあなたの夢の名前をつけましょう。</p>
+  <% end %>
+  <p><%= link_to "この大窓の名前を直す", edit_phase_path(@phase) %></p>
+  <%# 小窓（窓1〜8）は #14 で作る %>
   <p>この大窓の小窓は、これから作ります。</p>
 
   <p><%= link_to "Homeへ戻る", home_path %></p>
