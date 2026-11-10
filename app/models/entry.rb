@@ -10,6 +10,11 @@ class Entry < ApplicationRecord
   validates :body, length: { maximum: 1000 }
   validate :achieved_not_more_than_attempted
 
+  # 「11月10日」のような短い日付（お知らせの文に使う。#35 Controller から移した）
+  def date_label
+    recorded_on.strftime("%-m月%-d日")
+  end
+
   private
 
   # できた数は、やった数より多くならない（20問中21問正解はありえない）

@@ -28,10 +28,8 @@ class WindowsController < ApplicationController
       redirect_to phase_path(@phase), alert: "小窓は1つの大窓に8つまでです"
       return
     end
-    # 大窓の画面の空いたマスから来たときは、その番号を最初から選んでおく
-    number = params[:number].to_i
-    number = @phase.free_window_numbers.first unless @phase.free_window_numbers.include?(number)
-    @window = @phase.windows.build(number: number)
+    # 大窓の画面の空いたマスから来たときは、その番号を最初から選んでおく（選び方はモデルに任せる #35）
+    @window = @phase.windows.build(number: @phase.default_window_number(params[:number].to_i))
   end
 
   # 小窓を保存する（#14）
