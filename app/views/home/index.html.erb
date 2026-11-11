@@ -1,7 +1,8 @@
 <% content_for(:title, "Home｜MOGA") %>
 
 <main class="mandala-page">
-  <p class="breadcrumb">Home</p>
+  <%# 現在地（#31） %>
+  <%= breadcrumb("Home") %>
 
   <%= render "shared/pie", percent: current_user.progress_percent, label: "全体の進捗率（大窓 A〜H の平均）" %>
 

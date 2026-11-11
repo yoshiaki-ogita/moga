@@ -1,11 +1,8 @@
 <% content_for(:title, "窓#{@window.number_was} を直す｜MOGA") %>
 
 <main class="form-page">
-  <p class="breadcrumb">
-    <%= link_to "Home", home_path %> ＞
-    <%= link_to "#{@phase.code} #{@phase.name}", phase_path(@phase) %> ＞
-    <%= link_to "窓#{@window.number_was} #{@window.title_was}", window_path(@window) %> ＞ 直す
-  </p>
+  <%# 現在地（#31） %>
+  <%= breadcrumb(["Home", home_path], ["#{@phase.code} #{@phase.name}", phase_path(@phase)], ["窓#{@window.number_was} #{@window.title_was}", window_path(@window)], "直す") %>
 
   <h1 class="form-page__title">小窓を直す</h1>
   <p>数え方を変えると、％は新しい数え方で計算し直されます。</p>
