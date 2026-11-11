@@ -1,0 +1,30 @@
+<%# 課題の一覧（#20）。done_at が空＝まだ、入っている＝済み（済んだ日時も出す） %>
+<% undone = plans.reject(&:done?) %>
+<% done = plans.select(&:done?) %>
+
+<h3>まだ（<%= undone.size %>）</h3>
+<% if undone.any? %>
+  <ul class="plan-list">
+    <% undone.each do |plan| %>
+      <li class="plan-list__item" id="<%= dom_id(plan) %>">
+        <span class="plan-list__title"><%= plan.title %></span>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>まだの課題はありません。</p>
+<% end %>
+
+<h3>済み（<%= done.size %>）</h3>
+<% if done.any? %>
+  <ul class="plan-list">
+    <% done.each do |plan| %>
+      <li class="plan-list__item plan-list__item--done" id="<%= dom_id(plan) %>">
+        <span class="plan-list__title"><%= plan.title %></span>
+        <span class="plan-list__done-at">済んだ日時：<%= plan.done_at.strftime("%Y年%-m月%-d日 %H:%M") %></span>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>済んだ課題はまだありません。</p>
+<% end %>

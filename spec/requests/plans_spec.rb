@@ -32,3 +32,28 @@ RSpec.describe "課題の作成（#19）", type: :request do
     expect(other_window.plans).to be_empty
   end
 end
+
+RSpec.describe "課題の一覧（#20）", type: :request do
+  let(:user) { create(:user, password: "password123") }
+  let(:window) { user.phases.find_by(code: "B").windows.create!(number: 1, title: "地震・津波・火山", measure: :plan_count) }
+
+  before do
+    post login_path, params: { email: user.email, password: "password123" }
+  end
+
+  it "課題が「まだ」「済み」に分かれて並び、済みには済んだ日時が出る" do
+    window.plans.create!(title: "第1章 地震を読む")
+    window.plans.create!(title: "第2章 津波を読む", done_at: Time.zone.local(2026, 11, 10, 9, 30))
+    get window_path(window)
+    expect(response.body).to include("まだ（1）", "済み（1）", "第1章 地震を読む", "第2章 津波を読む")
+    expect(response.body).to include("済んだ日時：2026年11月10日 09:30")
+    expect(response.body.index("第1章 地震を読む")).to be < response.body.index("済み（1）")
+  end
+
+  it "ほかの小窓の課題は出ない" do
+    other = user.phases.find_by(code: "B").windows.create!(number: 2, title: "風水害", measure: :plan_count)
+    other.plans.create!(title: "第5章 台風を読む")
+    get window_path(window)
+    expect(response.body).not_to include("第5章 台風を読む")
+  end
+end
