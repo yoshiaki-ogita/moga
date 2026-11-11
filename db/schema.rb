@@ -10,9 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_09_234423) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_10_000100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "entries", force: :cascade do |t|
+    t.bigint "window_id", null: false
+    t.date "recorded_on", null: false
+    t.integer "attempted_count", default: 0, null: false
+    t.integer "achieved_count", default: 0, null: false
+    t.string "title"
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["window_id", "recorded_on"], name: "index_entries_on_window_id_and_recorded_on"
+    t.index ["window_id"], name: "index_entries_on_window_id"
+  end
 
   create_table "phases", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -53,6 +66,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_09_234423) do
     t.index ["phase_id"], name: "index_windows_on_phase_id"
   end
 
+  add_foreign_key "entries", "windows"
   add_foreign_key "phases", "users"
   add_foreign_key "plans", "windows"
   add_foreign_key "windows", "phases"

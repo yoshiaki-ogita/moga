@@ -1,0 +1,31 @@
+<%# 記録を書く入力欄（#24）。記録した日は、最初から今日（11/7 決裁） %>
+<%= form_with model: entry, url: window_entries_path(window), class: "form" do |f| %>
+  <% if entry.errors.any? %>
+    <ul class="form__errors">
+      <% entry.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  <% end %>
+  <div class="form__field">
+    <%= f.label :recorded_on %>
+    <%= f.date_field :recorded_on %>
+  </div>
+  <div class="form__field">
+    <%= f.label :attempted_count, "やった数（例：解いた問題の数）" %>
+    <%= f.number_field :attempted_count, min: 0 %>
+  </div>
+  <div class="form__field">
+    <%= f.label :achieved_count, "できた数（例：正解した数）" %>
+    <%= f.number_field :achieved_count, min: 0 %>
+  </div>
+  <div class="form__field">
+    <%= f.label :title, "題名（なくてもよい）" %>
+    <%= f.text_field :title, placeholder: "例：労基法 第1回" %>
+  </div>
+  <div class="form__field">
+    <%= f.label :body, "本文（なくてもよい）" %>
+    <%= f.text_area :body, rows: 3 %>
+  </div>
+  <%= f.submit "記録する", class: "button button--primary" %>
+<% end %>

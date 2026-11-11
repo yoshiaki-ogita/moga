@@ -23,7 +23,8 @@
   gap: 6px;
 }
 
-.form__field input {
+.form__field input,
+.form__field textarea {
   padding: 12px;
   font-size: 1rem;
   border: 1px solid #90caf9;

@@ -6,6 +6,7 @@ ja:
       phase: 大窓
       window: 小窓
       plan: 課題
+      entry: 記録
     attributes:
       user:
         name: 名前
@@ -22,6 +23,12 @@ ja:
       plan:
         title: 課題
         done_at: 済んだ日時
+      entry:
+        recorded_on: 記録した日
+        attempted_count: やった数
+        achieved_count: できた数
+        title: 題名
+        body: 本文
     enums:
       window:
         measure:
