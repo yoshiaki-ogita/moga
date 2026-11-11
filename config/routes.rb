@@ -27,8 +27,8 @@ Rails.application.routes.draw do
   resources :phases, only: %i[show edit update] do
     # 小窓（窓 1〜8）の作成（#14）・詳細（#16）・編集（#17）・削除（#18）
     resources :windows, only: %i[new create show edit update destroy], shallow: true do
-      # 課題の作成（#19）
-      resources :plans, only: %i[create]
+      # 課題の作成（#19）・編集（#21）
+      resources :plans, only: %i[create edit update]
     end
   end
 end
