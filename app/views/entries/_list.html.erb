@@ -8,6 +8,7 @@
         <th>やった数</th>
         <th>できた数</th>
         <th>題名</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -17,6 +18,7 @@
           <td class="entry-table__number"><%= entry.attempted_count %></td>
           <td class="entry-table__number"><%= entry.achieved_count %></td>
           <td><%= entry.title %></td>
+          <td class="entry-table__actions"><%= link_to "直す", edit_entry_path(entry) %></td>
         </tr>
       <% end %>
     </tbody>
