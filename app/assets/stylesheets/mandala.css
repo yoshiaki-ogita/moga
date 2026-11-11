@@ -102,6 +102,11 @@ a.mandala__cell:hover {
   flex: 1;
 }
 
+/* 済みの課題は、題名を1行まるごと使い、済んだ日時とボタンは次の行に回す（本番の課題4：題名が細く折り返して読みにくかった） */
+.plan-list__item--done .plan-list__title {
+  flex-basis: 100%;
+}
+
 .plan-list__done-at {
   font-size: 0.85rem;
   color: #1565c0;
