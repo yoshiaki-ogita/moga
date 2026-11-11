@@ -9,6 +9,9 @@
       <li class="plan-list__item" id="<%= dom_id(plan) %>">
         <span class="plan-list__title"><%= plan.title %></span>
         <%= link_to "直す", edit_plan_path(plan) %>
+        <%= button_to "消す", plan_path(plan), method: :delete,
+              form: { data: { turbo_confirm: "課題「#{plan.title}」を消します。元に戻せません。よろしいですか？" } },
+              class: "plan-list__button" %>
       </li>
     <% end %>
   </ul>
@@ -24,6 +27,9 @@
         <span class="plan-list__title"><%= plan.title %></span>
         <span class="plan-list__done-at">済んだ日時：<%= plan.done_at.strftime("%Y年%-m月%-d日 %H:%M") %></span>
         <%= link_to "直す", edit_plan_path(plan) %>
+        <%= button_to "消す", plan_path(plan), method: :delete,
+              form: { data: { turbo_confirm: "課題「#{plan.title}」を消します。元に戻せません。よろしいですか？" } },
+              class: "plan-list__button" %>
       </li>
     <% end %>
   </ul>

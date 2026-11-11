@@ -3,7 +3,7 @@ class PlansController < ApplicationController
   # 自分の小窓だけを探す（他人の小窓には課題を足せない＝404）
   before_action :set_window, only: %i[create]
   # 自分の課題だけを探す（他人の課題は直せない＝404）
-  before_action :set_plan, only: %i[edit update]
+  before_action :set_plan, only: %i[edit update destroy]
 
   # 課題を足す（#19）。入力欄は小窓の詳細画面にある
   def create
@@ -27,6 +27,12 @@ class PlansController < ApplicationController
     else
       render :edit, status: :unprocessable_content
     end
+  end
+
+  # 課題を消す（#22）
+  def destroy
+    @plan.destroy!
+    redirect_to window_path(@window), notice: "課題「#{@plan.title}」を消しました", status: :see_other
   end
 
   private

@@ -106,3 +106,18 @@ a.mandala__cell:hover {
   font-size: 0.85rem;
   color: #1565c0;
 }
+
+/* 課題の一覧の小さなボタン（消す・済み・まだに戻す） */
+.plan-list__button {
+  padding: 4px 10px;
+  font-size: 0.85rem;
+  border: 1px solid #90caf9;
+  border-radius: 6px;
+  background: #fff;
+  color: #1565c0;
+  cursor: pointer;
+}
+
+.plan-list__item form {
+  margin: 0;
+}
