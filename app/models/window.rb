@@ -14,6 +14,14 @@ class Window < ApplicationRecord
   validates :number, presence: true, inclusion: { in: NUMBERS }, uniqueness: { scope: :phase_id }
   validates :title, presence: true, length: { maximum: 30 }
 
+  # 進捗率を数えるために、たくさんの小窓の中身をまとめて読み込む（#34 N+1対策）
+  # 課題型の小窓には課題だけ、達成率型の小窓には記録だけを読み込む（使わない物は読まない）
+  def self.preload_for_progress(windows)
+    plan_windows, rate_windows = windows.partition(&:plan_count?)
+    ActiveRecord::Associations::Preloader.new(records: plan_windows, associations: :plans).call
+    ActiveRecord::Associations::Preloader.new(records: rate_windows, associations: :entries).call
+  end
+
   # 進捗率（#28）。どの表にも保存せず、見るたびに計算する
   # 割り算の「上の数（分子）」と「下の数（分母）」を返す
   #   課題型   ：済んだ課題の数 ÷ 課題の数
