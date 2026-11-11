@@ -123,3 +123,36 @@ RSpec.describe "課題の削除（#22）", type: :request do
     expect(response).to have_http_status(:not_found)
   end
 end
+
+RSpec.describe "課題を「済み」にする（#23）", type: :request do
+  let(:user) { create(:user, password: "password123") }
+  let(:window) { user.phases.find_by(code: "B").windows.create!(number: 1, title: "地震・津波・火山", measure: :plan_count) }
+  let!(:plan) { window.plans.create!(title: "第1章 地震を読む") }
+
+  before do
+    post login_path, params: { email: user.email, password: "password123" }
+  end
+
+  it "「済み」を押すと済んだ日時が入り、済みの欄に移る" do
+    patch done_plan_path(plan)
+    expect(plan.reload.done_at).to be_present
+    expect(response).to redirect_to(window_path(window))
+    follow_redirect!
+    expect(response.body).to include("まだ（0）", "済み（1）", "済んだ日時")
+  end
+
+  it "「まだに戻す」を押すと済んだ日時が空になる" do
+    plan.update!(done_at: Time.current)
+    patch undone_plan_path(plan)
+    expect(plan.reload.done_at).to be_nil
+    follow_redirect!
+    expect(response.body).to include("まだ（1）", "済み（0）")
+  end
+
+  it "他人の課題は済みにできない" do
+    other_plan = create(:user).phases.find_by(code: "B").windows.create!(number: 1, title: "他人の窓").plans.create!(title: "他人の課題")
+    patch done_plan_path(other_plan)
+    expect(response).to have_http_status(:not_found)
+    expect(other_plan.reload.done_at).to be_nil
+  end
+end

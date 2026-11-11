@@ -3,7 +3,7 @@ class PlansController < ApplicationController
   # 自分の小窓だけを探す（他人の小窓には課題を足せない＝404）
   before_action :set_window, only: %i[create]
   # 自分の課題だけを探す（他人の課題は直せない＝404）
-  before_action :set_plan, only: %i[edit update destroy]
+  before_action :set_plan, only: %i[edit update destroy done undone]
 
   # 課題を足す（#19）。入力欄は小窓の詳細画面にある
   def create
@@ -33,6 +33,18 @@ class PlansController < ApplicationController
   def destroy
     @plan.destroy!
     redirect_to window_path(@window), notice: "課題「#{@plan.title}」を消しました", status: :see_other
+  end
+
+  # 課題を「済み」にする（#23）。済んだ日時（done_at）に今の時刻を入れる
+  def done
+    @plan.update!(done_at: Time.current)
+    redirect_to window_path(@window), notice: "課題「#{@plan.title}」が済みました", status: :see_other
+  end
+
+  # 押し間違えた時のために「まだ」に戻す（#23）。done_at を空にする
+  def undone
+    @plan.update!(done_at: nil)
+    redirect_to window_path(@window), notice: "課題「#{@plan.title}」をまだに戻しました", status: :see_other
   end
 
   private
