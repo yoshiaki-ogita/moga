@@ -1,0 +1,16 @@
+<%# 進捗率の円グラフ（#29）。CSS の conic-gradient だけで描く（部品を入れない。11/7 決裁）
+    percent  : 0〜100 の整数
+    label    : 円の下に出す言葉（例：全体の進捗率）
+    fraction : 割り算のもとの数 [上の数, 下の数]。あれば「26 / 30」と横に出す %>
+<% fraction = local_assigns[:fraction] %>
+<div class="pie-box">
+  <div class="pie" style="--pct: <%= percent %>;" role="img" aria-label="<%= label %> <%= percent %>%">
+    <span class="pie__value"><%= percent %>%</span>
+  </div>
+  <div class="pie-box__text">
+    <p class="pie-box__label"><%= label %></p>
+    <% if fraction %>
+      <p class="pie-box__fraction"><%= fraction[0] %> / <%= fraction[1] %></p>
+    <% end %>
+  </div>
+</div>

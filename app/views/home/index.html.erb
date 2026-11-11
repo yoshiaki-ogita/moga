@@ -3,6 +3,8 @@
 <main class="mandala-page">
   <p class="breadcrumb">Home</p>
 
+  <%= render "shared/pie", percent: current_user.progress_percent, label: "全体の進捗率（大窓 A〜H の平均）" %>
+
   <div class="mandala">
     <% HomeController::MANDALA_ORDER.each do |code| %>
       <% if code == :me %>

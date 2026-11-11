@@ -11,6 +11,9 @@
   <p><%= Window.human_attribute_name(:measure) %>：<%= t("activerecord.enums.window.measure.#{@window.measure}") %></p>
   <p><%= link_to "この小窓を直す", edit_window_path(@window) %></p>
 
+  <%= render "shared/pie", percent: @window.progress_percent, label: "この小窓の進捗率",
+                           fraction: @window.progress_fraction %>
+
   <%# 数え方で、見る物が変わる。課題型＝課題（#19〜#23）、達成率型＝記録（#24〜#27） %>
   <% if @window.plan_count? %>
     <h2>課題</h2>
