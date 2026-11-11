@@ -18,7 +18,12 @@
           <td class="entry-table__number"><%= entry.attempted_count %></td>
           <td class="entry-table__number"><%= entry.achieved_count %></td>
           <td><%= entry.title %></td>
-          <td class="entry-table__actions"><%= link_to "直す", edit_entry_path(entry) %></td>
+          <td class="entry-table__actions">
+            <%= link_to "直す", edit_entry_path(entry) %>
+            <%= button_to "消す", entry_path(entry), method: :delete,
+                  form: { data: { turbo_confirm: "#{entry.recorded_on.strftime('%-m月%-d日')}の記録を消します。元に戻せません。よろしいですか？" } },
+                  class: "plan-list__button" %>
+          </td>
         </tr>
       <% end %>
     </tbody>
