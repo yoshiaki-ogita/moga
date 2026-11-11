@@ -127,3 +127,25 @@ a.mandala__cell:hover {
 .plan-list__item form {
   margin: 0;
 }
+
+/* 記録の一覧（#25） */
+.entry-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 16px;
+}
+
+.entry-table th,
+.entry-table td {
+  padding: 8px;
+  border-bottom: 1px solid #bbdefb;
+  text-align: left;
+}
+
+.entry-table th {
+  background: #e3f2fd;
+}
+
+.entry-table__number {
+  text-align: right;
+}

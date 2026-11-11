@@ -33,3 +33,25 @@ RSpec.describe "記録の作成（#24）", type: :request do
     expect(other_window.entries).to be_empty
   end
 end
+
+RSpec.describe "記録の一覧（#25）", type: :request do
+  let(:user) { create(:user, password: "password123") }
+  let(:window) { user.phases.find_by(code: "A").windows.create!(number: 1, title: "労働基準法", measure: :achievement_rate) }
+
+  before do
+    post login_path, params: { email: user.email, password: "password123" }
+  end
+
+  it "記録がない時は、書いてみましょうと出る" do
+    get window_path(window)
+    expect(response.body).to include("これまでの記録（0）", "記録はまだありません")
+  end
+
+  it "記録した日・やった数・できた数・題名が、新しい日付を上にして並ぶ" do
+    window.entries.create!(recorded_on: Date.new(2026, 11, 9), attempted_count: 10, achieved_count: 7, title: "古い記録")
+    window.entries.create!(recorded_on: Date.new(2026, 11, 10), attempted_count: 20, achieved_count: 16, title: "新しい記録")
+    get window_path(window)
+    expect(response.body).to include("これまでの記録（2）", "2026年11月10日", "新しい記録")
+    expect(response.body.index("新しい記録")).to be < response.body.index("古い記録")
+  end
+end

@@ -18,6 +18,7 @@
     <%= render "plans/form", window: @window, plan: @plan || Plan.new %>
   <% else %>
     <h2>記録</h2>
+    <%= render "entries/list", entries: @window.entries.reject(&:new_record?) %>
     <%= render "entries/form", window: @window, entry: @entry || Entry.new(recorded_on: Date.current) %>
   <% end %>
 
