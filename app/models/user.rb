@@ -21,6 +21,15 @@ class User < ApplicationRecord
                     uniqueness: { case_sensitive: false }
   validates :password, length: { minimum: 8 }, allow_nil: true
 
+  # Home の曼荼羅に並べる大窓（#35 Controller から移した）
+  # 足りない大窓を用意し、大窓 → 小窓 → 課題・記録をまとめて読み込んで（#34 N+1対策）、記号 A〜H で引ける形で返す
+  def mandala_phases
+    ensure_default_phases
+    ActiveRecord::Associations::Preloader.new(records: [ self ], associations: { phases: :windows }).call
+    Window.preload_for_progress(phases.flat_map(&:windows))
+    phases.index_by(&:code)
+  end
+
   # 全体の進捗率（#28）＝大窓 A〜H の進捗率の平均
   def progress_rate
     return 0.0 if phases.empty?

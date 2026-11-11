@@ -59,3 +59,37 @@ RSpec.describe "進捗率の計算（#28）", type: :model do
     end
   end
 end
+
+RSpec.describe "モデルに移した仕事（#35）", type: :model do
+  let(:user) { create(:user) }
+  let(:phase) { user.phases.find_by(code: "A") }
+
+  it "User#mandala_phases は A〜H の大窓を記号で引ける形で返す" do
+    expect(user.mandala_phases.keys).to match_array(Phase::CODES)
+  end
+
+  it "Phase#windows_by_number は小窓を番号で引ける形で返す" do
+    phase.windows.create!(number: 3, title: "窓3")
+    expect(phase.windows_by_number.keys).to eq([ 3 ])
+  end
+
+  it "Phase#default_window_number は、空いていればその番号、だめなら空いている一番小さい番号" do
+    phase.windows.create!(number: 1, title: "窓1")
+    expect(phase.default_window_number(5)).to eq(5)
+    expect(phase.default_window_number(1)).to eq(2)
+    expect(phase.default_window_number(0)).to eq(2)
+  end
+
+  it "Plan#done! と Plan#undone! で済んだ日時が入る・空になる" do
+    plan = phase.windows.create!(number: 1, title: "窓1").plans.create!(title: "第1章")
+    plan.done!
+    expect(plan.reload).to be_done
+    plan.undone!
+    expect(plan.reload).not_to be_done
+  end
+
+  it "Entry#date_label は「11月10日」の形" do
+    entry = Entry.new(recorded_on: Date.new(2026, 11, 10))
+    expect(entry.date_label).to eq("11月10日")
+  end
+end

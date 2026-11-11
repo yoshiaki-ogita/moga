@@ -37,13 +37,13 @@ class PlansController < ApplicationController
 
   # 課題を「済み」にする（#23）。済んだ日時（done_at）に今の時刻を入れる
   def done
-    @plan.update!(done_at: Time.current)
+    @plan.done!
     redirect_to window_path(@window), notice: "課題「#{@plan.title}」が済みました", status: :see_other
   end
 
   # 押し間違えた時のために「まだ」に戻す（#23）。done_at を空にする
   def undone
-    @plan.update!(done_at: nil)
+    @plan.undone!
     redirect_to window_path(@window), notice: "課題「#{@plan.title}」をまだに戻しました", status: :see_other
   end
 

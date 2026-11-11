@@ -9,7 +9,7 @@ class EntriesController < ApplicationController
   def create
     @entry = @window.entries.build(entry_params)
     if @entry.save
-      redirect_to window_path(@window), notice: "#{@entry.recorded_on.strftime('%-m月%-d日')}の記録を書きました"
+      redirect_to window_path(@window), notice: "#{@entry.date_label}の記録を書きました"
     else
       @phase = @window.phase
       render "windows/show", status: :unprocessable_content
@@ -23,7 +23,7 @@ class EntriesController < ApplicationController
   # 記録を保存し直す（#26）
   def update
     if @entry.update(entry_params)
-      redirect_to window_path(@window), notice: "#{@entry.recorded_on.strftime('%-m月%-d日')}の記録を直しました"
+      redirect_to window_path(@window), notice: "#{@entry.date_label}の記録を直しました"
     else
       render :edit, status: :unprocessable_content
     end
@@ -32,7 +32,7 @@ class EntriesController < ApplicationController
   # 記録を消す（#27）
   def destroy
     @entry.destroy!
-    redirect_to window_path(@window), notice: "#{@entry.recorded_on.strftime('%-m月%-d日')}の記録を消しました", status: :see_other
+    redirect_to window_path(@window), notice: "#{@entry.date_label}の記録を消しました", status: :see_other
   end
 
   private
