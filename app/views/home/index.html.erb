@@ -13,9 +13,12 @@
         </div>
       <% else %>
         <% phase = @phases[code] %>
-        <%= link_to phase_path(phase), class: "mandala__cell" do %>
+        <%# 進捗率に合わせて青の濃淡で塗る（#30） %>
+        <% percent = phase.progress_percent %>
+        <%= link_to phase_path(phase), class: mandala_cell_class(percent), style: "--pct: #{percent};" do %>
           <span class="mandala__code"><%= phase.code %></span>
           <span class="mandala__name"><%= phase.name %></span>
+          <span class="mandala__percent"><%= percent %>%</span>
         <% end %>
       <% end %>
     <% end %>

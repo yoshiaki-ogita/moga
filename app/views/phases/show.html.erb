@@ -21,9 +21,12 @@
           <span class="mandala__me-name"><%= @phase.name %></span>
         </div>
       <% elsif (window = @windows[number]) %>
-        <%= link_to window_path(window), class: "mandala__cell" do %>
+        <%# 進捗率に合わせて青の濃淡で塗る（#30） %>
+        <% percent = window.progress_percent %>
+        <%= link_to window_path(window), class: mandala_cell_class(percent), style: "--pct: #{percent};" do %>
           <span class="mandala__code"><%= number %></span>
           <span class="mandala__name"><%= window.title %></span>
+          <span class="mandala__percent"><%= percent %>%</span>
         <% end %>
       <% else %>
         <%= link_to new_phase_window_path(@phase, number: number), class: "mandala__cell mandala__cell--empty" do %>
