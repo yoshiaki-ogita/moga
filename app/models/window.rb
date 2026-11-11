@@ -27,11 +27,14 @@ class Window < ApplicationRecord
   #   課題型   ：済んだ課題の数 ÷ 課題の数
   #   達成率型 ：できた数の合計 ÷ やった数の合計（11/7 決裁 例：16/20 と 10/10 → 26÷30）
   # 読み込み済みの課題・記録を Ruby で数えるので、includes と組み合わせても余計な問い合わせが出ない
+  # 保存された物だけを数える。入力が断られた課題・記録（まだ保存されていない1件）は数えない（本番の課題6）
   def progress_fraction
     if plan_count?
-      [ plans.count(&:done?), plans.size ]
+      saved_plans = plans.select(&:persisted?)
+      [ saved_plans.count(&:done?), saved_plans.size ]
     else
-      [ entries.sum(&:achieved_count), entries.sum(&:attempted_count) ]
+      saved_entries = entries.select(&:persisted?)
+      [ saved_entries.sum(&:achieved_count), saved_entries.sum(&:attempted_count) ]
     end
   end
 

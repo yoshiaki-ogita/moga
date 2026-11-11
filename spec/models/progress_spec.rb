@@ -29,6 +29,19 @@ RSpec.describe "進捗率の計算（#28）", type: :model do
       expect(rate_window.progress_percent).to eq(0)
     end
 
+    it "入力が断られた課題（保存されていない1件）は数えない（本番の課題6：0 / 1 にならない）" do
+      window = phase_a.windows.create!(number: 6, title: "断られた課題", measure: :plan_count)
+      window.plans.build(title: "")
+      expect(window.progress_fraction).to eq([ 0, 0 ])
+    end
+
+    it "入力が断られた記録（保存されていない1件）は数えない（本番の課題6）" do
+      window = phase_a.windows.create!(number: 7, title: "断られた記録", measure: :achievement_rate)
+      window.entries.create!(recorded_on: Date.current, attempted_count: 10, achieved_count: 8)
+      window.entries.build(recorded_on: Date.current, attempted_count: 10, achieved_count: 11)
+      expect(window.progress_fraction).to eq([ 8, 10 ])
+    end
+
     it "全部済めば 100%" do
       window = phase_a.windows.create!(number: 5, title: "全部済み", measure: :plan_count)
       window.plans.create!(title: "1つだけ", done_at: Time.current)
