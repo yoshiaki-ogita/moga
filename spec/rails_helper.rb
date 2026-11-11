@@ -18,4 +18,9 @@ RSpec.configure do |config|
   config.fixture_paths = [ Rails.root.join("spec/fixtures") ]
   config.use_transactional_fixtures = true
   config.filter_rails_from_backtrace!
+
+  # system spec（#32）はブラウザを使わず rack_test で動かす（Docker や CI に Chrome を入れなくて済む）
+  config.before(type: :system) do
+    driven_by :rack_test
+  end
 end
