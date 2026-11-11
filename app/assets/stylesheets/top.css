@@ -52,3 +52,76 @@
   color: #1565c0;
   border: 1px solid #90caf9;
 }
+
+/* キャッチフレーズと見本（TOPページの札） */
+.top__phrase {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin: 0 0 16px;
+}
+
+.top-sample {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  max-width: 240px;
+  margin: 0 auto 8px;
+}
+
+.top-sample__cell {
+  --pct: 0;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #90caf9;
+  border-radius: 8px;
+  background: color-mix(in srgb, #1565c0 calc(var(--pct) * 1%), #fff);
+  font-size: 0.9rem;
+  color: #0d3c61;
+}
+
+.top-sample__cell--dark {
+  color: #fff;
+}
+
+.top-sample__cell--me {
+  background: #1565c0;
+  border-color: #1565c0;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: bold;
+}
+
+.top-sample__note {
+  font-size: 0.85rem;
+  margin: 0 0 32px;
+}
+
+.top-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto 40px;
+  max-width: 400px;
+  text-align: left;
+}
+
+.top-steps__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #e3f2fd;
+}
+
+.top-steps__number {
+  flex: 0 0 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #e3f2fd;
+  color: #1565c0;
+  font-weight: bold;
+}

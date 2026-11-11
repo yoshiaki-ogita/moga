@@ -3,10 +3,30 @@
 <main class="top">
   <h1 class="top__title">MOGA</h1>
   <p class="top__catch">育てられる記録</p>
+  <%# キャッチフレーズ（2026-11-12 荻田さん決定「ア」。11/9 の荻田さんの言葉） %>
+  <p class="top__phrase">MOGAの⚪︎は、あなた自身です。</p>
   <p class="top__lead">
     8つの局面と64の窓に、毎日の課題と記録を残す。<br>
     「私の昨日・今日・明日」が、色の濃さで見えてきます。
   </p>
+
+  <%# 小さな曼荼羅の見本（数字は見本。並びは Home と同じく A から時計回り） %>
+  <div class="top-sample" aria-label="曼荼羅の見本">
+    <% [ 80, 45, 20, 0, :me, 60, 10, 30, 95 ].each do |pct| %>
+      <% if pct == :me %>
+        <div class="top-sample__cell top-sample__cell--me">あなた</div>
+      <% else %>
+        <div class="top-sample__cell <%= "top-sample__cell--dark" if pct >= 60 %>" style="--pct: <%= pct %>;"><%= pct %>%</div>
+      <% end %>
+    <% end %>
+  </div>
+  <p class="top-sample__note">見本：青が濃いほど、進んだ局面です。</p>
+
+  <ol class="top-steps">
+    <li class="top-steps__item"><span class="top-steps__number">1</span>8つの大窓に、人生の局面の名前をつける</li>
+    <li class="top-steps__item"><span class="top-steps__number">2</span>毎日、課題と記録を1行残す</li>
+    <li class="top-steps__item"><span class="top-steps__number">3</span>青が濃くなるほど、あなたが育った証</li>
+  </ol>
 
   <div class="top__buttons">
     <%= link_to "はじめる（ユーザー登録）", new_user_path, class: "button button--primary" %>
