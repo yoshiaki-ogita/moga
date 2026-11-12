@@ -60,6 +60,18 @@
   margin: 0 0 16px;
 }
 
+/* キャッチフレーズの◯：大きく・太く・濃い青で目立たせる */
+.top__maru {
+  display: inline-block;
+  font-size: 1.8em;
+  font-weight: 900;
+  color: #0d47a1;
+  line-height: 1;
+  vertical-align: -0.12em;
+  margin: 0 2px;
+  -webkit-text-stroke: 1.5px #0d47a1;
+}
+
 .top-sample {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
