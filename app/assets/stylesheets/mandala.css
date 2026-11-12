@@ -69,6 +69,11 @@ a.mandala__cell:hover {
   margin-top: 32px;
 }
 
+/* 「この小窓を消す」：上の「記録する」「足す」とくっつかないよう、上に余白を取る（2026-11-12 荻田さん：本番で気づく） */
+.mandala-page__delete {
+  margin-top: 32px;
+}
+
 /* まだ小窓がないマス（#15）：点線の枠で「ここに作れる」ことを示す */
 .mandala__cell--empty {
   border-style: dashed;
