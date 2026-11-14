@@ -34,6 +34,13 @@ ja:
         measure:
           plan_count: 課題型（済んだ課題 ÷ 課題）
           achievement_rate: 達成率型（できた数 ÷ やった数）
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              # 登録済みかどうかを他人に知らせないよう、遠回しな文言にする（MVPレビュー #83）
+              taken: は使用できません
   errors:
     format: "%{attribute}%{message}"
     messages:
