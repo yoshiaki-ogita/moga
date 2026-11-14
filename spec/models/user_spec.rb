@@ -22,7 +22,7 @@ RSpec.describe User, type: :model do
       create(:user, email: "ogita@example.com")
       user = build(:user, email: "OGITA@example.com")
       expect(user).not_to be_valid
-      expect(user.errors[:email]).to include("はすでに使われています")
+      expect(user.errors[:email]).to include("は使用できません")
     end
 
     it "パスワードが空ならエラー" do

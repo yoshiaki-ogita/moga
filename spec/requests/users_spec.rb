@@ -26,7 +26,8 @@ RSpec.describe "Users（ユーザー登録）", type: :request do
       create(:user, email: "ogita@example.com")
       expect { post users_path, params: valid_params }.not_to change(User, :count)
       expect(response).to have_http_status(:unprocessable_content)
-      expect(response.body).to include("メールアドレスはすでに使われています")
+      expect(response.body).to include("メールアドレスは使用できません")
+      expect(response.body).not_to include("すでに使われています")
     end
 
     it "名前が空だと登録できない" do
