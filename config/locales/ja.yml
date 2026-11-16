@@ -36,6 +36,14 @@ ja:
         word: 今日の一言
         must_do: 今日必ずやること
         diary_plans: 行動予定
+        redo_1: やり直せるなら（1）
+        redo_2: やり直せるなら（2）
+        redo_3: やり直せるなら（3）
+        redo_4: やり直せるなら（4）
+        redo_5: やり直せるなら（5）
+        joy: 今日嬉しかったこと
+        growth: 成長したこと、上達したこと
+        thanks: 「ありがとう！」と言った、言われたこと
       diary/diary_plans:
         starts_at: 行動予定の始まり
         ends_at: 行動予定の終わり

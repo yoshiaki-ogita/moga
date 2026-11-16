@@ -76,6 +76,31 @@
       <p class="wadachi-section__hint"><%= Diary::GRADES.map { |grade, meaning| "#{grade}：#{meaning}" }.join("　") %></p>
     </section>
 
+    <section class="wadachi-section">
+      <h2>⑤ 今日もう一度やり直せるとしたら？</h2>
+      <p class="wadachi-section__hint wadachi-section__goal">3つ以上書きましょう！（4つ目・5つ目は書けたら）</p>
+      <ol class="wadachi-lines">
+        <% Diary::REDO_FIELDS.each_with_index do |field, i| %>
+          <li class="wadachi-lines__row<%= ' wadachi-lines__row--goal' if i < Diary::REDO_GOAL %>">
+            <span class="wadachi-lines__num"><%= i + 1 %></span>
+            <%= f.text_field field, placeholder: (i.zero? ? "例：朝の30分をスマホでなく復習に使う" : ""),
+                  aria: { label: "やり直せるなら（#{i + 1}）" } %>
+          </li>
+        <% end %>
+      </ol>
+    </section>
+
+    <section class="wadachi-section">
+      <h2>⑥ 今日自分の自信を育てた出来事3つ</h2>
+      <p class="wadachi-section__hint">それぞれ一言で。</p>
+      <% Diary::CONFIDENCE_ITEMS.each_with_index do |(field, label), i| %>
+        <div class="form__field wadachi-confidence">
+          <%= f.label field, "#{i + 1}　#{label}", class: "wadachi-confidence__label" %>
+          <%= f.text_field field %>
+        </div>
+      <% end %>
+    </section>
+
     <%= f.submit "保存する", class: "button button--primary" %>
   <% end %>
 

@@ -130,4 +130,39 @@ RSpec.describe "わたしの轍（PR1：前の日に書く①〜③）", type: :
       expect(response.body).not_to include("他人の一言")
     end
   end
+
+  describe "⑤⑥（PR3）" do
+    before do
+      post login_path, params: { email: user.email, password: "password123" }
+    end
+
+    it "1日の轍に⑤⑥の見出しと欄が出る" do
+      get diary_path("2026-11-17")
+      expect(response.body).to include("⑤ 今日もう一度やり直せるとしたら？", "3つ以上書きましょう！",
+                                       "⑥ 今日自分の自信を育てた出来事3つ", "今日嬉しかったことは？",
+                                       'name="diary[redo_5]"', 'name="diary[thanks]"')
+    end
+
+    it "⑤⑥を保存でき、⑤が2つなら「あと1つ」と励ます" do
+      patch diary_path("2026-11-17"), params: { diary: { redo_1: "朝の復習を先に", redo_2: "早めに寝る",
+                                                        joy: "友人から電話", growth: "轍を作れた", thanks: "家族にありがとう" } }
+      diary = user.diaries.find_by(diary_on: Date.new(2026, 11, 17))
+      expect([ diary.redo_1, diary.redo_2, diary.joy, diary.growth, diary.thanks ])
+        .to eq([ "朝の復習を先に", "早めに寝る", "友人から電話", "轍を作れた", "家族にありがとう" ])
+      follow_redirect!
+      expect(response.body).to include("⑤はあと1つ。もう一歩！")
+    end
+
+    it "⑤が3つなら達成を伝える" do
+      patch diary_path("2026-11-17"), params: { diary: { redo_1: "一", redo_2: "二", redo_3: "三" } }
+      follow_redirect!
+      expect(response.body).to include("⑤ 3つ以上達成！")
+    end
+
+    it "⑤を書かない日（前の日の夜の保存）は励ましを出さない" do
+      patch diary_path("2026-11-17"), params: { diary: { word: "一歩ずつ" } }
+      follow_redirect!
+      expect(response.body).not_to include("もう一歩！", "達成！")
+    end
+  end
 end

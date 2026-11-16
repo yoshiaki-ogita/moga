@@ -223,3 +223,59 @@
 .wadachi-list__grade--d { background: #bbdefb; color: #0d3c61; }
 .wadachi-list__grade--e { background: #e3f2fd; color: #0d3c61; }
 .wadachi-list__grade--none { color: #b0cbe6; }
+
+/* ⑤ 今日もう一度やり直せるとしたら？（1〜3は濃い丸＝目標、4・5は薄い丸） */
+.wadachi-section__goal {
+  color: #0d47a1;
+  font-weight: bold;
+}
+
+.wadachi-lines {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wadachi-lines__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+}
+
+.wadachi-lines__num {
+  flex: 0 0 auto;
+  width: 1.8em;
+  height: 1.8em;
+  line-height: 1.8em;
+  text-align: center;
+  border-radius: 50%;
+  color: #1565c0;
+  background: #e3f2fd;
+}
+
+.wadachi-lines__row--goal .wadachi-lines__num {
+  color: #fff;
+  background: #1976d2;
+}
+
+.wadachi-lines input[type="text"],
+.wadachi-confidence input[type="text"] {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #90caf9;
+  border-radius: 8px;
+}
+
+/* ⑥ 自信を育てた出来事3つ */
+.wadachi-confidence {
+  margin: 10px 0;
+}
+
+.wadachi-confidence__label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: bold;
+}

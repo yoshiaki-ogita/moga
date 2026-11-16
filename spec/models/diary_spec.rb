@@ -94,4 +94,30 @@ RSpec.describe DiaryPlan, type: :model do
     expect { window.destroy }.to change(DiaryPlan, :count).by(-1)
     expect(Diary.exists?(diary.id)).to be(true)
   end
+
+  describe "⑤⑥（その日の終わりに書く）" do
+    it "⑤⑥は51文字以上は保存できない" do
+      diary.redo_1 = "あ" * 51
+      diary.joy = "い" * 51
+      expect(diary).not_to be_valid
+      expect(diary.errors[:redo_1]).to be_present
+      expect(diary.errors[:joy]).to be_present
+    end
+
+    it "⑤をまだ1つも書いていない日は、励ましを出さない" do
+      expect(diary.redo_cheer).to be_nil
+    end
+
+    it "⑤が3つに足りない時は「あと◯つ」と励ます（保存はできる）" do
+      diary.redo_1 = "朝の復習を先にやる"
+      diary.redo_3 = "早めに寝る"
+      expect(diary).to be_valid
+      expect(diary.redo_cheer).to eq("⑤はあと1つ。もう一歩！")
+    end
+
+    it "⑤が3つ以上なら達成を伝える" do
+      diary.assign_attributes(redo_1: "一", redo_2: "二", redo_3: "三", redo_4: "四")
+      expect(diary.redo_cheer).to eq("⑤ 3つ以上達成！")
+    end
+  end
 end
