@@ -120,4 +120,53 @@ RSpec.describe DiaryPlan, type: :model do
       expect(diary.redo_cheer).to eq("⑤ 3つ以上達成！")
     end
   end
+
+  describe "①の実際（PR4）" do
+    let(:diary) { user.diaries.create!(diary_on: Date.new(2026, 11, 17)) }
+    let(:plan) { diary.diary_plans.create!(starts_at: "07:30", ends_at: "10:00", window: window) }
+
+    it "まだ確かめていない行は、実際が無い" do
+      expect(plan.actual_range).to be_nil
+      expect(plan).not_to be_actual
+    end
+
+    it "予定どおりに✓なら、予定の時刻が実際になる" do
+      plan.update!(as_planned: true)
+      expect(plan.actual_range.map { |t| t.strftime("%H:%M") }).to eq(%w[07:30 10:00])
+    end
+
+    it "ずれた時は、実際の時刻を使う" do
+      plan.update!(actual_starts_at: "08:00", actual_ends_at: "10:30")
+      expect(plan.actual_range.map { |t| t.strftime("%H:%M") }).to eq(%w[08:00 10:30])
+    end
+
+    it "実際の時刻は片方だけでは保存できない" do
+      plan.actual_starts_at = "08:00"
+      expect(plan).not_to be_valid
+      expect(plan.errors[:base]).to include("実際の時刻は、始まりと終わりの両方を書いてください")
+    end
+
+    it "実際の終わりは、実際の始まりより後" do
+      plan.assign_attributes(actual_starts_at: "10:00", actual_ends_at: "09:00")
+      expect(plan).not_to be_valid
+    end
+
+    it "小窓の記号は「D1」、大窓は「D」" do
+      expect([ plan.window_code, plan.phase_code ]).to eq(%w[D1 D])
+    end
+
+    it "④⑤⑥のどれかを書いたら、寝る前の部分を書いたことになる" do
+      expect(diary).not_to be_evening_written
+      diary.joy = "友人から電話"
+      expect(diary).to be_evening_written
+    end
+  end
+
+  it "①は日本の時刻で早い順に並ぶ（朝5時が昼1時より上）" do
+    diary = user.diaries.create!(diary_on: Date.new(2026, 11, 17))
+    diary.diary_plans.create!(starts_at: "13:00", ends_at: "15:00", window: window)
+    diary.diary_plans.create!(starts_at: "05:00", ends_at: "06:30", window: window)
+    diary.reload.build_blank_plans
+    expect(diary.sorted_plans.map { |p| p.starts_at&.strftime("%H:%M") }).to eq([ "05:00", "13:00", nil, nil, nil ])
+  end
 end

@@ -336,3 +336,76 @@
   color: #5b7fa3;
   font-size: 0.9rem;
 }
+
+/* ①の「実際は？」の行（寝る前に確かめる） */
+.wadachi-plans__actual td {
+  padding: 2px 4px 10px;
+  font-size: 0.9rem;
+  color: #37474f;
+  border-bottom: 1px dashed #cfd8dc;
+}
+
+.wadachi-plans__actual input[type="time"] {
+  box-sizing: border-box;
+  width: 7.5em;
+}
+
+.wadachi-actual__label {
+  margin-right: 8px;
+  color: #0d47a1;
+  font-weight: bold;
+}
+
+.wadachi-actual__ok {
+  margin: 0 12px 0 2px;
+  color: #1565c0;
+  font-weight: bold;
+}
+
+.wadachi-actual__or {
+  color: #78909c;
+}
+
+/* 狭い画面では「ずれた時：〜」をまとめて次の行へ */
+.wadachi-actual__times {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* ⑦ 今日の24時間（円の後ろは白→灰の丸いグラデーションと影。SVGの中で描く） */
+.wadachi-clock__chart {
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+.wadachi-clock__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.wadachi-clock__empty {
+  padding: 24px;
+  text-align: center;
+  color: #78909c;
+  border: 1px dashed #cfd8dc;
+  border-radius: 12px;
+  background: radial-gradient(circle at 50% 40%, #ffffff 0%, #e3e9ef 100%);
+}
+
+/* 明日の轍を書く ▶ */
+.wadachi-next {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.wadachi-next__button {
+  display: block;
+  padding: 14px;
+  color: #fff;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #1e88e5 0%, #1565c0 100%);
+  box-shadow: 0 4px 10px rgba(21, 101, 192, 0.25);
+}

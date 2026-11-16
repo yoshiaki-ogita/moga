@@ -34,13 +34,15 @@ class DiariesController < ApplicationController
 
   # 入力画面の準備：空の行を足し、小窓の選び方（大窓ごとのまとまり）を用意する
   def prepare_form
+    # 小窓と大窓をまとめて読む（円グラフの色・記号で1行ずつ読みに行かない）
+    ActiveRecord::Associations::Preloader.new(records: [ @diary ], associations: { diary_plans: { window: :phase } }).call
     @diary.build_blank_plans
     @window_choices = current_user.window_choices
   end
 
   def diary_params
     params.require(:diary).permit(:word, :must_do, *review_fields, *Diary::REDO_FIELDS, *Diary::CONFIDENCE_ITEMS.keys,
-                                  diary_plans_attributes: %i[id starts_at ends_at window_id memo _destroy])
+                                  diary_plans_attributes: %i[id starts_at ends_at window_id memo as_planned actual_starts_at actual_ends_at _destroy])
   end
 
   # ④の評価で受け取る欄（mind_grade, mind_comment, ...）

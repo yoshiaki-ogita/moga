@@ -49,7 +49,7 @@ class Diary < ApplicationRecord
 
   belongs_to :user
   # 轍を消すと、中の行動予定も一緒に消える。時刻の早い順に並べる
-  has_many :diary_plans, -> { order(:starts_at) }, dependent: :destroy, inverse_of: :diary
+  has_many :diary_plans, dependent: :destroy, inverse_of: :diary
   # 時刻も小窓も空の行は、保存しない（空の行を残して保存してもよい）
   accepts_nested_attributes_for :diary_plans, allow_destroy: true,
                                               reject_if: ->(attrs) { attrs.values_at("starts_at", "ends_at", "window_id", "memo").all?(&:blank?) }
@@ -94,5 +94,18 @@ class Diary < ApplicationRecord
     return "⑤ #{REDO_GOAL}つ以上達成！" if count >= REDO_GOAL
 
     "⑤はあと#{REDO_GOAL - count}つ。もう一歩！"
+  end
+
+  # ①の並び：保存した行を始まりの早い順に、その後に空の行
+  #   時刻の列は世界標準時で保存されるため、データベースの並べ替え（ORDER BY）では
+  #   朝5時（前日20時に当たる）が昼より後になってしまう。そこで日本の時刻の「時・分」で並べる
+  def sorted_plans
+    diary_plans.sort_by { |plan| plan.persisted? ? [ 0, plan.starts_at.hour * 60 + plan.starts_at.min ] : [ 1, 0 ] }
+  end
+
+  # 寝る前の部分（④⑤⑥）を書いたか。書いたら「明日の轍を書く」を出す
+  def evening_written?
+    redo_count.positive? || REVIEW_ITEMS.keys.any? { |item| self[:"#{item}_grade"].present? } ||
+      CONFIDENCE_ITEMS.keys.any? { |field| self[field].present? }
   end
 end
