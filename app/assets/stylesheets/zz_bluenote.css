@@ -22,7 +22,8 @@
 /* 画面全体：上は純白、下へいくほど薄い灰 */
 html {
   min-height: 100%;
-  background: linear-gradient(180deg, var(--bn-white) 0%, var(--bn-grey) 70%, var(--bn-grey-2) 100%) fixed;
+  /* fixed（画面に貼り付け）は iPhone の Safari で効かないため使わない。長い画面でも下まで同じ調子に */
+  background: var(--bn-grey-2) linear-gradient(180deg, var(--bn-white) 0%, var(--bn-grey) 70%, var(--bn-grey-2) 100%) no-repeat;
 }
 
 body {
