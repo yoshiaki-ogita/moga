@@ -86,6 +86,8 @@ RSpec.describe "わたしの轍（PR1：前の日に書く①〜③）", type: :
                                        "a：良い！", "e：負けるな！！")
       # 丸い印（label）を押すと、その評価が選ばれる
       expect(response.body).to include('for="diary_mind_grade_b"', 'id="diary_mind_grade_b"')
+      # a〜e で丸の色の濃さが変わる（a が一番濃い）
+      expect(response.body).to include("wadachi-grades__mark--a", "wadachi-grades__mark--e")
     end
 
     it "④の評価とコメントを保存できる" do

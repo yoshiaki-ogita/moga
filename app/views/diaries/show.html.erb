@@ -67,7 +67,7 @@
             <legend class="wadachi-review__item"><%= label %></legend>
             <% Diary::GRADES.each do |grade, meaning| %>
               <%= f.radio_button :"#{item}_grade", grade, class: "wadachi-grades__radio" %>
-              <%= f.label :"#{item}_grade", grade, value: grade, class: "wadachi-grades__mark", title: meaning %>
+              <%= f.label :"#{item}_grade", grade, value: grade, class: "wadachi-grades__mark wadachi-grades__mark--#{grade}", title: meaning %>
             <% end %>
           </fieldset>
           <%= f.text_field :"#{item}_comment", placeholder: "コメント（例：少しずつ前へ）", aria: { label: "#{label}のコメント" } %>

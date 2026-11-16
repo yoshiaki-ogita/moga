@@ -190,11 +190,12 @@
   cursor: pointer;
 }
 
-.wadachi-grades__radio:checked + .wadachi-grades__mark {
-  background: #1565c0;
-  border-color: #1565c0;
-  color: #fff;
-}
+/* 押した丸は、a が一番濃い青、e が一番薄い青（一覧の丸と同じ色。11/16 本人指示） */
+.wadachi-grades__radio:checked + .wadachi-grades__mark--a { background: #0d47a1; border-color: #0d47a1; color: #fff; }
+.wadachi-grades__radio:checked + .wadachi-grades__mark--b { background: #1976d2; border-color: #1976d2; color: #fff; }
+.wadachi-grades__radio:checked + .wadachi-grades__mark--c { background: #64b5f6; border-color: #64b5f6; color: #fff; }
+.wadachi-grades__radio:checked + .wadachi-grades__mark--d { background: #bbdefb; border-color: #1565c0; color: #0d3c61; }
+.wadachi-grades__radio:checked + .wadachi-grades__mark--e { background: #e3f2fd; border-color: #1565c0; color: #0d3c61; }
 
 .wadachi-grades__radio:focus-visible + .wadachi-grades__mark {
   outline: 3px solid #ffb74d;
