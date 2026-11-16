@@ -240,3 +240,17 @@ a.mandala__cell--shaded:hover {
 .breadcrumb [aria-current="page"] {
   font-weight: bold;
 }
+
+/* 真ん中の丸（本人）。押すと今日の轍が開く */
+a.mandala__cell--me:hover {
+  background: #0d47a1;
+}
+
+.mandala__me-wadachi {
+  margin-top: 6px;
+  padding: 2px 10px;
+  font-size: 0.8rem;
+  background: #fff;
+  color: #1565c0;
+  border-radius: 999px;
+}

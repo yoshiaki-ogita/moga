@@ -1,0 +1,135 @@
+/* わたしの轍（毎日の日誌）：曼荼羅と同じ薄いブルーの濃淡 */
+.wadachi__ruby {
+  font-size: 0.45em;
+  font-weight: normal;
+  color: #90a9c4;
+}
+
+.wadachi__lead,
+.wadachi-section__hint {
+  color: #5b7fa3;
+  font-size: 0.9rem;
+}
+
+.wadachi__closing {
+  margin-top: 24px;
+  text-align: center;
+  color: #5b7fa3;
+  font-size: 0.9rem;
+}
+
+.wadachi-list {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0;
+}
+
+.wadachi-list__row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border: 2px solid #e3f2fd;
+  border-radius: 12px;
+  color: #0d3c61;
+  text-decoration: none;
+}
+
+.wadachi-list__row:hover {
+  background: #e3f2fd;
+}
+
+.wadachi-list__date {
+  min-width: 9em;
+  font-weight: bold;
+}
+
+.wadachi-day {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  margin: 12px 0;
+  background: #e3f2fd;
+  border-radius: 10px;
+}
+
+.wadachi-day a {
+  color: #1565c0;
+}
+
+.wadachi-day__title {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.wadachi-day__today {
+  text-align: center;
+}
+
+.wadachi-section {
+  border: 2px solid #90caf9;
+  border-radius: 10px;
+  padding: 12px 16px;
+}
+
+.wadachi-section h2 {
+  margin: 0 0 4px;
+  font-size: 1.1rem;
+}
+
+.wadachi-plans {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.wadachi-plans th {
+  text-align: left;
+  font-weight: normal;
+  font-size: 0.85rem;
+  color: #5b7fa3;
+}
+
+.wadachi-plans td {
+  padding: 4px 4px 4px 0;
+}
+
+.wadachi-plans input[type="text"],
+.wadachi-plans input[type="time"],
+.wadachi-plans select {
+  width: 100%;
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #90caf9;
+  border-radius: 8px;
+  background: #fff;
+}
+
+/* 行動予定の表の列の幅（時刻・小窓が切れないように） */
+.wadachi-plans {
+  table-layout: fixed;
+}
+
+.wadachi-plans__time {
+  width: 21%;
+}
+
+.wadachi-plans__window {
+  width: 29%;
+}
+
+.wadachi-plans__delete {
+  width: 2.5em;
+  text-align: center;
+}
+
+.wadachi-plans input[type="time"] {
+  padding: 8px 4px;
+}
+
+.wadachi-plans input,
+.wadachi-plans select {
+  box-sizing: border-box;
+}

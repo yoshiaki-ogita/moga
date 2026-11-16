@@ -7,6 +7,8 @@ ja:
       window: 小窓
       plan: 課題
       entry: 記録
+      diary: 轍
+      diary_plan: 行動予定
     attributes:
       user:
         name: 名前
@@ -29,6 +31,21 @@ ja:
         achieved_count: できた数
         title: 題名
         body: 本文
+      diary:
+        diary_on: 日付
+        word: 今日の一言
+        must_do: 今日必ずやること
+        diary_plans: 行動予定
+      diary/diary_plans:
+        starts_at: 行動予定の始まり
+        ends_at: 行動予定の終わり
+        window: 行動予定の小窓
+        memo: 行動予定のひと言
+      diary_plan:
+        starts_at: 始まり
+        ends_at: 終わり
+        window: 小窓
+        memo: ひと言
     enums:
       window:
         measure:
@@ -51,6 +68,7 @@ ja:
       too_long: は%{count}文字以内で入力してください
       too_short: は%{count}文字以上で入力してください
       inclusion: は一覧にありません
+      required: を選んでください
   helpers:
     submit:
       create: 登録する
