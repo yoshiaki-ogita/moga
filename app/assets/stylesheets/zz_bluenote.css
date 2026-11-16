@@ -1,0 +1,183 @@
+/*
+ * ブルーノート（アプリ全体の見た目の仕上げ。2026-11-17 荻田さん）
+ *   青（ブルーノート）を基調に、純白・白・薄い灰・淡い灰・にじんだ色のグラデーションで
+ *   目に優しく、少し浮き上がって見える（立体的な）画面にする。参考：永田ゆかり『データ視覚化のデザイン』
+ *   ファイル名の zz_ は「一番最後に読む」ため（他のCSSの上から仕上げを重ねる）
+ */
+:root {
+  --bn-ink: #0d3c61;          /* 字の色（濃い藍） */
+  --bn-blue: #1565c0;         /* ブルーノートの青 */
+  --bn-blue-light: #1e88e5;
+  --bn-mist: #e3f2fd;         /* にじんだ淡い青 */
+  --bn-white: #ffffff;        /* 純白 */
+  --bn-paper: #f7f9fb;        /* 白 */
+  --bn-grey: #eef2f5;         /* 薄い灰 */
+  --bn-grey-2: #dfe6ec;       /* 淡い灰 */
+  --bn-line: #e1e7ee;         /* 細い枠線 */
+  --bn-shadow: 0 1px 2px rgba(13, 60, 97, 0.06), 0 6px 16px rgba(13, 60, 97, 0.09);
+  --bn-shadow-low: 0 1px 2px rgba(13, 60, 97, 0.08), 0 2px 6px rgba(13, 60, 97, 0.06);
+  --bn-card: linear-gradient(180deg, var(--bn-white) 0%, var(--bn-paper) 55%, var(--bn-grey) 100%);
+}
+
+/* 画面全体：上は純白、下へいくほど薄い灰 */
+html {
+  min-height: 100%;
+  /* fixed（画面に貼り付け）は iPhone の Safari で効かないため使わない。長い画面でも下まで同じ調子に */
+  background: var(--bn-grey-2) linear-gradient(180deg, var(--bn-white) 0%, var(--bn-grey) 70%, var(--bn-grey-2) 100%) no-repeat;
+}
+
+body {
+  margin: 0;
+  color: var(--bn-ink);
+}
+
+/* 現在地（パンくず）：薄い灰の帯 */
+.breadcrumb {
+  display: inline-block;
+  padding: 6px 14px;
+  border: 1px solid var(--bn-line);
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--bn-white) 0%, var(--bn-grey) 100%);
+  box-shadow: var(--bn-shadow-low);
+}
+
+/* お知らせ（保存しました 等） */
+.flash {
+  border: 1px solid #cfe3f7;
+  background: linear-gradient(180deg, #f3f9ff 0%, var(--bn-mist) 100%);
+  box-shadow: var(--bn-shadow-low);
+}
+
+/* ボタン：上が明るく下が深い青、影で浮かせる */
+.button--primary,
+.wadachi-next__button {
+  background: linear-gradient(180deg, #2a8de6 0%, var(--bn-blue) 100%);
+  border: 1px solid #0f5aa8;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 4px 10px rgba(21, 101, 192, 0.28);
+  color: #fff;
+}
+
+.button--primary:hover {
+  background: linear-gradient(180deg, #3597ec 0%, #1a6fcf 100%);
+}
+
+.button--secondary {
+  background: linear-gradient(180deg, var(--bn-white) 0%, var(--bn-mist) 100%);
+  box-shadow: var(--bn-shadow-low);
+}
+
+/* 入力欄：白地に、ほんの少しのくぼみ */
+.form__field input,
+.form__field textarea,
+.form__field select,
+.wadachi-plans input,
+.wadachi-plans select,
+.wadachi-review input[type="text"],
+.wadachi-lines input[type="text"],
+.wadachi-confidence input[type="text"] {
+  background: linear-gradient(180deg, #fbfcfd 0%, var(--bn-white) 100%);
+  box-shadow: inset 0 1px 2px rgba(13, 60, 97, 0.08);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid #90caf9;
+  outline-offset: 1px;
+}
+
+/* 曼荼羅のマス：青の濃淡はそのまま、上に白い光を重ねてタイルのように浮かせる */
+.mandala {
+  gap: 10px;
+}
+
+.mandala__cell {
+  border-color: var(--bn-line);
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 55%, rgba(13, 60, 97, 0.05) 100%);
+  box-shadow: var(--bn-shadow);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+a.mandala__cell:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(13, 60, 97, 0.08), 0 10px 22px rgba(13, 60, 97, 0.14);
+}
+
+.mandala__cell--empty {
+  background: linear-gradient(180deg, var(--bn-white) 0%, var(--bn-grey) 100%);
+  box-shadow: none;
+}
+
+/* 真ん中の丸（本人）：深い青の球のように */
+.mandala__cell--me,
+a.mandala__cell--me:hover {
+  background: radial-gradient(circle at 35% 30%, #4aa3f0 0%, var(--bn-blue) 55%, #0b3f85 100%);
+  border-color: #0f5aa8;
+  box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.25), 0 8px 20px rgba(21, 101, 192, 0.35);
+}
+
+.mandala__me-wadachi {
+  box-shadow: 0 1px 3px rgba(13, 60, 97, 0.25);
+}
+
+/* 進捗率の円：外側に影、真ん中は白→灰 */
+.pie {
+  box-shadow: var(--bn-shadow);
+}
+
+.pie__value {
+  background: radial-gradient(circle at 50% 35%, var(--bn-white) 0%, var(--bn-grey) 100%);
+  box-shadow: inset 0 1px 3px rgba(13, 60, 97, 0.12);
+}
+
+/* カード（課題・記録・轍の各欄）：純白→白→薄い灰、細い枠線と柔らかい影 */
+.plan-list__item,
+.wadachi-section,
+.wadachi-list__row,
+.wadachi-guide {
+  border: 1px solid var(--bn-line);
+  background: var(--bn-card);
+  box-shadow: var(--bn-shadow);
+}
+
+.wadachi-section {
+  border-radius: 14px;
+  padding: 14px 18px;
+}
+
+.plan-list__item--done {
+  background: linear-gradient(180deg, #f3f9ff 0%, var(--bn-mist) 100%);
+}
+
+.wadachi-list__row:hover {
+  background: linear-gradient(180deg, var(--bn-white) 0%, var(--bn-mist) 100%);
+}
+
+.wadachi-guide {
+  border-style: dashed;
+  border-color: #b7d5f2;
+}
+
+/* 日付の帯（◀ 前の日 ／ 次の日 ▶） */
+.wadachi-day {
+  border: 1px solid #cfe3f7;
+  background: linear-gradient(180deg, #f3f9ff 0%, var(--bn-mist) 100%);
+  box-shadow: var(--bn-shadow-low);
+}
+
+/* 記録の表 */
+.entry-table {
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--bn-white);
+  box-shadow: var(--bn-shadow-low);
+}
+
+.entry-table th {
+  background: linear-gradient(180deg, var(--bn-mist) 0%, #d6e9fb 100%);
+}
+
+/* a〜e の丸：押した丸に光と影 */
+.wadachi-grades__radio:checked + .wadachi-grades__mark {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 3px 8px rgba(13, 60, 97, 0.25);
+}
