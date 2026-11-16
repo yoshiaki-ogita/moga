@@ -57,6 +57,25 @@
       <%= f.text_area :must_do, rows: 3, placeholder: "例：ウォーキング 8km" %>
     </section>
 
+    <section class="wadachi-section">
+      <h2>④ 今日1日の自分の行動の評価</h2>
+      <p class="wadachi-section__hint">その日の終わりに書きます。a〜eを1つ押し、ひと言を残します。</p>
+      <%# 1項目ずつ「項目名と a〜e の丸」、その下に「コメント」を並べる（狭い画面でも重ならない） %>
+      <% Diary::REVIEW_ITEMS.each do |item, label| %>
+        <div class="wadachi-review">
+          <fieldset class="wadachi-grades">
+            <legend class="wadachi-review__item"><%= label %></legend>
+            <% Diary::GRADES.each do |grade, meaning| %>
+              <%= f.radio_button :"#{item}_grade", grade, class: "wadachi-grades__radio" %>
+              <%= f.label :"#{item}_grade", grade, value: grade, class: "wadachi-grades__mark wadachi-grades__mark--#{grade}", title: meaning %>
+            <% end %>
+          </fieldset>
+          <%= f.text_field :"#{item}_comment", placeholder: "コメント（例：少しずつ前へ）", aria: { label: "#{label}のコメント" } %>
+        </div>
+      <% end %>
+      <p class="wadachi-section__hint"><%= Diary::GRADES.map { |grade, meaning| "#{grade}：#{meaning}" }.join("　") %></p>
+    </section>
+
     <%= f.submit "保存する", class: "button button--primary" %>
   <% end %>
 

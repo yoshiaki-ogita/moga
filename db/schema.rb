@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_16_000200) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_16_000300) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -21,6 +21,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_16_000200) do
     t.text "must_do"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "mind_grade", limit: 1
+    t.string "mind_comment"
+    t.string "skill_grade", limit: 1
+    t.string "skill_comment"
+    t.string "body_grade", limit: 1
+    t.string "body_comment"
+    t.string "life_grade", limit: 1
+    t.string "life_comment"
+    t.string "overall_grade", limit: 1
+    t.string "overall_comment"
     t.index ["user_id", "diary_on"], name: "index_diaries_on_user_id_and_diary_on", unique: true
     t.index ["user_id"], name: "index_diaries_on_user_id"
   end

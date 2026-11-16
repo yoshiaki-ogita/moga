@@ -39,7 +39,12 @@ class DiariesController < ApplicationController
   end
 
   def diary_params
-    params.require(:diary).permit(:word, :must_do,
+    params.require(:diary).permit(:word, :must_do, *review_fields,
                                   diary_plans_attributes: %i[id starts_at ends_at window_id memo _destroy])
+  end
+
+  # ④の評価で受け取る欄（mind_grade, mind_comment, ...）
+  def review_fields
+    Diary::REVIEW_ITEMS.keys.flat_map { |item| [ :"#{item}_grade", :"#{item}_comment" ] }
   end
 end

@@ -19,6 +19,9 @@
           <%= link_to diary_path(diary.diary_on), class: "wadachi-list__row" do %>
             <span class="wadachi-list__date"><%= diary.date_label %></span>
             <span class="wadachi-list__word"><%= diary.word.presence || "（今日の一言はまだありません）" %></span>
+            <%# ④の「今日は全体で？」の評価。まだなら「ー」 %>
+            <span class="wadachi-list__grade wadachi-list__grade--<%= diary.overall_grade.presence || "none" %>"
+                  title="今日は全体で？"><%= diary.overall_grade.presence || "ー" %></span>
           <% end %>
         </li>
       <% end %>

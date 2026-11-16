@@ -38,6 +38,21 @@ RSpec.describe Diary, type: :model do
     expect(diary.diary_plans.count).to eq(1)
   end
 
+  it "④の評価は a〜e のどれかか、空（まだ付けていない）" do
+    expect(user.diaries.build(diary_on: Date.current, mind_grade: "a", overall_grade: "e")).to be_valid
+    expect(user.diaries.build(diary_on: Date.current, mind_grade: nil)).to be_valid
+    expect(user.diaries.build(diary_on: Date.current, skill_grade: "f")).not_to be_valid
+  end
+
+  it "④のコメントは50文字まで" do
+    expect(user.diaries.build(diary_on: Date.current, life_comment: "あ" * 51)).not_to be_valid
+  end
+
+  it "④の項目と a〜e の意味は、本人の言葉で並ぶ" do
+    expect(Diary::REVIEW_ITEMS.values).to eq([ "心（メンタル）", "技（スキル）", "体（健康）", "生活", "今日は全体で？" ])
+    expect(Diary::GRADES.values).to eq([ "良い！", "やや良い", "まぁまぁ", "明日こそ", "負けるな！！" ])
+  end
+
   it "轍を消すと、中の行動予定も消える" do
     diary = user.diaries.create!(diary_on: Date.current, diary_plans_attributes: [ { starts_at: "05:00", ends_at: "06:30", window_id: window.id } ])
     expect { diary.destroy }.to change(DiaryPlan, :count).by(-1)

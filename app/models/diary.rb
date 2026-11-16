@@ -1,7 +1,26 @@
 # わたしの轍（1日に1つ）。真ん中の丸（本人）から開く
 #   ① 行動予定（diary_plans）② 今日の一言（word）③ 今日必ずやること（must_do）
 #   ①〜③は前の日の夜に書く
+#   ④ 今日1日の自分の行動の評価（5つの項目に a〜e とコメント）は、その日の終わりに書く
 class Diary < ApplicationRecord
+  # ④の評価の項目（並び順のまま画面に出す。名前は本人の言葉 11/16）
+  REVIEW_ITEMS = {
+    mind: "心（メンタル）",
+    skill: "技（スキル）",
+    body: "体（健康）",
+    life: "生活",
+    overall: "今日は全体で？"
+  }.freeze
+
+  # a〜e の意味（本人の言葉 11/16）
+  GRADES = {
+    "a" => "良い！",
+    "b" => "やや良い",
+    "c" => "まぁまぁ",
+    "d" => "明日こそ",
+    "e" => "負けるな！！"
+  }.freeze
+
   # 1日の画面に出しておく、空の行動予定の行の数（JavaScript を使わずに「行を足す」代わり）
   BLANK_PLAN_ROWS = 3
 
@@ -15,6 +34,11 @@ class Diary < ApplicationRecord
   validates :diary_on, presence: true, uniqueness: { scope: :user_id }
   validates :word, length: { maximum: 50 }
   validates :must_do, length: { maximum: 1000 }
+  # 評価は a〜e のどれか（まだ付けていなければ空でよい）。コメントは50文字まで
+  REVIEW_ITEMS.each_key do |item|
+    validates :"#{item}_grade", inclusion: { in: GRADES.keys }, allow_blank: true
+    validates :"#{item}_comment", length: { maximum: 50 }
+  end
 
   # その日の轍を探す。まだなければ、保存前の新しい轍を用意する
   def self.for(user, date)
