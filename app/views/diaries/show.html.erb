@@ -1,0 +1,65 @@
+<% content_for(:title, "#{@diary.date_label}の轍｜MOGA") %>
+
+<main class="mandala-page">
+  <%# 現在地（#31） %>
+  <%= breadcrumb(["Home", home_path], ["わたしの轍", diaries_path], "#{@diary.date_label}の轍") %>
+
+  <%# 前の日・次の日へ移る（夜は「明日」を押して、明日の分を書く） %>
+  <nav class="wadachi-day" aria-label="日を移る">
+    <%= link_to "◀ 前の日", diary_path(@diary.diary_on - 1) %>
+    <h1 class="wadachi-day__title"><%= @diary.date_label %>の轍</h1>
+    <%= link_to "次の日 ▶", diary_path(@diary.diary_on + 1) %>
+  </nav>
+  <% unless @diary.diary_on == Date.current %>
+    <p class="wadachi-day__today"><%= link_to "今日の轍へ", diary_path(Date.current) %></p>
+  <% end %>
+
+  <%= form_with model: @diary, url: diary_path(@diary.diary_on), method: :patch, class: "form" do |f| %>
+    <% if @diary.errors.any? %>
+      <ul class="form__errors">
+        <% @diary.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <section class="wadachi-section">
+      <h2>① 行動予定</h2>
+      <p class="wadachi-section__hint">前の日の夜に書きます。時間帯ごとに、どの小窓に取り組むか。空の行は保存されません。</p>
+      <table class="wadachi-plans">
+        <thead>
+          <tr><th class="wadachi-plans__time">始まり</th><th class="wadachi-plans__time">終わり</th><th class="wadachi-plans__window">小窓</th><th>ひと言</th><th class="wadachi-plans__delete">消す</th></tr>
+        </thead>
+        <tbody>
+          <%= f.fields_for :diary_plans do |pf| %>
+            <tr>
+              <td><%= pf.time_field :starts_at, aria: { label: "始まり" } %></td>
+              <td><%= pf.time_field :ends_at, aria: { label: "終わり" } %></td>
+              <td>
+                <%= pf.select :window_id, grouped_options_for_select(@window_choices, pf.object.window_id),
+                      { include_blank: "（えらぶ）" }, aria: { label: "小窓" } %>
+              </td>
+              <td><%= pf.text_field :memo, placeholder: "例：Railsの復習", aria: { label: "ひと言" } %></td>
+              <td><%= pf.check_box :_destroy, aria: { label: "この行を消す" } if pf.object.persisted? %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="wadachi-section form__field">
+      <h2><%= f.label :word, "② 今日の一言" %></h2>
+      <%= f.text_field :word, placeholder: "例：一歩ずつ、今日も前へ。" %>
+    </section>
+
+    <section class="wadachi-section form__field">
+      <h2><%= f.label :must_do, "③ 今日必ずやること" %></h2>
+      <%= f.text_area :must_do, rows: 3, placeholder: "例：ウォーキング 8km" %>
+    </section>
+
+    <%= f.submit "保存する", class: "button button--primary" %>
+  <% end %>
+
+  <p class="wadachi__closing">少しの成長でもOK！1日の最後はプラスの言葉で締めましょう！</p>
+  <p><%= link_to "わたしの轍の一覧へ", diaries_path %></p>
+</main>

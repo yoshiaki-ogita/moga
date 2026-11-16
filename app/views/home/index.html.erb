@@ -9,9 +9,11 @@
   <div class="mandala">
     <% HomeController::MANDALA_ORDER.each do |code| %>
       <% if code == :me %>
-        <div class="mandala__cell mandala__cell--me">
+        <%# 真ん中の丸（本人）を押すと、今日の轍が開く %>
+        <%= link_to diary_path(Date.current), class: "mandala__cell mandala__cell--me", aria: { label: "#{current_user.name}（今日の轍を開く）" } do %>
           <span class="mandala__me-name"><%= current_user.name %></span>
-        </div>
+          <span class="mandala__me-wadachi">👣 轍</span>
+        <% end %>
       <% else %>
         <% phase = @phases[code] %>
         <%# 進捗率に合わせて青の濃淡で塗る（#30） %>

@@ -1,0 +1,30 @@
+<% content_for(:title, "わたしの轍｜MOGA") %>
+
+<main class="mandala-page">
+  <%# 現在地（#31） %>
+  <%= breadcrumb(["Home", home_path], "わたしの轍") %>
+
+  <%# 「轍」の読み仮名は、この1か所だけに小さく付ける（11/16 本人指示） %>
+  <h1 class="mandala-page__title">👣 わたしの<ruby>轍<rt class="wadachi__ruby">わだち</rt></ruby></h1>
+  <p class="wadachi__lead">1日に1本ずつ、わたしの通った跡が残ります。1行を押すと、その日の轍が開きます。</p>
+
+  <p><%= link_to "＋ 明日の轍を書く", diary_path(Date.tomorrow), class: "button button--primary" %></p>
+
+  <% if @diaries.empty? %>
+    <p>轍はまだありません。「明日の轍を書く」から始めましょう。</p>
+  <% else %>
+    <ul class="wadachi-list">
+      <% @diaries.each do |diary| %>
+        <li>
+          <%= link_to diary_path(diary.diary_on), class: "wadachi-list__row" do %>
+            <span class="wadachi-list__date"><%= diary.date_label %></span>
+            <span class="wadachi-list__word"><%= diary.word.presence || "（今日の一言はまだありません）" %></span>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <p class="wadachi__closing">少しの成長でもOK！1日の最後はプラスの言葉で締めましょう！</p>
+  <p><%= link_to "Home へ戻る", home_path %></p>
+</main>

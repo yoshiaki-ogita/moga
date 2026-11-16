@@ -23,6 +23,9 @@ Rails.application.routes.draw do
   # ログイン後のHome（曼荼羅）
   get "home", to: "home#index", as: :home
 
+  # わたしの轍（真ん中の丸から開く毎日の日誌）。日付で開く（例：/diaries/2026-11-17）
+  resources :diaries, only: %i[index show update], param: :date
+
   # 大窓（局面）の画面と、名前の編集（#13）
   resources :phases, only: %i[show edit update] do
     # 小窓（窓 1〜8）の作成（#14）・詳細（#16）・編集（#17）・削除（#18）

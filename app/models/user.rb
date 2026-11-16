@@ -7,6 +7,8 @@ class User < ApplicationRecord
   has_many :windows, through: :phases
   has_many :plans, through: :windows
   has_many :entries, through: :windows
+  # わたしの轍（1日に1つの日誌）。利用者を消すと轍も一緒に消える
+  has_many :diaries, dependent: :destroy
 
   # 登録と同時に大窓 A〜H を8つ作る（11/7 決裁）
   after_create :ensure_default_phases
@@ -28,6 +30,14 @@ class User < ApplicationRecord
     ActiveRecord::Associations::Preloader.new(records: [ self ], associations: { phases: :windows }).call
     Window.preload_for_progress(phases.flat_map(&:windows))
     phases.index_by(&:code)
+  end
+
+  # 轍の行動予定で小窓を選ぶための一覧（大窓ごとにまとめる）
+  #   [["A 特定社労士", [["A1 労基＆安衛", 小窓の番号], ...]], ...]
+  def window_choices
+    phases.includes(:windows).order(:code).map do |phase|
+      [ "#{phase.code} #{phase.name}", phase.windows.map { |window| [ "#{phase.code}#{window.number} #{window.title}", window.id ] } ]
+    end
   end
 
   # 全体の進捗率（#28）＝大窓 A〜H の進捗率の平均
