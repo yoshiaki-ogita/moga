@@ -133,3 +133,92 @@
 .wadachi-plans select {
   box-sizing: border-box;
 }
+
+/* ④ 今日1日の自分の行動の評価 */
+.wadachi-review {
+  padding: 10px 0;
+  border-bottom: 1px solid #e3f2fd;
+}
+
+.wadachi-review__item {
+  float: left;
+  width: 8.5em;
+  padding: 0;
+  font-weight: bold;
+  line-height: 2.4em;
+}
+
+.wadachi-review input[type="text"] {
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 6px;
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #90caf9;
+  border-radius: 8px;
+}
+
+/* a〜e は丸い印。押した印だけ濃い青になる */
+.wadachi-grades {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.wadachi-grades__radio {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.wadachi-grades__mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4em;
+  height: 2.4em;
+  border: 2px solid #90caf9;
+  border-radius: 50%;
+  color: #1565c0;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.wadachi-grades__radio:checked + .wadachi-grades__mark {
+  background: #1565c0;
+  border-color: #1565c0;
+  color: #fff;
+}
+
+.wadachi-grades__radio:focus-visible + .wadachi-grades__mark {
+  outline: 3px solid #ffb74d;
+}
+
+/* 一覧の「今日は全体で？」の丸（a が一番濃い） */
+.wadachi-list__word {
+  flex: 1;
+}
+
+.wadachi-list__grade {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2em;
+  height: 2em;
+  border-radius: 50%;
+  font-weight: bold;
+  color: #fff;
+}
+
+.wadachi-list__grade--a { background: #0d47a1; }
+.wadachi-list__grade--b { background: #1976d2; }
+.wadachi-list__grade--c { background: #64b5f6; }
+.wadachi-list__grade--d { background: #bbdefb; color: #0d3c61; }
+.wadachi-list__grade--e { background: #e3f2fd; color: #0d3c61; }
+.wadachi-list__grade--none { color: #b0cbe6; }

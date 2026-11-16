@@ -80,6 +80,35 @@ RSpec.describe "わたしの轍（PR1：前の日に書く①〜③）", type: :
       expect(DiaryPlan.count).to eq(0)
     end
 
+    it "1日の轍に、④の評価の5項目と a〜e の意味が出る" do
+      get diary_path("2026-11-17")
+      expect(response.body).to include("④ 今日1日の自分の行動の評価", "心（メンタル）", "技（スキル）", "体（健康）", "生活", "今日は全体で？",
+                                       "a：良い！", "e：負けるな！！")
+      # 丸い印（label）を押すと、その評価が選ばれる
+      expect(response.body).to include('for="diary_mind_grade_b"', 'id="diary_mind_grade_b"')
+    end
+
+    it "④の評価とコメントを保存できる" do
+      patch diary_path("2026-11-17"), params: { diary: { mind_grade: "b", mind_comment: "落ち着いて過ごせた", overall_grade: "a" } }
+      diary = user.diaries.find_by(diary_on: Date.new(2026, 11, 17))
+      expect([ diary.mind_grade, diary.mind_comment, diary.overall_grade ]).to eq([ "b", "落ち着いて過ごせた", "a" ])
+      follow_redirect!
+      expect(response.body).to include('value="b" checked="checked" name="diary[mind_grade]"')
+    end
+
+    it "a〜e 以外の評価は保存しない" do
+      patch diary_path("2026-11-17"), params: { diary: { body_grade: "z" } }
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(user.diaries).to be_empty
+    end
+
+    it "一覧に「今日は全体で？」の評価が出る（まだなら「ー」）" do
+      user.diaries.create!(diary_on: Date.new(2026, 11, 16), word: "評価あり", overall_grade: "a")
+      user.diaries.create!(diary_on: Date.new(2026, 11, 17), word: "評価なし")
+      get diaries_path
+      expect(response.body).to include("wadachi-list__grade--a", "wadachi-list__grade--none")
+    end
+
     it "一覧は新しい日が上に並び、題名の「轍」に読み仮名が付く" do
       user.diaries.create!(diary_on: Date.new(2026, 11, 16), word: "古い一言")
       user.diaries.create!(diary_on: Date.new(2026, 11, 17), word: "新しい一言")
