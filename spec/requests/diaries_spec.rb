@@ -171,4 +171,40 @@ RSpec.describe "わたしの轍（PR1：前の日に書く①〜③）", type: :
       expect(response.body).not_to include("もう一歩！", "達成！")
     end
   end
+
+  describe "①の実際と⑦の円グラフ（PR4）" do
+    before do
+      post login_path, params: { email: user.email, password: "password123" }
+    end
+
+    let(:diary) { user.diaries.create!(diary_on: Date.new(2026, 11, 17)) }
+    let!(:plan) { diary.diary_plans.create!(starts_at: "07:30", ends_at: "10:00", window: window) }
+
+    it "保存した行に「実際は？」が出て、⑦に円グラフが出る" do
+      get diary_path("2026-11-17")
+      expect(response.body).to include("🛏 実際は？", "⑦ 今日の24時間", "wadachi-clock__svg", "実際は夜に")
+    end
+
+    it "予定どおり✓と、ずれた時の実際の時刻を保存できる" do
+      patch diary_path("2026-11-17"), params: { diary: { diary_plans_attributes: {
+        "0" => { id: plan.id, starts_at: "07:30", ends_at: "10:00", window_id: window.id, actual_starts_at: "08:00", actual_ends_at: "10:30" }
+      } } }
+      expect(plan.reload.actual_range.map { |t| t.strftime("%H:%M") }).to eq(%w[08:00 10:30])
+      follow_redirect!
+      expect(response.body).to include("予定 2.5時間 / 実際 2.5時間")
+    end
+
+    it "行動予定が無い日は、円グラフの代わりに案内が出る" do
+      get diary_path("2026-11-20")
+      expect(response.body).to include("①の行動予定を保存すると、ここに円グラフが出ます。")
+    end
+
+    it "寝る前の部分を書いた日だけ「明日の轍を書く」が出る" do
+      get diary_path("2026-11-17")
+      expect(response.body).not_to include("明日の轍を書く ▶")
+      diary.update!(overall_grade: "b")
+      get diary_path("2026-11-17")
+      expect(response.body).to include("明日の轍を書く ▶", diary_path("2026-11-18"))
+    end
+  end
 end

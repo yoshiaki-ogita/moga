@@ -49,6 +49,9 @@ ja:
         ends_at: 行動予定の終わり
         window: 行動予定の小窓
         memo: 行動予定のひと言
+        as_planned: 予定どおり
+        actual_starts_at: 実際の始まり
+        actual_ends_at: 実際の終わり
       diary_plan:
         starts_at: 始まり
         ends_at: 終わり
