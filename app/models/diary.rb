@@ -2,6 +2,7 @@
 #   ① 行動予定（diary_plans）② 今日の一言（word）③ 今日必ずやること（must_do）
 #   ①〜③は前の日の夜に書く
 #   ④ 今日1日の自分の行動の評価（5つの項目に a〜e とコメント）は、その日の終わりに書く
+#   ⑤ 今日もう一度やり直せるとしたら？（3つ以上を目指す）⑥ 自信を育てた出来事3つ も、その日の終わりに書く
 class Diary < ApplicationRecord
   # ④の評価の項目（並び順のまま画面に出す。名前は本人の言葉 11/16）
   REVIEW_ITEMS = {
@@ -22,6 +23,28 @@ class Diary < ApplicationRecord
   }.freeze
 
   # 1日の画面に出しておく、空の行動予定の行の数（JavaScript を使わずに「行を足す」代わり）
+  # ⑤ やり直せるなら：5行まで書ける。3つ以上を目指す（足りなくても保存はできる。励ましの言葉を出す）
+  REDO_FIELDS = %i[redo_1 redo_2 redo_3 redo_4 redo_5].freeze
+  REDO_GOAL = 3
+  # 初めての人が「ほぉ」と思える書き方の例（薄い字で欄に出す）
+  REDO_EXAMPLES = [
+    "例：朝の30分をスマホでなく復習に使う",
+    "例：歩く前にストレッチをする",
+    "例：夜は22時までに寝る"
+  ].freeze
+
+  # ⑥ 自信を育てた出来事3つ（見出しは本人が選んだ文 11/17）
+  CONFIDENCE_ITEMS = {
+    joy: "今日嬉しかったことは？",
+    growth: "成長したこと、上達したことは？（自己効力感）",
+    thanks: "「ありがとう！」と言った、言われたことは？（自己肯定感）"
+  }.freeze
+  CONFIDENCE_EXAMPLES = {
+    joy: "例：友人から久しぶりに電話が来た",
+    growth: "例：Railsで新しい画面を1つ作れた",
+    thanks: "例：家族に「ありがとう」と言えた"
+  }.freeze
+
   BLANK_PLAN_ROWS = 3
 
   belongs_to :user
@@ -41,6 +64,10 @@ class Diary < ApplicationRecord
   end
 
   # その日の轍を探す。まだなければ、保存前の新しい轍を用意する
+  (REDO_FIELDS + CONFIDENCE_ITEMS.keys).each do |field|
+    validates field, length: { maximum: 50 }
+  end
+
   def self.for(user, date)
     user.diaries.find_or_initialize_by(diary_on: date)
   end
@@ -53,5 +80,19 @@ class Diary < ApplicationRecord
   # 入力画面用に、空の行動予定の行を足しておく
   def build_blank_plans
     BLANK_PLAN_ROWS.times { diary_plans.build }
+  end
+
+  # ⑤に書いた数
+  def redo_count
+    REDO_FIELDS.count { |field| self[field].present? }
+  end
+
+  # ⑤の励まし（まだ1つも書いていない日は何も言わない＝前の日の夜の保存では出さない）
+  def redo_cheer
+    count = redo_count
+    return if count.zero?
+    return "⑤ #{REDO_GOAL}つ以上達成！" if count >= REDO_GOAL
+
+    "⑤はあと#{REDO_GOAL - count}つ。もう一歩！"
   end
 end

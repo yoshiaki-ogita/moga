@@ -13,9 +13,17 @@
 
 .wadachi__closing {
   margin-top: 24px;
+  padding: 16px 12px;
   text-align: center;
-  color: #5b7fa3;
-  font-size: 0.9rem;
+  color: #37474f;
+  font-size: 0.95rem;
+  font-weight: bold;
+  line-height: 1.7;
+  /* 純白から薄い灰色へのグラデーション＋影で、少し浮き上がって見せる */
+  background: linear-gradient(180deg, #ffffff 0%, #eceff1 100%);
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .wadachi-list {
@@ -223,3 +231,108 @@
 .wadachi-list__grade--d { background: #bbdefb; color: #0d3c61; }
 .wadachi-list__grade--e { background: #e3f2fd; color: #0d3c61; }
 .wadachi-list__grade--none { color: #b0cbe6; }
+
+/* ⑤ 今日もう一度やり直せるとしたら？（1〜3は濃い丸＝目標、4・5は薄い丸） */
+.wadachi-section__goal {
+  color: #0d47a1;
+  font-weight: bold;
+}
+
+.wadachi-lines {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wadachi-lines__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+}
+
+.wadachi-lines__num {
+  flex: 0 0 auto;
+  width: 1.8em;
+  height: 1.8em;
+  line-height: 1.8em;
+  text-align: center;
+  border-radius: 50%;
+  color: #1565c0;
+  background: #e3f2fd;
+}
+
+.wadachi-lines__row--goal .wadachi-lines__num {
+  color: #fff;
+  background: #1976d2;
+}
+
+.wadachi-lines input[type="text"],
+.wadachi-confidence input[type="text"] {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #90caf9;
+  border-radius: 8px;
+}
+
+/* ⑥ 自信を育てた出来事3つ */
+.wadachi-confidence {
+  margin: 10px 0;
+}
+
+.wadachi-confidence__label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: bold;
+}
+
+/* いつ書くかの札（🌙 前の日の夜／🛏 その日の終わり） */
+.wadachi-when {
+  display: inline-block;
+  align-self: flex-start;
+  width: fit-content;
+  margin: 0 0 4px;
+  padding: 2px 10px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  border-radius: 999px;
+}
+
+.wadachi-when--night {
+  color: #fff;
+  background: #1565c0;
+}
+
+.wadachi-when--end {
+  color: #0d47a1;
+  background: #bbdefb;
+}
+
+/* 初めての人への道しるべ */
+.wadachi-guide {
+  margin: 0 0 16px;
+  padding: 12px 16px;
+  border: 2px dashed #90caf9;
+  border-radius: 12px;
+  background: #f5faff;
+}
+
+.wadachi-guide__title {
+  margin: 0 0 6px;
+  font-weight: bold;
+  color: #0d47a1;
+}
+
+.wadachi-guide__steps {
+  margin: 0;
+  padding-left: 1.2em;
+  line-height: 1.8;
+}
+
+.wadachi-guide__note {
+  margin: 6px 0 0;
+  color: #5b7fa3;
+  font-size: 0.9rem;
+}

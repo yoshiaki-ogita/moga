@@ -16,7 +16,7 @@ class DiariesController < ApplicationController
   # 1日の轍を保存する（初めてなら作り、2回目からは保存し直す）
   def update
     if @diary.update(diary_params)
-      redirect_to diary_path(@diary.diary_on), notice: "#{@diary.date_label}の轍を保存しました"
+      redirect_to diary_path(@diary.diary_on), notice: [ "#{@diary.date_label}の轍を保存しました", @diary.redo_cheer ].compact.join("　")
     else
       prepare_form
       render :show, status: :unprocessable_content
@@ -39,7 +39,7 @@ class DiariesController < ApplicationController
   end
 
   def diary_params
-    params.require(:diary).permit(:word, :must_do, *review_fields,
+    params.require(:diary).permit(:word, :must_do, *review_fields, *Diary::REDO_FIELDS, *Diary::CONFIDENCE_ITEMS.keys,
                                   diary_plans_attributes: %i[id starts_at ends_at window_id memo _destroy])
   end
 
