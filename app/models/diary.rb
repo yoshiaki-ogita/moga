@@ -26,12 +26,23 @@ class Diary < ApplicationRecord
   # ⑤ やり直せるなら：5行まで書ける。3つ以上を目指す（足りなくても保存はできる。励ましの言葉を出す）
   REDO_FIELDS = %i[redo_1 redo_2 redo_3 redo_4 redo_5].freeze
   REDO_GOAL = 3
+  # 初めての人が「ほぉ」と思える書き方の例（薄い字で欄に出す）
+  REDO_EXAMPLES = [
+    "例：朝の30分をスマホでなく復習に使う",
+    "例：歩く前にストレッチをする",
+    "例：夜は22時までに寝る"
+  ].freeze
 
   # ⑥ 自信を育てた出来事3つ（見出しは本人が選んだ文 11/17）
   CONFIDENCE_ITEMS = {
     joy: "今日嬉しかったことは？",
     growth: "成長したこと、上達したことは？（自己効力感）",
     thanks: "「ありがとう！」と言った、言われたことは？（自己肯定感）"
+  }.freeze
+  CONFIDENCE_EXAMPLES = {
+    joy: "例：友人から久しぶりに電話が来た",
+    growth: "例：Railsで新しい画面を1つ作れた",
+    thanks: "例：家族に「ありがとう」と言えた"
   }.freeze
 
   BLANK_PLAN_ROWS = 3

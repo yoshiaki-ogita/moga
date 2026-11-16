@@ -143,6 +143,12 @@ RSpec.describe "わたしの轍（PR1：前の日に書く①〜③）", type: :
                                        'name="diary[redo_5]"', 'name="diary[thanks]"')
     end
 
+    it "いつ書くか（前の日の夜／寝る前）と書き方の例が出る" do
+      get diary_path("2026-11-18")
+      expect(response.body).to include("轍の書き方（1日に2回）", "🌙 前の日の夜に書く", "🛏 その日の終わり（寝る前）に書く",
+                                       'placeholder="例：夜は22時までに寝る"', 'placeholder="例：友人から久しぶりに電話が来た"')
+    end
+
     it "⑤⑥を保存でき、⑤が2つなら「あと1つ」と励ます" do
       patch diary_path("2026-11-17"), params: { diary: { redo_1: "朝の復習を先に", redo_2: "早めに寝る",
                                                         joy: "友人から電話", growth: "轍を作れた", thanks: "家族にありがとう" } }

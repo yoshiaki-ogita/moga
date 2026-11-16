@@ -23,9 +23,20 @@
       </ul>
     <% end %>
 
+    <%# 初めての人へ：いつ・どこを書くかの道しるべ %>
+    <div class="wadachi-guide">
+      <p class="wadachi-guide__title">轍の書き方（1日に2回）</p>
+      <ol class="wadachi-guide__steps">
+        <li>🌙 <strong>前の日の夜</strong>：①行動予定 ②今日の一言 ③今日必ずやること</li>
+        <li>🛏 <strong>その日の終わり（寝る前）</strong>：④評価 ⑤やり直せるなら ⑥自信を育てた出来事</li>
+      </ol>
+      <p class="wadachi-guide__note">どの欄も薄い字の「例」を参考に。書いた所だけ保存されます。</p>
+    </div>
+
     <section class="wadachi-section">
+      <p class="wadachi-when wadachi-when--night">🌙 前の日の夜に書く</p>
       <h2>① 行動予定</h2>
-      <p class="wadachi-section__hint">前の日の夜に書きます。時間帯ごとに、どの小窓に取り組むか。空の行は保存されません。</p>
+      <p class="wadachi-section__hint">時間帯ごとに、どの小窓に取り組むかを書きます（例：5:00〜6:30 H3 継続受講「Railsの復習」）。空の行は保存されません。</p>
       <table class="wadachi-plans">
         <thead>
           <tr><th class="wadachi-plans__time">始まり</th><th class="wadachi-plans__time">終わり</th><th class="wadachi-plans__window">小窓</th><th>ひと言</th><th class="wadachi-plans__delete">消す</th></tr>
@@ -48,18 +59,23 @@
     </section>
 
     <section class="wadachi-section form__field">
+      <p class="wadachi-when wadachi-when--night">🌙 前の日の夜に書く</p>
       <h2><%= f.label :word, "② 今日の一言" %></h2>
+      <p class="wadachi-section__hint">明日の自分への合言葉を一言で。</p>
       <%= f.text_field :word, placeholder: "例：一歩ずつ、今日も前へ。" %>
     </section>
 
     <section class="wadachi-section form__field">
+      <p class="wadachi-when wadachi-when--night">🌙 前の日の夜に書く</p>
       <h2><%= f.label :must_do, "③ 今日必ずやること" %></h2>
-      <%= f.text_area :must_do, rows: 3, placeholder: "例：ウォーキング 8km" %>
+      <p class="wadachi-section__hint">これだけは必ず、という1つか2つを。</p>
+      <%= f.text_area :must_do, rows: 3, placeholder: "例：ウォーキング 8km／Railsの復習を1章" %>
     </section>
 
     <section class="wadachi-section">
+      <p class="wadachi-when wadachi-when--end">🛏 その日の終わり（寝る前）に書く</p>
       <h2>④ 今日1日の自分の行動の評価</h2>
-      <p class="wadachi-section__hint">その日の終わりに書きます。a〜eを1つ押し、ひと言を残します。</p>
+      <p class="wadachi-section__hint">項目ごとに a〜e を1つ押し、ひと言を残します（例：技 b「Railsの轍を作り上げた」）。</p>
       <%# 1項目ずつ「項目名と a〜e の丸」、その下に「コメント」を並べる（狭い画面でも重ならない） %>
       <% Diary::REVIEW_ITEMS.each do |item, label| %>
         <div class="wadachi-review">
@@ -77,13 +93,14 @@
     </section>
 
     <section class="wadachi-section">
+      <p class="wadachi-when wadachi-when--end">🛏 その日の終わり（寝る前）に書く</p>
       <h2>⑤ 今日もう一度やり直せるとしたら？</h2>
       <p class="wadachi-section__hint wadachi-section__goal">3つ以上書きましょう！（4つ目・5つ目は書けたら）</p>
       <ol class="wadachi-lines">
         <% Diary::REDO_FIELDS.each_with_index do |field, i| %>
           <li class="wadachi-lines__row<%= ' wadachi-lines__row--goal' if i < Diary::REDO_GOAL %>">
             <span class="wadachi-lines__num"><%= i + 1 %></span>
-            <%= f.text_field field, placeholder: (i.zero? ? "例：朝の30分をスマホでなく復習に使う" : ""),
+            <%= f.text_field field, placeholder: Diary::REDO_EXAMPLES[i].to_s,
                   aria: { label: "やり直せるなら（#{i + 1}）" } %>
           </li>
         <% end %>
@@ -91,12 +108,13 @@
     </section>
 
     <section class="wadachi-section">
+      <p class="wadachi-when wadachi-when--end">🛏 その日の終わり（寝る前）に書く</p>
       <h2>⑥ 今日自分の自信を育てた出来事3つ</h2>
-      <p class="wadachi-section__hint">それぞれ一言で。</p>
+      <p class="wadachi-section__hint">小さなことで大丈夫。それぞれ一言で。</p>
       <% Diary::CONFIDENCE_ITEMS.each_with_index do |(field, label), i| %>
         <div class="form__field wadachi-confidence">
           <%= f.label field, "#{i + 1}　#{label}", class: "wadachi-confidence__label" %>
-          <%= f.text_field field %>
+          <%= f.text_field field, placeholder: Diary::CONFIDENCE_EXAMPLES[field] %>
         </div>
       <% end %>
     </section>
