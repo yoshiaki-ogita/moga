@@ -15,3 +15,11 @@ if ENV["SENTRY_DSN"].present?
     config.traces_sample_rate = 0.0
   end
 end
+
+# 火災報知器の「試しの知らせ」（一時的なもの。届いたのを確かめたら次の PR で消す）
+#   本番の MOGA が立ち上がった時に1回だけ、Sentry へ「試しです」と知らせる
+if ENV["SENTRY_DSN"].present?
+  Rails.application.config.after_initialize do
+    Sentry.capture_message("MOGA の火災報知器の試し：本番の MOGA が立ち上がりました")
+  end
+end
