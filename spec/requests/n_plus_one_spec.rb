@@ -25,4 +25,28 @@ RSpec.describe "N+1問題が出ない（#34）", type: :request do
     get phase_path(user.phases.find_by(code: "A"))
     expect(response).to have_http_status(:ok)
   end
+
+  # わたしの轍（11/15〜11/17 に足した画面）も、N+1 が出ないことを確かめる
+  context "わたしの轍" do
+    before do
+      windows = [ %w[A 1], %w[B 2], %w[C 1] ].map { |code, number| user.phases.find_by(code: code).windows.find_by(number: number) }
+      3.times do |i|
+        user.diaries.create!(diary_on: Date.new(2026, 11, 15 + i), word: "一言#{i}", diary_plans_attributes: [
+          { starts_at: "05:00", ends_at: "06:30", window_id: windows[0].id },
+          { starts_at: "07:30", ends_at: "10:00", window_id: windows[1].id },
+          { starts_at: "20:00", ends_at: "21:00", window_id: windows[2].id }
+        ])
+      end
+    end
+
+    it "轍の一覧（轍 3日分）" do
+      get diaries_path
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "1日の轍（行動予定 × 小窓 × 大窓）" do
+      get diary_path("2026-11-17")
+      expect(response).to have_http_status(:ok)
+    end
+  end
 end
