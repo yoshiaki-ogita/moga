@@ -40,3 +40,12 @@ plugin :solid_queue if ENV["SOLID_QUEUE_IN_PUMA"]
 # Specify the PID file. Defaults to tmp/pids/server.pid in development.
 # In other environments, only set the PID file if requested.
 pidfile ENV["PIDFILE"] if ENV["PIDFILE"]
+
+# 火災報知器（Sentry）の「試しの知らせ」（#92。一時的なもの。届いたのを確かめたら次の PR で消す）
+#   ・Puma（本番のお店）が開店し終わった時だけ、1回知らせる
+#   ・組み立て（assets:precompile や db:migrate）では Puma は動かないので、送らない（#95 の失敗の反省）
+after_booted do
+  if ENV["SENTRY_DSN"].to_s != "" && defined?(Sentry) && Sentry.initialized?
+    Sentry.capture_message("MOGA の火災報知器の試し：本番の MOGA が開店しました")
+  end
+end
