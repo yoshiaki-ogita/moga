@@ -106,17 +106,17 @@ module WadachiClockHelper
 
   # 時刻 → 円の上の点（真上が0時、右回り）
   def point(hour, radius)
-    angle = hour / 24.0 * 2 * Math::PI - Math::PI / 2
-    [ (CENTER + radius * Math.cos(angle)).round(1), (CENTER + radius * Math.sin(angle)).round(1) ]
+    angle = (hour / 24.0 * 2 * Math::PI) - (Math::PI / 2)
+    [ (CENTER + (radius * Math.cos(angle))).round(1), (CENTER + (radius * Math.sin(angle))).round(1) ]
   end
 
   def minutes_of(time)
-    time.hour * 60 + time.min
+    (time.hour * 60) + time.min
   end
 
   # 色を白へ混ぜて淡くする（にじんだ色）
   def tint(hex, ratio)
     rgb = hex.delete("#").scan(/../).map { |c| c.to_i(16) }
-    "#" + rgb.map { |v| format("%02x", (v + (255 - v) * ratio).round) }.join
+    "#" + rgb.map { |v| format("%02x", (v + ((255 - v) * ratio)).round) }.join
   end
 end

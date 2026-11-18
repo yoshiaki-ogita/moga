@@ -100,7 +100,7 @@ class Diary < ApplicationRecord
   #   時刻の列は世界標準時で保存されるため、データベースの並べ替え（ORDER BY）では
   #   朝5時（前日20時に当たる）が昼より後になってしまう。そこで日本の時刻の「時・分」で並べる
   def sorted_plans
-    diary_plans.sort_by { |plan| plan.persisted? ? [ 0, plan.starts_at.hour * 60 + plan.starts_at.min ] : [ 1, 0 ] }
+    diary_plans.sort_by { |plan| plan.persisted? ? [ 0, (plan.starts_at.hour * 60) + plan.starts_at.min ] : [ 1, 0 ] }
   end
 
   # 寝る前の部分（④⑤⑥）を書いたか。書いたら「明日の轍を書く」を出す
