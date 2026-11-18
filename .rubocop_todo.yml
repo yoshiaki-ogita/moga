@@ -1,9 +1,6 @@
 # すぐには直せない所の一覧（RuboCop の「宿題帳」）
 # ここに書いた所は、今は検査から外しています。直したら、ここから消します。
-
-# 「わたしの轍」の時計の絵（SVG）を組み立てるヘルパーは、計算が1か所に集まっていて、
-# 複雑さの目安（AbcSize 17）を超えている（wadachi_clock 31.38、clock_ticks 19.29）。
-# 運営事務局からの課題 #6「ロジックの分離」で、計算を Service 層に切り出す時に直す。
-Metrics/AbcSize:
-  Exclude:
-    - "app/helpers/wadachi_clock_helper.rb"
+#
+# 今は宿題はありません。
+# ・2026-11-19 「わたしの轍」の時計のヘルパーの複雑さ（Metrics/AbcSize）2か所は、
+#   計算を WadachiClockGeometry に切り出して直しました（運営事務局からの課題 #6、Issue #101）。

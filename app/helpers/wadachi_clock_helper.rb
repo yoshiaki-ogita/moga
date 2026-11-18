@@ -1,13 +1,15 @@
 # 轍の⑦「今日の24時間」の円グラフ（SVG）を描く
 #   真上が0時、右回り。外の輪＝予定（はっきりした青）、内の輪＝実際（同じ青を白でにじませた淡い色）
 #   色は大窓ごとの青の濃淡（Aが一番濃く、Hが一番淡い）。参考：永田ゆかり『データ視覚化のデザイン』
+#   このヘルパーは絵（SVG のタグ）を組み立てる仕事だけ。点・扇形・色・合計の計算は
+#   WadachiClockGeometry（app/services）に任せる（運営事務局からの課題 #6、Issue #101）
 module WadachiClockHelper
   PHASE_BLUES = {
     "A" => "#0d3c61", "B" => "#12507f", "C" => "#1565c0", "D" => "#1e88e5",
     "E" => "#42a5f5", "F" => "#64b5f6", "G" => "#90caf9", "H" => "#bbdefb"
   }.freeze
   DARK_PHASES = %w[A B C D].freeze # この大窓の上の字は白
-  CENTER = 210
+  CENTER = WadachiClockGeometry::CENTER
   PLAN_RING = [ 130, 170 ].freeze   # 外の輪（予定）の内側・外側の半径
   ACTUAL_RING = [ 94, 122 ].freeze  # 内の輪（実際）
   ACTUAL_TINT = 0.45                # 実際の色を白へにじませる割合
@@ -15,25 +17,15 @@ module WadachiClockHelper
   def wadachi_clock(diary)
     plans = diary.diary_plans.select(&:persisted?)
     confirmed = plans.any?(&:actual?)
-    parts = [ clock_background, clock_rings(confirmed) ]
-    plans.each do |plan|
-      parts << clock_arc(plan.starts_at, plan.ends_at, PLAN_RING, PHASE_BLUES[plan.phase_code], "#ffffff", 2)
-    end
-    plans.select(&:actual?).each do |plan|
-      color = PHASE_BLUES[plan.phase_code]
-      parts << clock_arc(*plan.actual_range, ACTUAL_RING, tint(color, ACTUAL_TINT), color, 1.2)
-    end
-    parts << clock_ticks
-    plans.each { |plan| parts << clock_label(plan) }
-    parts << clock_center(plans, confirmed)
+    parts = [ clock_background, clock_rings(confirmed), clock_plan_arcs(plans), clock_actual_arcs(plans),
+              clock_ticks, *plans.map { |plan| clock_label(plan) }, clock_center(plans, confirmed) ]
     tag.svg(safe_join(parts), viewBox: "-20 -5 460 430", class: "wadachi-clock__svg", role: "img",
                               aria: { label: "今日の24時間の円グラフ" })
   end
 
-  # 「7時間」「6.5時間」のような合計
+  # 「7時間」「6.5時間」のような合計（計算は WadachiClockGeometry）
   def clock_hours(ranges)
-    hours = ranges.sum { |s, e| (minutes_of(e) - minutes_of(s)) / 60.0 }
-    "#{hours.round(1).to_s.delete_suffix('.0')}時間"
+    WadachiClockGeometry.hours_label(ranges)
   end
 
   private
@@ -67,36 +59,50 @@ module WadachiClockHelper
     ])
   end
 
+  # 外の輪：予定（はっきりした青）
+  def clock_plan_arcs(plans)
+    safe_join(plans.map do |plan|
+      clock_arc(plan.starts_at, plan.ends_at, PLAN_RING, PHASE_BLUES[plan.phase_code], "#ffffff", 2)
+    end)
+  end
+
+  # 内の輪：実際（同じ青を白でにじませた淡い色）
+  def clock_actual_arcs(plans)
+    safe_join(plans.select(&:actual?).map do |plan|
+      color = PHASE_BLUES[plan.phase_code]
+      clock_arc(*plan.actual_range, ACTUAL_RING, WadachiClockGeometry.tint(color, ACTUAL_TINT), color, 1.2)
+    end)
+  end
+
   def clock_arc(starts_at, ends_at, (inner, outer), fill, stroke, width)
-    s = minutes_of(starts_at) / 60.0
-    e = minutes_of(ends_at) / 60.0
-    large = e - s > 12 ? 1 : 0
-    x1, y1 = point(s, outer)
-    x2, y2 = point(e, outer)
-    x3, y3 = point(e, inner)
-    x4, y4 = point(s, inner)
-    d = "M#{x1},#{y1} A#{outer},#{outer} 0 #{large} 1 #{x2},#{y2} " \
-        "L#{x3},#{y3} A#{inner},#{inner} 0 #{large} 0 #{x4},#{y4} Z"
+    d = WadachiClockGeometry.arc_path(starts_at, ends_at, inner, outer)
     tag.path(d: d, fill: fill, stroke: stroke, "stroke-width": width, "stroke-linejoin": "round")
   end
 
+  # 24時間の目盛り（6時間ごとに長く太く）と、0・6・12・18時の字
   def clock_ticks
-    lines = (0..23).map do |h|
-      x1, y1 = point(h, 174)
-      x2, y2 = point(h, (h % 6).zero? ? 186 : 180)
-      tag.line(x1: x1, y1: y1, x2: x2, y2: y2, stroke: "#90a4ae", "stroke-width": (h % 6).zero? ? 2 : 1)
+    safe_join(clock_tick_lines + clock_tick_labels)
+  end
+
+  def clock_tick_lines
+    (0..23).map do |h|
+      long = (h % 6).zero?
+      x1, y1 = WadachiClockGeometry.point(h, 174)
+      x2, y2 = WadachiClockGeometry.point(h, long ? 186 : 180)
+      tag.line(x1: x1, y1: y1, x2: x2, y2: y2, stroke: "#90a4ae", "stroke-width": long ? 2 : 1)
     end
-    labels = [ 0, 6, 12, 18 ].map do |h|
-      x, y = point(h, 200)
+  end
+
+  def clock_tick_labels
+    [ 0, 6, 12, 18 ].map do |h|
+      x, y = WadachiClockGeometry.point(h, 200)
       tag.text("#{h}時", x: x, y: y + 5, "text-anchor": "middle", "font-size": 14, fill: "#546e7a")
     end
-    safe_join(lines + labels)
   end
 
   # 輪の上に小窓の記号（H3 など）を直接書く（色の見本表を見比べなくて済む）
   def clock_label(plan)
-    mid = (minutes_of(plan.starts_at) + minutes_of(plan.ends_at)) / 120.0
-    x, y = point(mid, 150)
+    x, y = WadachiClockGeometry.point(WadachiClockGeometry.mid_hour(plan.starts_at, plan.ends_at), 150)
     color = DARK_PHASES.include?(plan.phase_code) ? "#ffffff" : "#0d3c61"
     tag.text(plan.window_code, x: x, y: y + 5, "text-anchor": "middle", "font-size": 14, "font-weight": "bold",
              fill: color)
@@ -111,21 +117,5 @@ module WadachiClockHelper
       tag.text("#{plan_text} / #{actual_text}", x: CENTER, y: CENTER + 30, "text-anchor": "middle",
                                                 "font-size": 16, "font-weight": "bold", fill: "#0d3c61")
     ])
-  end
-
-  # 時刻 → 円の上の点（真上が0時、右回り）
-  def point(hour, radius)
-    angle = (hour / 24.0 * 2 * Math::PI) - (Math::PI / 2)
-    [ (CENTER + (radius * Math.cos(angle))).round(1), (CENTER + (radius * Math.sin(angle))).round(1) ]
-  end
-
-  def minutes_of(time)
-    (time.hour * 60) + time.min
-  end
-
-  # 色を白へ混ぜて淡くする（にじんだ色）
-  def tint(hex, ratio)
-    rgb = hex.delete("#").scan(/../).map { |c| c.to_i(16) }
-    "#" + rgb.map { |v| format("%02x", (v + ((255 - v) * ratio)).round) }.join
   end
 end
