@@ -1,8 +1,77 @@
-# Omakase Ruby styling for Rails
+# ============================================================
+# MOGA の RuboCop 設定 ― 書き方の先生（RuboCop）に教える「MOGA の家訓」
+# ============================================================
+# 土台は Rails 標準の rubocop-rails-omakase（書き方の見た目をそろえる決まり）。
+# その上に、MOGA で大切にしたい決まりを足しています。
+# 決まりごとに「なぜそうするか」をコメントで残します。
+# （運営事務局からの課題 #4「.rubocop.yml をプロジェクトに合わせてカスタマイズする」、Issue #99）
+
 inherit_gem: { rubocop-rails-omakase: rubocop.yml }
 
-# Overwrite or add rules to create your own house style
-#
-# # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`
-# Layout/SpaceInsideArrayLiteralBrackets:
-#   Enabled: false
+# すぐには直せない所の一覧（いつ・どこで直すかを書いて、見える所に置いておく）
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+  # MOGA が使っている Ruby の版（.ruby-version と同じ）
+  TargetRubyVersion: 3.4
+  # RuboCop を新しくした時に増えた検査も、自動で使う（見落としを防ぐため）
+  NewCops: enable
+
+# ------------------------------------------------------------
+# 家訓1：バグのもとを見つける検査を使う
+# ------------------------------------------------------------
+# omakase では Lint（バグのもと）と Security（安全）の検査が止まっている。
+# MOGA は自分の大切な記録をしまうアプリなので、両方とも使う。
+Lint:
+  Enabled: true
+
+Security:
+  Enabled: true
+
+# ------------------------------------------------------------
+# 家訓2：1行は120字まで
+# ------------------------------------------------------------
+# GitHub の PR の画面で、横に動かさずに読める長さにする（レビューする人のため）。
+# テスト（spec）は、テストの名前を日本語の文で書いているので長くなる。
+# 読みやすさを優先して、テストは対象から外す。
+Layout/LineLength:
+  Enabled: true
+  Max: 120
+  Exclude:
+    - "spec/**/*"
+
+# ------------------------------------------------------------
+# 家訓3：太りすぎたメソッドやクラスを作らない
+# ------------------------------------------------------------
+# Fat Controller / Fat Model の見張り番（運営事務局からの課題 #6 とつながる）。
+# 1つのメソッドは15行まで、1つのクラスは150行まで。
+# 条件分岐の多さ（複雑さ）も RuboCop の標準の目安で見張る。
+Metrics/MethodLength:
+  Enabled: true
+  Max: 15
+
+Metrics/ClassLength:
+  Enabled: true
+  Max: 150
+
+Metrics/AbcSize:
+  Enabled: true
+
+Metrics/CyclomaticComplexity:
+  Enabled: true
+
+Metrics/PerceivedComplexity:
+  Enabled: true
+
+# ------------------------------------------------------------
+# 家訓4：日本語で書いてよい
+# ------------------------------------------------------------
+# 本人が後から読み返して分かるように、コメントや画面の言葉は日本語で書く。
+# そのため、次の2つの検査は使わない（omakase でも止まっているが、理由をはっきり残す）。
+# ・Style/AsciiComments：コメントを英字だけにする検査
+# ・Rails/I18nLocaleTexts：画面の言葉を翻訳ファイルに移す検査（MOGA は日本語だけで使う）
+Style/AsciiComments:
+  Enabled: false
+
+Rails/I18nLocaleTexts:
+  Enabled: false
