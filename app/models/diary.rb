@@ -51,8 +51,9 @@ class Diary < ApplicationRecord
   # 轍を消すと、中の行動予定も一緒に消える。時刻の早い順に並べる
   has_many :diary_plans, dependent: :destroy, inverse_of: :diary
   # 時刻も小窓も空の行は、保存しない（空の行を残して保存してもよい）
-  accepts_nested_attributes_for :diary_plans, allow_destroy: true,
-                                              reject_if: ->(attrs) { attrs.values_at("starts_at", "ends_at", "window_id", "memo").all?(&:blank?) }
+  accepts_nested_attributes_for :diary_plans, allow_destroy: true, reject_if: lambda { |attrs|
+    attrs.values_at("starts_at", "ends_at", "window_id", "memo").all?(&:blank?)
+  }
 
   validates :diary_on, presence: true, uniqueness: { scope: :user_id }
   validates :word, length: { maximum: 50 }

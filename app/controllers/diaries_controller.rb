@@ -16,7 +16,8 @@ class DiariesController < ApplicationController
   # 1日の轍を保存する（初めてなら作り、2回目からは保存し直す）
   def update
     if @diary.update(diary_params)
-      redirect_to diary_path(@diary.diary_on), notice: [ "#{@diary.date_label}の轍を保存しました", @diary.redo_cheer ].compact.join("　")
+      notice = [ "#{@diary.date_label}の轍を保存しました", @diary.redo_cheer ].compact.join("　")
+      redirect_to diary_path(@diary.diary_on), notice: notice
     else
       prepare_form
       render :show, status: :unprocessable_content
@@ -35,14 +36,17 @@ class DiariesController < ApplicationController
   # 入力画面の準備：空の行を足し、小窓の選び方（大窓ごとのまとまり）を用意する
   def prepare_form
     # 小窓と大窓をまとめて読む（円グラフの色・記号で1行ずつ読みに行かない）
-    ActiveRecord::Associations::Preloader.new(records: [ @diary ], associations: { diary_plans: { window: :phase } }).call
+    ActiveRecord::Associations::Preloader.new(
+      records: [ @diary ], associations: { diary_plans: { window: :phase } }
+    ).call
     @diary.build_blank_plans
     @window_choices = current_user.window_choices
   end
 
   def diary_params
+    plan_fields = %i[id starts_at ends_at window_id memo as_planned actual_starts_at actual_ends_at _destroy]
     params.require(:diary).permit(:word, :must_do, *review_fields, *Diary::REDO_FIELDS, *Diary::CONFIDENCE_ITEMS.keys,
-                                  diary_plans_attributes: %i[id starts_at ends_at window_id memo as_planned actual_starts_at actual_ends_at _destroy])
+                                  diary_plans_attributes: plan_fields)
   end
 
   # ④の評価で受け取る欄（mind_grade, mind_comment, ...）

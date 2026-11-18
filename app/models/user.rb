@@ -36,7 +36,8 @@ class User < ApplicationRecord
   #   [["A 特定社労士", [["A1 労基＆安衛", 小窓の番号], ...]], ...]
   def window_choices
     phases.includes(:windows).order(:code).map do |phase|
-      [ "#{phase.code} #{phase.name}", phase.windows.map { |window| [ "#{phase.code}#{window.number} #{window.title}", window.id ] } ]
+      choices = phase.windows.map { |window| [ "#{phase.code}#{window.number} #{window.title}", window.id ] }
+      [ "#{phase.code} #{phase.name}", choices ]
     end
   end
 

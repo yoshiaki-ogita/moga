@@ -16,7 +16,9 @@ module WadachiClockHelper
     plans = diary.diary_plans.select(&:persisted?)
     confirmed = plans.any?(&:actual?)
     parts = [ clock_background, clock_rings(confirmed) ]
-    plans.each { |plan| parts << clock_arc(plan.starts_at, plan.ends_at, PLAN_RING, PHASE_BLUES[plan.phase_code], "#ffffff", 2) }
+    plans.each do |plan|
+      parts << clock_arc(plan.starts_at, plan.ends_at, PLAN_RING, PHASE_BLUES[plan.phase_code], "#ffffff", 2)
+    end
     plans.select(&:actual?).each do |plan|
       color = PHASE_BLUES[plan.phase_code]
       parts << clock_arc(*plan.actual_range, ACTUAL_RING, tint(color, ACTUAL_TINT), color, 1.2)
@@ -54,9 +56,14 @@ module WadachiClockHelper
     dash = confirmed ? nil : "4 4"
     safe_join([
       tag.circle(cx: CENTER, cy: CENTER, r: 150, fill: "none", stroke: "#e9eef2", "stroke-width": 40),
-      *PLAN_RING.map { |r| tag.circle(cx: CENTER, cy: CENTER, r: r, fill: "none", stroke: "#b0bec5", "stroke-width": 1) },
+      *PLAN_RING.map { |r|
+        tag.circle(cx: CENTER, cy: CENTER, r: r, fill: "none", stroke: "#b0bec5", "stroke-width": 1)
+      },
       tag.circle(cx: CENTER, cy: CENTER, r: 108, fill: "none", stroke: "#f4f6f8", "stroke-width": 28),
-      *ACTUAL_RING.map { |r| tag.circle(cx: CENTER, cy: CENTER, r: r, fill: "none", stroke: "#cfd8dc", "stroke-width": 1, "stroke-dasharray": dash) }
+      *ACTUAL_RING.map { |r|
+        tag.circle(cx: CENTER, cy: CENTER, r: r, fill: "none", stroke: "#cfd8dc", "stroke-width": 1,
+                   "stroke-dasharray": dash)
+      }
     ])
   end
 
@@ -68,7 +75,8 @@ module WadachiClockHelper
     x2, y2 = point(e, outer)
     x3, y3 = point(e, inner)
     x4, y4 = point(s, inner)
-    d = "M#{x1},#{y1} A#{outer},#{outer} 0 #{large} 1 #{x2},#{y2} L#{x3},#{y3} A#{inner},#{inner} 0 #{large} 0 #{x4},#{y4} Z"
+    d = "M#{x1},#{y1} A#{outer},#{outer} 0 #{large} 1 #{x2},#{y2} " \
+        "L#{x3},#{y3} A#{inner},#{inner} 0 #{large} 0 #{x4},#{y4} Z"
     tag.path(d: d, fill: fill, stroke: stroke, "stroke-width": width, "stroke-linejoin": "round")
   end
 
@@ -90,7 +98,8 @@ module WadachiClockHelper
     mid = (minutes_of(plan.starts_at) + minutes_of(plan.ends_at)) / 120.0
     x, y = point(mid, 150)
     color = DARK_PHASES.include?(plan.phase_code) ? "#ffffff" : "#0d3c61"
-    tag.text(plan.window_code, x: x, y: y + 5, "text-anchor": "middle", "font-size": 14, "font-weight": "bold", fill: color)
+    tag.text(plan.window_code, x: x, y: y + 5, "text-anchor": "middle", "font-size": 14, "font-weight": "bold",
+             fill: color)
   end
 
   def clock_center(plans, confirmed)
