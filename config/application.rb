@@ -36,6 +36,11 @@ module Moga
     # 日本時間・日本語で動かす（記録の日付を日本の日付で残すため）
     config.time_zone = "Tokyo"
     config.i18n.default_locale = :ja
+
+    # 注意（エラー）を受けた欄を field_with_errors の箱で包まない（#107）。
+    # 箱で包まれると、その欄だけ横幅の指定が外れて縮み、欄の長さがそろわなくなるため。
+    # どの欄が違うかは、画面の上の注意の一覧（form__errors）で伝えている
+    config.action_view.field_error_proc = proc { |html_tag, _instance| html_tag }
     # config.eager_load_paths << Rails.root.join("extras")
 
     # Don't generate system test files.

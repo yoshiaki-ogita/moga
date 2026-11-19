@@ -35,5 +35,12 @@ RSpec.describe "Users（ユーザー登録）", type: :request do
       expect { post users_path, params: valid_params }.not_to change(User, :count)
       expect(response.body).to include("名前を入力してください")
     end
+
+    it "注意を受けた欄も箱（field_with_errors）で包まれず、他の欄と同じ幅のまま（#107）" do
+      valid_params[:user][:name] = ""
+      post users_path, params: valid_params
+      expect(response.body).to include("名前を入力してください")
+      expect(response.body).not_to include("field_with_errors")
+    end
   end
 end
