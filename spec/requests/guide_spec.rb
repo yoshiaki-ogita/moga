@@ -8,6 +8,11 @@ RSpec.describe "使い方の画面（#115）", type: :request do
                                      "記録を足す", "わたしの轍", "課題型", "達成率型", "TOPへ戻る")
   end
 
+  it "いちばん上に64の窓の図がある（押すと大きく見られる）" do
+    get guide_path
+    expect(response.body).to include("曼荼羅アート64の図", "guide_mandala64", 'target="_blank"')
+  end
+
   it "TOP から使い方の画面へ行ける" do
     get root_path
     expect(response.body).to include(%(href="#{guide_path}"))

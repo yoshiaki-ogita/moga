@@ -82,3 +82,23 @@
   margin: 24px 0 8px;
   font-size: 1.05rem;
 }
+
+/* 64の窓の図（使い方の画面のいちばん上） */
+.guide-figure {
+  margin: 0 0 24px;
+  text-align: center;
+}
+
+.guide-figure__image {
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgb(13 60 97 / 10%);
+}
+
+.guide-figure__caption {
+  margin-top: 8px;
+  font-size: 0.95rem;
+  color: #1565c0;
+}
