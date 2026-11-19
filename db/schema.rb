@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_17_000200) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_19_000100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -106,6 +106,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_17_000200) do
     t.integer "measure", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "target_count"
     t.index ["phase_id", "number"], name: "index_windows_on_phase_id_and_number", unique: true
     t.index ["phase_id"], name: "index_windows_on_phase_id"
   end
