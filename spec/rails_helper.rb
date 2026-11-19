@@ -14,6 +14,8 @@ end
 RSpec.configure do |config|
   # FactoryBot の create(:user) などを、FactoryBot. を付けずに書けるようにする
   config.include FactoryBot::Syntax::Methods
+  # travel（時計を進める）を使えるようにする（#110 の「3分たつと」を確かめるため）
+  config.include ActiveSupport::Testing::TimeHelpers
 
   config.fixture_paths = [ Rails.root.join("spec/fixtures") ]
   config.use_transactional_fixtures = true
