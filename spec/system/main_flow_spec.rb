@@ -55,7 +55,8 @@ RSpec.describe "MOGA の主な流れ", type: :system do
     fill_in "window_title", with: "過去問"
     choose "達成率型（できた数 ÷ やった数）"
     click_button "保存する"
-    click_link "過去問"
+    # 曼荼羅のマスから入る（下の「科目ごとのまとめ表」にも同じ名前のリンクがあるため、場所を絞る #132）
+    within(".mandala") { click_link "過去問" }
     fill_in "entry_attempted_count", with: "20"
     fill_in "entry_achieved_count", with: "16"
     click_button "記録する"

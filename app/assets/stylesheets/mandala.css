@@ -234,6 +234,15 @@ a.mandala__cell:hover {
   margin-bottom: 24px;
 }
 
+/* 科目ごとのまとめ表（#132）。合計の行は太字 */
+.score-summary {
+  margin: 24px 0;
+}
+
+.score-summary__total td {
+  font-weight: bold;
+}
+
 /* 回答済みと正解を並べる（#128） */
 .window-score {
   list-style: none;
