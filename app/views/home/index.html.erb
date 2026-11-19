@@ -6,6 +6,16 @@
 
   <%= render "shared/pie", percent: current_user.progress_percent, label: "全体の進捗率（大窓 A〜H の平均）" %>
 
+  <%# 最初の一歩（#115）。小窓がまだ1つも無い人にだけ、何から始めるかを示す %>
+  <% if current_user.windows.none? %>
+    <section class="first-step" aria-label="最初の一歩">
+      <h2 class="first-step__title">最初の一歩</h2>
+      <p>下の A〜H のマスを1つ押し、「この大窓の名前を直す」で、あなたの人生のテーマを書きましょう。</p>
+      <p class="first-step__example">例：特定社労士への挑戦</p>
+      <p class="first-step__guide"><%= link_to "くわしくは「使い方」へ", guide_path %></p>
+    </section>
+  <% end %>
+
   <div class="mandala">
     <% HomeController::MANDALA_ORDER.each do |code| %>
       <% if code == :me %>

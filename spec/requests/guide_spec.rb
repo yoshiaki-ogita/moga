@@ -30,6 +30,17 @@ RSpec.describe "使い方の画面（#115）", type: :request do
       expect(response.body).to include("使い方を見る", %(href="#{guide_path}"))
     end
 
+    it "小窓がまだ1つも無い時は、Home に「最初の一歩」が出る" do
+      get home_path
+      expect(response.body).to include("最初の一歩", "この大窓の名前を直す", "くわしくは「使い方」へ")
+    end
+
+    it "小窓を1つ作ったら、Home の「最初の一歩」は消える" do
+      user.phases.find_by(code: "A").windows.create!(number: 1, title: "労働基準法")
+      get home_path
+      expect(response.body).not_to include("最初の一歩")
+    end
+
     it "使い方の画面に、Home への現在地と戻り道が出る" do
       get guide_path
       expect(response.body).to include("現在地", "Homeへ戻る")
