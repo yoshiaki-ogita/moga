@@ -31,7 +31,7 @@ RSpec.describe "現在地（パンくず #31）", type: :request do
       edit_entry_path(entry) => "記録を直す"
     }.each do |path, current|
       get path
-      expect(response.body).to include(%(<a href="#{home_path}">Home</a>), %(<span aria-current="page">#{current}</span>))
+      expect(response.body).to include(%(<a class="breadcrumb__link" href="#{home_path}">Home</a>), %(<span aria-current="page">#{current}</span>))
     end
   end
 

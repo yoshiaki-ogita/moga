@@ -5,10 +5,11 @@ module BreadcrumbHelper
   #   breadcrumb(["Home", home_path], ["A 社労士", phase_path(phase)], "窓1 労働基準法")
   #   ・[名前, 行き先] はリンク（押すとその画面へ戻れる）
   #   ・最後の文字だけの物が「今いる画面」
+  #   ・リンクには breadcrumb__link の目印を付け、押せる範囲を CSS で広げる（#108）
   def breadcrumb(*items)
     links = items.map do |item|
       if item.is_a?(Array)
-        link_to(item[0], item[1])
+        link_to(item[0], item[1], class: "breadcrumb__link")
       else
         tag.span(item, aria: { current: "page" })
       end
