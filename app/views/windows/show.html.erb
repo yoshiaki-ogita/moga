@@ -14,8 +14,8 @@
   <%# 全体の数がある達成率型の小窓は、回答済みと正解を並べて出す（#128） %>
   <% if @window.uses_target? %>
     <ul class="window-score">
-      <li>回答済み <%= @window.attempted_total %> ／ <%= @window.target_count %>問（<%= @window.progress_percent %>%）</li>
-      <li>正解 <%= @window.achieved_total %> ／ <%= @window.attempted_total %>問（<%= @window.accuracy_percent %>%）</li>
+      <li>回答済み <%= @window.attempted_total %> ／ <%= @window.target_count %>問（到達率 <%= @window.progress_percent %>%）</li>
+      <li>正解 <%= @window.achieved_total %> ／ <%= @window.attempted_total %>問（正解率 <%= @window.accuracy_percent %>%）</li>
     </ul>
   <% end %>
 

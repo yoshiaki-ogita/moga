@@ -30,7 +30,7 @@ RSpec.describe "小窓の全体の数（#128）", type: :request do
     window = phase.windows.create!(number: 1, title: "労働基準法", measure: :achievement_rate, target_count: 700)
     window.entries.create!(recorded_on: Date.current, attempted_count: 120, achieved_count: 96)
     get window_path(window)
-    expect(response.body).to include("回答済み 120 ／ 700問（17%）", "正解 96 ／ 120問（80%）")
+    expect(response.body).to include("回答済み 120 ／ 700問（到達率 17%）", "正解 96 ／ 120問（正解率 80%）")
   end
 
   it "全体の数が空欄の小窓には、その2行を出さない" do
