@@ -56,8 +56,10 @@
   box-shadow: 0 2px 8px rgb(13 60 97 / 10%);
 }
 
+/* 説明文は見出しの字より少し右から始める（2026-11-20 作者の指摘：左に寄りすぎ） */
 .guide-steps__item p {
   margin: 4px 0;
+  padding-left: 2em;
 }
 
 .guide-steps__heading {
