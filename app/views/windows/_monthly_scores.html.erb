@@ -1,0 +1,33 @@
+<%# 月ごとの成績表（#130）。達成率型の小窓だけに出す。計算は MonthlyScoreTable の仕事 %>
+<% rows = MonthlyScoreTable.new(window).rows %>
+<% if rows.any? %>
+  <h3>月ごとの成績表</h3>
+  <table class="entry-table monthly-scores">
+    <thead>
+      <tr>
+        <th>月</th>
+        <th>その月に解いた数</th>
+        <th>正解</th>
+        <th>正解率</th>
+        <th>累計の回答済み</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% rows.each do |row| %>
+        <tr>
+          <td><%= row.month.strftime("%Y年%-m月") %></td>
+          <td class="entry-table__number"><%= row.attempted %></td>
+          <td class="entry-table__number"><%= row.achieved %></td>
+          <td class="entry-table__number"><%= row.accuracy_percent ? "#{row.accuracy_percent}%" : "―" %></td>
+          <td class="entry-table__number">
+            <% if row.cumulative_percent %>
+              <%= row.cumulative %> ／ <%= row.target_count %>（<%= row.cumulative_percent %>%）
+            <% else %>
+              <%= row.cumulative %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
