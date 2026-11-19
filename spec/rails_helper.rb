@@ -23,4 +23,9 @@ RSpec.configure do |config|
   config.before(type: :system) do
     driven_by :rack_test
   end
+
+  # ログインの回数制限（#110）の数えた回数を、テストごとに空にする（前のテストのログインを数えないため）
+  config.before do
+    SessionsController::RATE_LIMIT_STORE.clear
+  end
 end
