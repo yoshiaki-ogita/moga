@@ -38,15 +38,20 @@ class MonthlyScoreTable
     by_month = entries.group_by { |entry| entry.recorded_on.beginning_of_month }
     cumulative = 0
     months(by_month.keys).map do |month|
-      monthly = by_month.fetch(month, [])
-      attempted = monthly.sum(&:attempted_count)
-      cumulative += attempted
-      Row.new(month: month, attempted: attempted, achieved: monthly.sum(&:achieved_count),
-              cumulative: cumulative, target_count: @window.target_count)
+      row = build_row(month, by_month.fetch(month, []), cumulative)
+      cumulative = row.cumulative
+      row
     end
   end
 
   private
+
+  # 1か月ぶんの記録から1行を作る。累計は前の月までの累計に、その月の解いた数を足す
+  def build_row(month, monthly, cumulative_before)
+    attempted = monthly.sum(&:attempted_count)
+    Row.new(month: month, attempted: attempted, achieved: monthly.sum(&:achieved_count),
+            cumulative: cumulative_before + attempted, target_count: @window.target_count)
+  end
 
   # 最初の月から最後の月まで、記録の無い月も含めて1か月ずつ並べる
   def months(recorded_months)
