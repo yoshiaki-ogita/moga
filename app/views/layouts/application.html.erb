@@ -9,6 +9,9 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <%# 看板（OGP）：リンクを送った時に出る絵と説明（課題 #17、Issue #103） %>
+    <%= ogp_meta_tags %>
+
     <%= yield :head %>
 
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
