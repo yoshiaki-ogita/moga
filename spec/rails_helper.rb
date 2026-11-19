@@ -14,6 +14,8 @@ end
 RSpec.configure do |config|
   # FactoryBot の create(:user) などを、FactoryBot. を付けずに書けるようにする
   config.include FactoryBot::Syntax::Methods
+  # travel（時計を進める）を使えるようにする（#110 の「3分たつと」を確かめるため）
+  config.include ActiveSupport::Testing::TimeHelpers
 
   config.fixture_paths = [ Rails.root.join("spec/fixtures") ]
   config.use_transactional_fixtures = true
@@ -22,5 +24,10 @@ RSpec.configure do |config|
   # system spec（#32）はブラウザを使わず rack_test で動かす（Docker や CI に Chrome を入れなくて済む）
   config.before(type: :system) do
     driven_by :rack_test
+  end
+
+  # ログインの回数制限（#110）の数えた回数を、テストごとに空にする（前のテストのログインを数えないため）
+  config.before do
+    SessionsController::RATE_LIMIT_STORE.clear
   end
 end

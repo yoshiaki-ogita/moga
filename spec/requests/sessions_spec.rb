@@ -26,6 +26,34 @@ RSpec.describe "Sessions（ログイン・ログアウト）", type: :request do
     end
   end
 
+  describe "POST /login の回数制限（#110）" do
+    let(:limit) { SessionsController::LOGIN_LIMIT }
+
+    it "10回までは、パスワードが違えば今までどおりの注意が出る" do
+      limit.times do
+        post login_path, params: { email: "ogita@example.com", password: "wrong-pass" }
+        expect(response).to have_http_status(:unprocessable_content)
+      end
+    end
+
+    it "11回目は断られ、パスワードが合っていてもログインできない" do
+      limit.times { post login_path, params: { email: "ogita@example.com", password: "wrong-pass" } }
+      post login_path, params: { email: "ogita@example.com", password: "password123" }
+      expect(response).to have_http_status(:too_many_requests)
+      expect(response.body).to include("ログインの試みが多すぎます")
+      get home_path
+      expect(response).to redirect_to(root_path)
+    end
+
+    it "3分たつと、また正しいパスワードでログインできる" do
+      limit.times { post login_path, params: { email: "ogita@example.com", password: "wrong-pass" } }
+      travel(SessionsController::LOGIN_WITHIN + 1.second) do
+        post login_path, params: { email: "ogita@example.com", password: "password123" }
+        expect(response).to redirect_to(home_path)
+      end
+    end
+  end
+
   describe "DELETE /logout" do
     it "ログアウトすると TOP へ戻り、Home は開けなくなる" do
       post login_path, params: { email: "ogita@example.com", password: "password123" }
