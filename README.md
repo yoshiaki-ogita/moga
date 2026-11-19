@@ -8,6 +8,8 @@
 
 ![MOGA 曼荼羅アート64 のイメージ図（真ん中のあなたを8つの大窓が囲み、それぞれの大窓を8つの小窓が囲む）](MOGA_曼荼羅64_イメージ図.png)
 
+> **使ってみる方へ：** このREADMEは設計図・企画書です。使い方は、アプリの中の「[使い方の画面](https://moga-2qx4.onrender.com/guide)」にまとめました。
+
 ## 1. サービス概要（10のポイント）
 
 - MOGA は、自分を**数値化**することにより**育てられる記録**にして、**記憶を成長・発展させるノート**にします。第一弾は「数値化ブルーノート」です。
@@ -242,6 +244,7 @@ MVP の考え方：初心者の私が RUNTEQ で学んだ **基本中の基本**
 - DB：PostgreSQL（本番は Neon）。最初は MySQL（基礎②で使ったものと同じ種類）の予定でしたが、RUNTEQ 運営が推奨する構成（Render × Neon。30日などの期限がない）に合わせて PostgreSQL に切り替えました
 - デプロイ先：Render（アプリ）× Neon（DB）です。main にマージするたびに Render が自動で作り直します（デプロイは小まめに）。Render の箱はしばらく使われないと眠るので、Google Apps Script で10分おきに本番を開いてスリープ対策をしています
 - 本番の URL：https://moga-2qx4.onrender.com
+- 使い方の画面：https://moga-2qx4.onrender.com/guide （使う人向けの取扱説明書です。登録しなくても読めます。Home と TOP の「使い方を見る」からも開けます）
 - 使用ライブラリ：bcrypt（ログイン）、rspec-rails・factory_bot_rails・capybara（テスト）、SimpleCov（テストのカバレッジ測定）、Bullet（N+1 の検出。開発とテストの時だけ）。本リリースで ransack（検索）。画像は、Rails 標準の Active Storage と、基礎①で使った carrierwave を本リリースで比べて決めます
 - 品質（MVP 時点の数字）：rspec 134件すべて成功、行のカバレッジ 100%・分岐のカバレッジ 93.18%（SimpleCov で測定）。GitHub Actions で、PR ごとにテスト・rubocop・安全点検（brakeman・bundler-audit・importmap audit）を自動で回します
 
