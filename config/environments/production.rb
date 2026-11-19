@@ -78,12 +78,10 @@ Rails.application.configure do
   # Only use :id for inspections in production.
   config.active_record.attributes_for_inspect = [ :id ]
 
-  # Enable DNS rebinding protection and other `Host` header attacks.
-  # config.hosts = [
-  #   "example.com",     # Allow requests from example.com
-  #   /.*\.example\.com/ # Allow requests from subdomains like `www.example.com`
-  # ]
-  #
-  # Skip DNS rebinding protection for the default health check endpoint.
-  # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+  # MOGA の住所あての訪問だけを受け付ける（#114。DNS リバインディングなど Host ヘッダーを使った攻撃を防ぐ）
+  # 独自ドメイン（#16）を付けたら、Render の環境変数 APP_HOSTS にカンマ区切りで足す
+  config.hosts = ENV.fetch("APP_HOSTS", "moga-2qx4.onrender.com").split(",").map(&:strip)
+
+  # 動いているかの確かめ（/up）は住所を問わずに通す
+  config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 end
