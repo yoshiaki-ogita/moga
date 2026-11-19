@@ -7,6 +7,8 @@ class Phase < ApplicationRecord
 
   validates :code, presence: true, inclusion: { in: CODES }, uniqueness: { scope: :user_id }
   validates :name, presence: true, length: { maximum: 30 }
+  # 「なぜ そこへ向かうのか」のメモ（#145）。空でもよい
+  validates :memo, length: { maximum: 1000 }
 
   # 大窓の進捗率（#28）＝中の小窓の進捗率の平均。小窓が1つもなければ 0
   def progress_rate
