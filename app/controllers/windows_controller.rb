@@ -60,6 +60,6 @@ class WindowsController < ApplicationController
   end
 
   def window_params
-    params.require(:window).permit(:number, :title, :measure)
+    params.require(:window).permit(:number, :title, :measure, :target_count)
   end
 end

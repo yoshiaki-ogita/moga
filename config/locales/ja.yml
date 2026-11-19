@@ -22,6 +22,7 @@ ja:
         number: 番号
         title: 小窓の題名
         measure: 数え方
+        target_count: 全体の数
       plan:
         title: 課題
         done_at: 済んだ日時
@@ -80,6 +81,9 @@ ja:
       too_short: は%{count}文字以上で入力してください
       inclusion: は一覧にありません
       required: を選んでください
+      not_a_number: は数字で入力してください
+      not_an_integer: は整数で入力してください
+      greater_than: は%{count}より大きい値にしてください
   helpers:
     submit:
       create: 登録する

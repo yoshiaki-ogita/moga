@@ -15,6 +15,8 @@ class Window < ApplicationRecord
 
   validates :number, presence: true, inclusion: { in: NUMBERS }, uniqueness: { scope: :phase_id }
   validates :title, presence: true, length: { maximum: 30 }
+  # 全体の数（#128）。達成率型で使う。空欄でもよい。入れるなら 1 以上の整数
+  validates :target_count, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
 
   # 進捗率を数えるために、たくさんの小窓の中身をまとめて読み込む（#34 N+1対策）
   # 課題型の小窓には課題だけ、達成率型の小窓には記録だけを読み込む（使わない物は読まない）
@@ -30,14 +32,43 @@ class Window < ApplicationRecord
   #   達成率型 ：できた数の合計 ÷ やった数の合計（11/7 決裁 例：16/20 と 10/10 → 26÷30）
   # 読み込み済みの課題・記録を Ruby で数えるので、includes と組み合わせても余計な問い合わせが出ない
   # 保存された物だけを数える。入力が断られた課題・記録（まだ保存されていない1件）は数えない（本番の課題6）
+  #   達成率型で全体の数あり ：やった数の合計 ÷ 全体の数（#128 例：120問 ÷ 700問）
   def progress_fraction
     if plan_count?
       saved_plans = plans.select(&:persisted?)
       [ saved_plans.count(&:done?), saved_plans.size ]
+    elsif uses_target?
+      [ attempted_total, target_count ]
     else
-      saved_entries = entries.select(&:persisted?)
-      [ saved_entries.sum(&:achieved_count), saved_entries.sum(&:attempted_count) ]
+      accuracy_fraction
     end
+  end
+
+  # 全体の数を使う小窓か（達成率型で、全体の数が入っている）
+  def uses_target?
+    achievement_rate? && target_count.present?
+  end
+
+  # やった数（回答済み）の合計。保存された記録だけを数える
+  def attempted_total
+    saved_entries.sum(&:attempted_count)
+  end
+
+  # できた数（正解）の合計
+  def achieved_total
+    saved_entries.sum(&:achieved_count)
+  end
+
+  # 正解率のもとの数 [できた数の合計, やった数の合計]（例：96 / 120）
+  def accuracy_fraction
+    [ achieved_total, attempted_total ]
+  end
+
+  # 正解率 ○%（やった数が0なら 0）
+  def accuracy_percent
+    return 0 if attempted_total.zero?
+
+    (achieved_total * 100.0 / attempted_total).round
   end
 
   # 0.0〜1.0。課題・記録が0件（分母が0）の窓は 0（講師補足①：0%・白）
@@ -45,11 +76,18 @@ class Window < ApplicationRecord
     numerator, denominator = progress_fraction
     return 0.0 if denominator.zero?
 
-    numerator.to_f / denominator
+    # 全体の数より多く解いても（2周目など）100% で止める（#128）
+    [ numerator.to_f / denominator, 1.0 ].min
   end
 
   # 画面に出す ○%（四捨五入した整数）
   def progress_percent
     (progress_rate * 100).round
+  end
+
+  private
+
+  def saved_entries
+    entries.select(&:persisted?)
   end
 end
