@@ -27,5 +27,8 @@
     <% end %>
   </div>
 
+  <%# 使い方の画面への入口（#115） %>
+  <p class="mandala-page__guide"><%= link_to "使い方を見る", guide_path %></p>
+
   <%= button_to "ログアウト", logout_path, method: :delete, class: "button button--secondary mandala-page__logout" %>
 </main>

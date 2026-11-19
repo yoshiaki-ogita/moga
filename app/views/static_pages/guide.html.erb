@@ -1,0 +1,49 @@
+<% content_for(:title, "使い方｜MOGA") %>
+
+<main class="guide">
+  <%# 現在地（#31）。ログインしている人には Home への道を出す %>
+  <% if logged_in? %>
+    <%= breadcrumb(["Home", home_path], "使い方") %>
+  <% end %>
+
+  <h1 class="guide__title">MOGA の使い方</h1>
+  <p class="guide__lead">5つの手順で、あなたの曼荼羅64が育ち始めます。</p>
+
+  <ol class="guide-steps">
+    <li class="guide-steps__item">
+      <h2 class="guide-steps__heading"><span class="guide-steps__number">1</span>大窓に名前をつける</h2>
+      <p>Home の A〜H のマスを押し、「この大窓の名前を直す」で、あなたの人生のテーマを書きます。</p>
+      <p class="guide-steps__example">例：特定社労士への挑戦</p>
+    </li>
+    <li class="guide-steps__item">
+      <h2 class="guide-steps__heading"><span class="guide-steps__number">2</span>小窓を作る</h2>
+      <p>大窓の画面の「＋ 小窓を作る」を押し、テーマを8つまで分けます。</p>
+      <p class="guide-steps__example">例：労働基準法、雇用保険法</p>
+    </li>
+    <li class="guide-steps__item">
+      <h2 class="guide-steps__heading"><span class="guide-steps__number">3</span>数え方を選ぶ</h2>
+      <dl class="guide-measures">
+        <dt>課題型</dt>
+        <dd>やることを並べ、済んだ数で進み具合を見ます。<span class="guide-steps__example">例：本の章を1つずつ読む</span></dd>
+        <dt>達成率型</dt>
+        <dd>やった数とできた数を記録します。<span class="guide-steps__example">例：過去問を解いた数と正解した数</span></dd>
+      </dl>
+    </li>
+    <li class="guide-steps__item">
+      <h2 class="guide-steps__heading"><span class="guide-steps__number">4</span>記録を足す</h2>
+      <p>小窓の画面で、課題を足して「済み」にするか、やった数・できた数を記録します。円グラフと曼荼羅の青が、少しずつ濃くなります。</p>
+    </li>
+    <li class="guide-steps__item">
+      <h2 class="guide-steps__heading"><span class="guide-steps__number">5</span>わたしの轍</h2>
+      <p>Home の真ん中の丸から、毎日の行動予定と夜のふり返りを書けます。</p>
+    </li>
+  </ol>
+
+  <p class="guide__back">
+    <% if logged_in? %>
+      <%= link_to "Homeへ戻る", home_path %>
+    <% else %>
+      <%= link_to "TOPへ戻る", root_path %>
+    <% end %>
+  </p>
+</main>
