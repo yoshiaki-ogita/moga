@@ -1,0 +1,29 @@
+<%# 科目ごとのまとめ表（#132）。達成率型の小窓が1つ以上ある大窓だけに出す。計算は PhaseScoreSummary の仕事 %>
+<% summary = PhaseScoreSummary.new(windows) %>
+<% if summary.any? %>
+  <h2>科目ごとのまとめ表</h2>
+  <table class="entry-table score-summary">
+    <thead>
+      <tr>
+        <th>小窓</th>
+        <th>全体の数</th>
+        <th>回答済み</th>
+        <th>正解</th>
+        <th>正解率</th>
+        <th>進み具合</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% (summary.rows + [ summary.total ]).each do |row| %>
+        <tr class="<%= 'score-summary__total' unless row.window %>">
+          <td><%= row.window ? link_to("窓#{row.window.number} #{row.window.title}", window_path(row.window)) : "合計" %></td>
+          <td class="entry-table__number"><%= row.target_count || "―" %></td>
+          <td class="entry-table__number"><%= row.attempted %></td>
+          <td class="entry-table__number"><%= row.achieved %></td>
+          <td class="entry-table__number"><%= row.accuracy_percent ? "#{row.accuracy_percent}%" : "―" %></td>
+          <td class="entry-table__number"><%= row.progress_percent ? "#{row.progress_percent}%" : "―" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
