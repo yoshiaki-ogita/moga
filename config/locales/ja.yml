@@ -81,6 +81,9 @@ ja:
       too_short: は%{count}文字以上で入力してください
       inclusion: は一覧にありません
       required: を選んでください
+      not_a_number: は数字で入力してください
+      not_an_integer: は整数で入力してください
+      greater_than: は%{count}より大きい値にしてください
   helpers:
     submit:
       create: 登録する
