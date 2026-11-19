@@ -21,7 +21,7 @@ class PhasesController < ApplicationController
   # 大窓の名前を保存する（#13）
   def update
     if @phase.update(phase_params)
-      redirect_to phase_path(@phase), notice: "大窓の名前を「#{@phase.name}」にしました"
+      redirect_to phase_path(@phase), notice: "大窓「#{@phase.name}」を保存しました"
     else
       render :edit, status: :unprocessable_content
     end
@@ -33,8 +33,8 @@ class PhasesController < ApplicationController
     @phase = current_user.phases.find(params[:id])
   end
 
-  # 直してよいのは名前だけ（記号 A〜H は変えられない）
+  # 直してよいのは名前と「なぜ」のメモだけ（記号 A〜H は変えられない）
   def phase_params
-    params.require(:phase).permit(:name)
+    params.require(:phase).permit(:name, :memo)
   end
 end
