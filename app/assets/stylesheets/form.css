@@ -77,3 +77,14 @@ fieldset.form__field input[type="radio"] {
 .form--inline {
   margin: 16px 0;
 }
+
+/* 入力欄の上の説明（#116）。薄い青の帯で、欄と見分けやすくする */
+.form__hint {
+  margin: 0 0 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #e3f2fd;
+  color: #0d47a1;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
