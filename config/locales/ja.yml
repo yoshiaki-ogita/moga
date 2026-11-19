@@ -22,6 +22,7 @@ ja:
         number: 番号
         title: 小窓の題名
         measure: 数え方
+        target_count: 全体の数
       plan:
         title: 課題
         done_at: 済んだ日時

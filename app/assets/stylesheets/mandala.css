@@ -229,6 +229,15 @@ a.mandala__cell:hover {
   color: #1565c0;
 }
 
+/* 回答済みと正解を並べる（#128） */
+.window-score {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
 /* 曼荼羅64の青の濃淡（#30）。％をそのまま濃さにする（0% は白、100% は濃い青。11/7 決裁） */
 .mandala__cell--shaded {
   --pct: 0;

@@ -29,5 +29,12 @@
     <% end %>
   </fieldset>
 
+  <%# 全体の数（#128）。達成率型のときだけ使う %>
+  <div class="form__field">
+    <%= f.label :target_count %>
+    <%= f.number_field :target_count, min: 1, step: 1, placeholder: "例：700" %>
+    <small>達成率型のときだけ使います。空欄でもかまいません（例：過去問700問なら 700）</small>
+  </div>
+
   <%= f.submit "保存する", class: "button button--primary" %>
 <% end %>
