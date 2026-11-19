@@ -21,6 +21,13 @@
       <small>あなたの夢の名前をつけましょう（30文字まで）</small>
     </div>
 
+    <%# 「なぜ」のメモ（#145）。日付は付けず、いつでも書いて、その都度変えてよい %>
+    <div class="form__field">
+      <%= f.label :memo %>
+      <%= f.text_area :memo, rows: 6, placeholder: "例：家族と地域を、災害から守れる人になりたいから" %>
+      <small>心の動きや、迷いも自由に。いつでも書き直せます（1000文字まで）</small>
+    </div>
+
     <%= f.submit "保存する", class: "button button--primary" %>
   <% end %>
 

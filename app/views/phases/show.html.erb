@@ -17,10 +17,12 @@
   <div class="mandala">
     <% PhasesController::WINDOW_ORDER.each do |number| %>
       <% if number == :phase %>
-        <div class="mandala__cell mandala__cell--me">
+        <%# 真ん中の球体を押すと「なぜ」のメモへ（#145） %>
+        <%= link_to edit_phase_path(@phase), class: "mandala__cell mandala__cell--me", aria: { label: "#{@phase.code} #{@phase.name}（なぜ そこへ向かうのかを書く）" } do %>
           <span class="mandala__code"><%= @phase.code %></span>
           <span class="mandala__me-name"><%= @phase.name %></span>
-        </div>
+          <span class="mandala__me-wadachi">✎ なぜ？</span>
+        <% end %>
       <% elsif (window = @windows[number]) %>
         <%# 進捗率に合わせて青の濃淡で塗る（#30） %>
         <% percent = window.progress_percent %>
@@ -37,6 +39,14 @@
       <% end %>
     <% end %>
   </div>
+
+  <%# 書いたメモを小さく出す（#145） %>
+  <% if @phase.memo.present? %>
+    <section class="phase-memo" aria-label="なぜ そこへ向かうのか">
+      <p class="phase-memo__question">なぜ　あなたはそこへ向かおうとしているのか？</p>
+      <div class="phase-memo__body"><%= simple_format(@phase.memo) %></div>
+    </section>
+  <% end %>
 
   <%= render "phases/score_summary", windows: @windows.values %>
 

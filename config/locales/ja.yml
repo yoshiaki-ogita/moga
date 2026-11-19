@@ -18,6 +18,7 @@ ja:
       phase:
         code: 記号
         name: 大窓の名前
+        memo: なぜ　あなたはそこへ向かおうとしているのか？
       window:
         number: 番号
         title: 小窓の題名
