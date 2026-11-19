@@ -7,6 +7,14 @@
   <% end %>
 
   <h1 class="guide__title">MOGA の使い方</h1>
+  <%# 全体の形を先に見せる図（2026-11-19 作者の提案）。README の「曼荼羅アート64」の図と同じ。押すと大きく見られる %>
+  <figure class="guide-figure">
+    <%= link_to image_path("guide_mandala64.png"), target: "_blank", rel: "noopener" do %>
+      <%= image_tag "guide_mandala64.png", alt: "曼荼羅アート64の図。真ん中があなた、そのまわりを8つの大窓 A〜H が囲み、それぞれの大窓を8つの小窓が囲む。進捗率が上がるほど青が濃くなる。", class: "guide-figure__image" %>
+    <% end %>
+    <figcaption class="guide-figure__caption">真ん中があなた。8つの大窓と、それぞれを囲む8つの小窓で、64の窓になります（図を押すと大きく見られます）。</figcaption>
+  </figure>
+
   <p class="guide__lead">5つの手順で、あなたの曼荼羅64が育ち始めます。</p>
 
   <ol class="guide-steps">
