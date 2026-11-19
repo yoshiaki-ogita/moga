@@ -13,8 +13,31 @@
   margin: 8px 0;
 }
 
+.guide__catch {
+  margin: 16px 0 4px;
+  font-size: 1.4rem;
+  font-weight: bold;
+  text-align: center;
+}
+
 .guide__lead {
   margin: 0 0 24px;
+}
+
+.guide__closing {
+  margin: 32px 0 16px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.9;
+}
+
+.guide__message {
+  margin: 0 0 24px;
+  padding: 16px 20px;
+  border-left: 4px solid #6baed6;
+  background: #f4f9fd;
+  font-size: 1.05rem;
 }
 
 .guide-steps {

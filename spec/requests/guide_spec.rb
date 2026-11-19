@@ -1,11 +1,19 @@
 require "rails_helper"
 
 RSpec.describe "使い方の画面（#115）", type: :request do
-  it "ログインしていなくても読め、5つの手順が並ぶ" do
+  it "ログインしていなくても読め、呼びかけの言葉と5つの手順が並ぶ" do
     get guide_path
     expect(response).to have_http_status(:ok)
-    expect(response.body).to include("MOGA の使い方", "大窓に名前をつける", "小窓を作る", "数え方を選ぶ",
-                                     "記録を足す", "わたしの轍", "課題型", "達成率型", "TOPへ戻る")
+    expect(response.body).to include("MOGA の使い方", "真ん中の◯は、あなた自身です。",
+                                     "あなた自身で、今の自分を8つに描いてみる", "大きな夢を、今日できる大きさに",
+                                     "数え方は、あなたが決める", "数字は、うそをつかない", "朝・昼・晩、自分と向き合う",
+                                     "わたしの轍", "TOPへ戻る")
+  end
+
+  it "結びと MOGA からのメッセージがある（歌詞は載せない）" do
+    get guide_path
+    expect(response.body).to include("あなたのそばに、また春よ、来い！", "MOGA から、あなたへ。",
+                                     "松任谷由実さんの『春よ、来い』を口ずさみながら")
   end
 
   it "いちばん上に64の窓の図がある（押すと大きく見られる）" do
