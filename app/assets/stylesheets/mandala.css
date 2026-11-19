@@ -229,6 +229,11 @@ a.mandala__cell:hover {
   color: #1565c0;
 }
 
+/* 月ごとの成績表（#130）。記録の一覧と同じ表の形に、下の余白だけ足す */
+.monthly-scores {
+  margin-bottom: 24px;
+}
+
 /* 回答済みと正解を並べる（#128） */
 .window-score {
   list-style: none;
