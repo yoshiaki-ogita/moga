@@ -60,4 +60,11 @@ RSpec.describe "お試しで見る（登録なし・見るだけ）", type: :req
     get home_path
     expect(response.body).not_to include("お試し中（見るだけ）です。")
   end
+
+  it "機械で何度も押されると、しばらく止まる（回数制限）" do
+    SessionsController::LOGIN_LIMIT.times { post demo_session_path }
+    post demo_session_path
+    expect(response).to redirect_to(root_path)
+    expect(flash[:alert]).to include("お試しの回数が多すぎます")
+  end
 end
