@@ -16,6 +16,12 @@ RSpec.describe "使い方の画面（#115）", type: :request do
                                      "松任谷由実さんの『春よ、来い』を口ずさみながら")
   end
 
+  it "年齢を問わず届けたい人への言葉がある" do
+    get guide_path
+    expect(response.body).to include("MOGA は、年齢を問いません。", "就職氷河期世代の方",
+                                     "人生のどの季節にいる人にも、MOGA を届けたいと願っています。")
+  end
+
   it "いちばん上に64の窓の図がある（押すと大きく見られる）" do
     get guide_path
     expect(response.body).to include("曼荼羅アート64の図", "guide_mandala64", 'target="_blank"')
