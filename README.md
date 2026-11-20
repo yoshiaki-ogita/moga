@@ -8,11 +8,11 @@
 
 ![MOGA 曼荼羅アート64 のイメージ図（真ん中のあなたを8つの大窓が囲み、それぞれの大窓を8つの小窓が囲む）](MOGA_曼荼羅64_イメージ図.png)
 
-- **本番**：https://moga-2qx4.onrender.com （TOP の「お試しで見る」で登録なしに見本を閲覧可・書き込み不可。/guide も未ログインで閲覧可）
+- **本番**：https://moga-2qx4.onrender.com （TOP の「お試しで見る」で登録なしに見本を閲覧可・書き込み不可。/guide も未ログインで閲覧可）。登録の手間なく広くご意見をいただくための入口です
 - **Stack**：Ruby 3.4 / Rails 8.1 / PostgreSQL（Neon） / Hotwire / Render
 - **CI**：GitHub Actions で RSpec 270+ examples・RuboCop・Brakeman・bundler-audit・importmap audit を PR ごとに実行。Dependabot、Bullet（N+1 検知）、Sentry（本番エラー監視）
 - **設計**：進捗率・24時間円グラフの幾何計算を app/services に分離（Fat Model / Helper を避ける）。1 Issue = 1 PR、main 直 push 禁止
-- **セキュリティ**：has_secure_password、CSP（nonce）、ログイン rate_limit、Host Authorization、セッション2週間で失効、他人のリソースは current_user 経由でのみ取得
+- **セキュリティ**：has_secure_password、CSP（nonce）、ログインとお試しの入口に rate_limit（3分10回）、Host Authorization、セッション2週間で失効、他人のリソースは current_user 経由でのみ取得
 
 > **使ってみる方へ：** このREADMEは設計図・企画書です。使い方は、アプリの中の「[使い方の画面](https://moga-2qx4.onrender.com/guide)」にまとめました。
 
