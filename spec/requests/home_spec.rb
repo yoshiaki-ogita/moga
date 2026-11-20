@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Home（曼荼羅）", type: :request do
-  let(:user) { create(:user, name: "荻田", email: "ogita@example.com", password: "password123") }
+  let(:user) { create(:user, name: "もが太郎", email: "taro@example.com", password: "password123") }
 
   before do
     post login_path, params: { email: user.email, password: "password123" }
@@ -10,7 +10,7 @@ RSpec.describe "Home（曼荼羅）", type: :request do
   it "真ん中に本人の名前、まわりに大窓 A〜H が並ぶ" do
     get home_path
     expect(response).to have_http_status(:ok)
-    expect(response.body).to include("荻田")
+    expect(response.body).to include("もが太郎")
     Phase::CODES.each { |code| expect(response.body).to include("局面#{code}") }
   end
 

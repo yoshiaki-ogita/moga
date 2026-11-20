@@ -19,8 +19,8 @@ RSpec.describe User, type: :model do
     end
 
     it "メールアドレスが重複していたらエラー（大文字・小文字の違いも同じとみなす）" do
-      create(:user, email: "ogita@example.com")
-      user = build(:user, email: "OGITA@example.com")
+      create(:user, email: "taro@example.com")
+      user = build(:user, email: "TARO@example.com")
       expect(user).not_to be_valid
       expect(user.errors[:email]).to include("は使用できません")
     end
@@ -50,8 +50,8 @@ RSpec.describe User, type: :model do
 
   describe "メールアドレスの保存" do
     it "小文字にそろえて保存される" do
-      user = create(:user, email: "Ogita@Example.COM")
-      expect(user.reload.email).to eq("ogita@example.com")
+      user = create(:user, email: "Taro@Example.COM")
+      expect(user.reload.email).to eq("taro@example.com")
     end
   end
 end

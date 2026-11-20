@@ -11,7 +11,7 @@ RSpec.describe "Users（ユーザー登録）", type: :request do
 
   describe "POST /users" do
     let(:valid_params) do
-      { user: { name: "荻田", email: "ogita@example.com",
+      { user: { name: "もが太郎", email: "taro@example.com",
                 password: "password123", password_confirmation: "password123" } }
     end
 
@@ -19,11 +19,11 @@ RSpec.describe "Users（ユーザー登録）", type: :request do
       expect { post users_path, params: valid_params }.to change(User, :count).by(1)
       expect(response).to redirect_to(home_path)
       follow_redirect!
-      expect(response.body).to include("荻田").and include("局面A")
+      expect(response.body).to include("もが太郎").and include("局面A")
     end
 
     it "同じメールアドレスでは登録できない" do
-      create(:user, email: "ogita@example.com")
+      create(:user, email: "taro@example.com")
       expect { post users_path, params: valid_params }.not_to change(User, :count)
       expect(response).to have_http_status(:unprocessable_content)
       expect(response.body).to include("メールアドレスは使用できません")

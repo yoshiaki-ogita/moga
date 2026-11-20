@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "大窓の名前の編集（#13）", type: :request do
-  let(:user) { create(:user, name: "荻田", email: "ogita@example.com", password: "password123") }
+  let(:user) { create(:user, name: "もが太郎", email: "taro@example.com", password: "password123") }
   let(:phase) { user.phases.find_by(code: "A") }
 
   before do

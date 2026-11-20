@@ -5,8 +5,8 @@ RSpec.describe "MOGA の主な流れ", type: :system do
   it "登録 → 大窓の名前 → 小窓 → 課題・記録の作成・編集・削除 → 進捗率が画面に出る → ログアウト・ログイン" do
     # 1. 登録すると Home に曼荼羅が出る
     visit new_user_path
-    fill_in "user_name", with: "荻田"
-    fill_in "user_email", with: "ogita@example.com"
+    fill_in "user_name", with: "もが太郎"
+    fill_in "user_email", with: "taro@example.com"
     fill_in "user_password", with: "password123"
     fill_in "user_password_confirmation", with: "password123"
     click_button "登録する"
@@ -83,7 +83,7 @@ RSpec.describe "MOGA の主な流れ", type: :system do
     click_link "Home"
     click_button "ログアウト"
     visit login_path
-    fill_in "メールアドレス", with: "ogita@example.com"
+    fill_in "メールアドレス", with: "taro@example.com"
     fill_in "パスワード", with: "password123"
     click_button "ログインする"
     expect(page).to have_content("A")
