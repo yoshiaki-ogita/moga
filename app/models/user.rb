@@ -22,6 +22,12 @@ class User < ApplicationRecord
                     format: { with: URI::MailTo::EMAIL_REGEXP },
                     uniqueness: { case_sensitive: false }
   validates :password, length: { minimum: 8 }, allow_nil: true
+  # お試しの見本用のアドレス（@moga.example）は、ふつうの登録では使えない
+  #   先に誰かが登録すると、お試しの人がその人の部屋に入ってしまうため
+  validate :reserved_email_not_used, on: :create, unless: :demo_account
+
+  # お試しの見本の利用者を作る時だけ true にする（DemoAccount から）
+  attr_accessor :demo_account
 
   # Home の曼荼羅に並べる大窓（#35 Controller から移した）
   # 足りない大窓を用意し、大窓 → 小窓 → 課題・記録をまとめて読み込んで（#34 N+1対策）、記号 A〜H で引ける形で返す
@@ -58,5 +64,11 @@ class User < ApplicationRecord
     (Phase::CODES - existing).each do |code|
       phases.create!(code: code, name: "局面#{code}")
     end
+  end
+
+  private
+
+  def reserved_email_not_used
+    errors.add(:email, "は使えません") if email.to_s.downcase.end_with?("@moga.example")
   end
 end

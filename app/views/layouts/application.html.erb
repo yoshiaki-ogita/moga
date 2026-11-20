@@ -27,6 +27,13 @@
   </head>
 
   <body>
+    <%# お試し中の帯（見るだけ。自分で始める道を示す） %>
+    <% if demo? %>
+      <div class="demo-banner">
+        <span>お試し中（見るだけ）です。書き込みはできません。</span>
+        <%= button_to "ログアウトして自分で始める", logout_path, method: :delete, class: "demo-banner__button" %>
+      </div>
+    <% end %>
     <% flash.each do |type, message| %>
       <p class="flash flash--<%= type %>"><%= message %></p>
     <% end %>
