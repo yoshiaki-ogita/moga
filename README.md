@@ -14,6 +14,38 @@
 - **設計**：進捗率・24時間円グラフの幾何計算を app/services に分離（Fat Model / Helper を避ける）。1 Issue = 1 PR、main 直 push 禁止
 - **セキュリティ**：has_secure_password、CSP（nonce）、ログインとお試しの入口に rate_limit（3分10回）、Host Authorization、セッション2週間で失効、他人のリソースは current_user 経由でのみ取得
 
+**本リリースに向けた整備（RUNTEQ 運営事務局からの17項目）：15 / 17 クリア**（2026-11-20 時点）
+
+| 区分 | 項目 | 状態 | 根拠 |
+|---|---|---|---|
+| 品質・保守性 | ① RSpec（model / request / system） ② SimpleCov ③ CI（GitHub Actions） ④ RuboCop（`.rubocop.yml` を理由付きでカスタマイズ） ⑤ N+1（Bullet＋見張りの spec） ⑥ ロジック分離（`app/services`） ⑦ エラー監視（Sentry） | ✅ 7/7 | `spec/`、`.github/workflows/`、`.rubocop.yml`、`app/services/` |
+| 協働 | ⑧ PR Body（何を・なぜ） ⑨ `Closes #` で Issue と紐付け ⑩ Conventional Commits ⑪ 1 PR 2〜10 commits | ✅ 4/4 | `.github/pull_request_template.md`、`.github/commit_convention.md` |
+| 改善 | ⑬ フィードバック → Issue → PR ⑭ 改善の根拠を記録 ⑮ やらない判断を理由付きで close | ✅ 3/3 | Issue #107〜#124、#124（not planned） |
+| 改善 | ⑫ ユーザーからフィードバックを集める | 🔄 実施中 | 今回の SPF 掲載と「お試しで見る」（下記） |
+| UX | ⑰ OGP | ✅ | `public/ogp.png`、`ApplicationHelper#ogp_meta_tags` |
+| UX | ⑯ 独自ドメイン | ⬜ 2026-12 予定 | 取得 → Render の Custom Domain → `APP_HOSTS` に追加 → OGP の URL を更新 |
+
+**残りの課題と進め方**：いただいたご意見は、すべて Issue にして 1 Issue = 1 PR で反映し、やらないものも理由を書いて close します。
+
+- ⑫ SPF・RUNTEQ 生・身近な人からの意見 → Issue 化（2026-11〜12）
+- ⑯ 独自ドメイン（2026-12）
+- #112 パスワード再設定、#109 登録時のアドレス推測対策（どちらもメール送信の仕組みが要るため 2026-12）
+- #113 DB（Neon）のバックアップ期間の確認と記録、#118 初見で迷わない操作の磨き込み（ご意見を受けて）
+- #120 小窓に月の目標用紙と日誌（本リリース以降）
+
+> **ご意見をください（SPF 2026-11）**：辛口・厳しいご指摘こそ大歓迎です。「ここが分からない」の一言でも、「自分ならこう書く」でも構いません。SPF のコメント、または [GitHub Issues](https://github.com/yoshiaki-ogita/moga/issues) にお寄せください。いただいたものは必ず Issue にして、直した PR か、やらない理由でお返しします。
+>
+> 特に見ていただきたい観点：
+> 1. **初めての操作**：TOP →「お試しで見る」→ Home → 大窓 → 小窓 → わたしの轍。どこで迷い、どこで「めんどくさい」と感じたか
+> 2. **テスト**：spec の粒度・命名、request spec と system spec の分担、足りないケース
+> 3. **設計**：`app/services`（WadachiClockGeometry / MonthlyScoreTable / PhaseScoreSummary / DemoAccount）の切り方、モデルに残した進捗率の判断
+> 4. **DB 設計**：users → phases → windows → plans / entries、diaries → diary_plans のテーブルの分け方
+> 5. **セキュリティ**：認可の漏れ（他人の記録に届く道がないか）、お試し中の書き込み遮断、CSP・rate_limit の設定
+> 6. **性能**：N+1 の取りこぼし、重い画面
+> 7. **見た目・使いやすさ**：スマホでの表示、色の濃淡の見分けやすさ、文字の大きさ
+> 8. **README とコミット履歴**：読みやすさ、Issue・PR の書き方
+
+
 > **使ってみる方へ：** このREADMEは設計図・企画書です。使い方は、アプリの中の「[使い方の画面](https://moga-2qx4.onrender.com/guide)」にまとめました。
 
 ## 1. サービス概要（10のポイント）
