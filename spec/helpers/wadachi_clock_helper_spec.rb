@@ -11,10 +11,17 @@ RSpec.describe WadachiClockHelper, type: :helper do
     expect(svg).to include("<svg", "D1", "予定 2.5時間 / 実際は夜に", 'stroke-dasharray="4 4"', 'fill="#1e88e5"')
   end
 
-  it "実際を確かめると、内の輪に淡い色が入り、合計が出る" do
-    diary.diary_plans.create!(starts_at: "07:30", ends_at: "10:00", window: window, actual_starts_at: "08:00", actual_ends_at: "09:00")
+  it "◎○を押すと、内の輪に淡い色が入り、できた時間とほめる一言が出る（#123）" do
+    diary.diary_plans.create!(starts_at: "07:30", ends_at: "10:00", window: window, outcome: "shifted", actual_starts_at: "08:00", actual_ends_at: "09:00")
     svg = helper.wadachi_clock(diary.reload)
-    expect(svg).to include("予定 2.5時間 / 実際 1時間", 'fill="#83bef1"')
+    expect(svg).to include("予定 2.5時間 / できた 1時間", 'fill="#83bef1"', "よく進みました！")
+    expect(svg).not_to include("stroke-dasharray")
+  end
+
+  it "すべて △ の日は、できた時間0でも、明日への一言が出る" do
+    diary.diary_plans.create!(starts_at: "07:30", ends_at: "10:00", window: window, outcome: "missed")
+    svg = helper.wadachi_clock(diary.reload)
+    expect(svg).to include("明日に回して、また一歩！")
     expect(svg).not_to include("stroke-dasharray")
   end
 

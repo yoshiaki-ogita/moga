@@ -130,14 +130,31 @@ RSpec.describe DiaryPlan, type: :model do
       expect(plan).not_to be_actual
     end
 
-    it "予定どおりに✓なら、予定の時刻が実際になる" do
-      plan.update!(as_planned: true)
+    it "◎ 予定どおりなら、予定の時刻が実際になる（#123）" do
+      plan.update!(outcome: "kept")
       expect(plan.actual_range.map { |t| t.strftime("%H:%M") }).to eq(%w[07:30 10:00])
     end
 
-    it "ずれた時は、実際の時刻を使う" do
-      plan.update!(actual_starts_at: "08:00", actual_ends_at: "10:30")
+    it "○ 少しずれたなら、時刻を書かなくても予定の時刻で数える（#123）" do
+      plan.update!(outcome: "shifted")
+      expect(plan.actual_range.map { |t| t.strftime("%H:%M") }).to eq(%w[07:30 10:00])
+    end
+
+    it "○ 少しずれた行に、前に書いた実際の時刻があれば、それを使う" do
+      plan.update!(outcome: "shifted", actual_starts_at: "08:00", actual_ends_at: "10:30")
       expect(plan.actual_range.map { |t| t.strftime("%H:%M") }).to eq(%w[08:00 10:30])
+    end
+
+    it "△ できなかった行は、できた時間に入れない（確かめたことにはなる）" do
+      plan.update!(outcome: "missed")
+      expect(plan.actual_range).to be_nil
+      expect(plan).to be_checked
+      expect(plan).to be_missed
+    end
+
+    it "◎○△ 以外は保存できない" do
+      plan.outcome = "perfect"
+      expect(plan).not_to be_valid
     end
 
     it "実際の時刻は片方だけでは保存できない" do

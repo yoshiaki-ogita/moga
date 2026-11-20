@@ -16,7 +16,7 @@ module WadachiClockHelper
 
   def wadachi_clock(diary)
     plans = diary.diary_plans.select(&:persisted?)
-    confirmed = plans.any?(&:actual?)
+    confirmed = plans.any?(&:checked?)
     parts = [ clock_background, clock_rings(confirmed), clock_plan_arcs(plans), clock_actual_arcs(plans),
               clock_ticks, *plans.map { |plan| clock_label(plan) }, clock_center(plans, confirmed) ]
     tag.svg(safe_join(parts), viewBox: "-20 -5 460 430", class: "wadachi-clock__svg", role: "img",
@@ -108,14 +108,29 @@ module WadachiClockHelper
              fill: color)
   end
 
+  # 真ん中：予定と、できた時間。確かめた日は、できた時間を一言でほめる（#123）
   def clock_center(plans, confirmed)
+    done = plans.filter_map(&:actual_range)
+    lines = [ clock_center_note("外の輪＝予定", -24), clock_center_note("内の輪＝できた", -4),
+              clock_center_total(plans, done, confirmed) ]
+    lines << clock_cheer(done) if confirmed
+    safe_join(lines)
+  end
+
+  def clock_center_note(text, dy)
+    tag.text(text, x: CENTER, y: CENTER + dy, "text-anchor": "middle", "font-size": 13, fill: "#78909c")
+  end
+
+  def clock_center_total(plans, done, confirmed)
     plan_text = "予定 #{clock_hours(plans.map { |p| [ p.starts_at, p.ends_at ] })}"
-    actual_text = confirmed ? "実際 #{clock_hours(plans.filter_map(&:actual_range))}" : "実際は夜に"
-    safe_join([
-      tag.text("外の輪＝予定", x: CENTER, y: CENTER - 16, "text-anchor": "middle", "font-size": 13, fill: "#78909c"),
-      tag.text("内の輪＝実際", x: CENTER, y: CENTER + 4, "text-anchor": "middle", "font-size": 13, fill: "#78909c"),
-      tag.text("#{plan_text} / #{actual_text}", x: CENTER, y: CENTER + 30, "text-anchor": "middle",
-                                                "font-size": 16, "font-weight": "bold", fill: "#0d3c61")
-    ])
+    done_text = confirmed ? "できた #{clock_hours(done)}" : "実際は夜に"
+    tag.text("#{plan_text} / #{done_text}", x: CENTER, y: CENTER + 22, "text-anchor": "middle",
+                                            "font-size": 16, "font-weight": "bold", fill: "#0d3c61")
+  end
+
+  def clock_cheer(done)
+    text = done.any? ? "よく進みました！" : "明日に回して、また一歩！"
+    tag.text(text, x: CENTER, y: CENTER + 46, "text-anchor": "middle", "font-size": 14, "font-weight": "bold",
+                   fill: "#1565c0")
   end
 end
