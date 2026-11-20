@@ -7,8 +7,8 @@ module WadachiTimeHelper
   # select に渡す [見出し, 値] の一覧。例：["5:30", "05:30"]
   #   すでに保存した時刻が一覧に無い時（例：3:10）は、その時刻も足して消えないようにする
   def wadachi_time_options(selected = nil)
-    times = (FIRST_HOUR * 60).step((24 * 60) - STEP_MINUTES, STEP_MINUTES).map { |m|
- format("%02d:%02d", m / 60, m % 60) }
+    minutes = (FIRST_HOUR * 60).step((24 * 60) - STEP_MINUTES, STEP_MINUTES)
+    times = minutes.map { |m| format("%02d:%02d", m / 60, m % 60) }
     value = wadachi_time_value(selected)
     times = (times + [ value ]).sort if value && !times.include?(value)
     times.map { |t| [ t.delete_prefix("0"), t ] }
