@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Sessions（ログイン・ログアウト）", type: :request do
-  let!(:user) { create(:user, name: "もが太郎", email: "taro@example.com", password: "password123") }
+  let!(:user) { create(:user, name: "moga太郎", email: "taro@example.com", password: "password123") }
 
   describe "GET /login" do
     it "ログイン画面が表示される" do
@@ -16,7 +16,7 @@ RSpec.describe "Sessions（ログイン・ログアウト）", type: :request do
       post login_path, params: { email: "taro@example.com", password: "password123" }
       expect(response).to redirect_to(home_path)
       follow_redirect!
-      expect(response.body).to include("もが太郎").and include("局面A")
+      expect(response.body).to include("moga太郎").and include("局面A")
     end
 
     it "パスワードが違うとログインできない" do
