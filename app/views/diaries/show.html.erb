@@ -36,7 +36,7 @@
     <section class="wadachi-section">
       <p class="wadachi-when wadachi-when--night">🌙 前の日の夜に書く</p>
       <h2>① 行動予定</h2>
-      <p class="wadachi-section__hint">時間帯ごとに、どの小窓に取り組むかを書きます（例：5:00〜6:30 H3 継続受講「Railsの復習」）。空の行は保存されません。保存した行には「🛏 実際は？」が出ます。寝る前に、予定どおりなら✓、ずれた時だけ実際の時刻を書きます。</p>
+      <p class="wadachi-section__hint">時間帯ごとに、どの小窓に取り組むかを書きます（例：5:00〜6:30 H3 継続受講「Railsの復習」）。始まり・終わりは、押すと出る一覧から選びます（15分刻み）。空の行は保存されません。保存した行には「🛏 実際は？」が出ます。寝る前に、予定どおりなら✓、ずれた時だけ実際の時刻を書きます。</p>
       <table class="wadachi-plans">
         <thead>
           <tr><th class="wadachi-plans__time">始まり</th><th class="wadachi-plans__time">終わり</th><th class="wadachi-plans__window">小窓</th><th>ひと言</th><th class="wadachi-plans__delete">消す</th></tr>
@@ -44,8 +44,11 @@
         <tbody>
           <%= f.fields_for :diary_plans, @diary.sorted_plans do |pf| %>
             <tr>
-              <td><%= pf.time_field :starts_at, aria: { label: "始まり" } %></td>
-              <td><%= pf.time_field :ends_at, aria: { label: "終わり" } %></td>
+              <%# 時刻は一覧から1回で選ぶ（#122、15分刻み） %>
+              <td><%= pf.select :starts_at, options_for_select(wadachi_time_options(pf.object.starts_at), wadachi_time_value(pf.object.starts_at)),
+                        { include_blank: "--:--" }, aria: { label: "始まり" } %></td>
+              <td><%= pf.select :ends_at, options_for_select(wadachi_time_options(pf.object.ends_at), wadachi_time_value(pf.object.ends_at)),
+                        { include_blank: "--:--" }, aria: { label: "終わり" } %></td>
               <td>
                 <%= pf.select :window_id, grouped_options_for_select(@window_choices, pf.object.window_id),
                       { include_blank: "（えらぶ）" }, aria: { label: "小窓" } %>
