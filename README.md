@@ -10,18 +10,18 @@
 
 - **本番**：https://moga-2qx4.onrender.com （TOP の「お試しで見る」で登録なしに見本を閲覧可・書き込み不可。/guide も未ログインで閲覧可）。登録の手間なく広くご意見をいただくための入口です
 - **Stack**：Ruby 3.4 / Rails 8.1 / PostgreSQL（Neon） / Hotwire / Render
-- **CI**：GitHub Actions で RSpec 270+ examples・RuboCop・Brakeman・bundler-audit・importmap audit を PR ごとに実行。Dependabot、Bullet（N+1 検知）、Sentry（本番エラー監視）
+- **CI**：GitHub Actions で RSpec 280+ examples・RuboCop・Brakeman・bundler-audit・importmap audit を PR ごとに実行。Dependabot、Bullet（N+1 検知）、Sentry（本番エラー監視）
 - **設計**：進捗率・24時間円グラフの幾何計算を app/services に分離（Fat Model / Helper を避ける）。1 Issue = 1 PR、main 直 push 禁止
 - **セキュリティ**：has_secure_password、CSP（nonce）、ログインとお試しの入口に rate_limit（3分10回）、Host Authorization、セッション2週間で失効、他人のリソースは current_user 経由でのみ取得
 
-**本リリースに向けた整備（RUNTEQ 運営事務局からの17項目）：15 / 17 クリア**（2026-11-20 時点）
+**本リリースに向けた整備（RUNTEQ 運営事務局からの17項目）：16 / 17 クリア**（2026-11-21 時点）
 
 | 区分 | 項目 | 状態 | 根拠 |
 |---|---|---|---|
 | 品質・保守性 | ① RSpec（model / request / system） ② SimpleCov ③ CI（GitHub Actions） ④ RuboCop（`.rubocop.yml` を理由付きでカスタマイズ） ⑤ N+1（Bullet＋見張りの spec） ⑥ ロジック分離（`app/services`） ⑦ エラー監視（Sentry） | ✅ 7/7 | `spec/`、`.github/workflows/`、`.rubocop.yml`、`app/services/` |
 | 協働 | ⑧ PR Body（何を・なぜ） ⑨ `Closes #` で Issue と紐付け ⑩ Conventional Commits ⑪ 1 PR 2〜10 commits | ✅ 4/4 | `.github/pull_request_template.md`、`.github/commit_convention.md` |
 | 改善 | ⑬ フィードバック → Issue → PR ⑭ 改善の根拠を記録 ⑮ やらない判断を理由付きで close | ✅ 3/3 | Issue #107〜#124、#124（not planned） |
-| 改善 | ⑫ ユーザーからフィードバックを集める | 🔄 実施中 | 今回の SPF 掲載と「お試しで見る」（下記） |
+| 改善 | ⑫ ユーザーからフィードバックを集める | ✅ 2026-11-21 SPF 掲載 | 「お試しで見る」で登録なしに閲覧可。ご意見を収集中（下記） |
 | UX | ⑰ OGP | ✅ | `public/ogp.png`、`ApplicationHelper#ogp_meta_tags` |
 | UX | ⑯ 独自ドメイン | ⬜ 2026-12 予定 | 取得 → Render の Custom Domain → `APP_HOSTS` に追加 → OGP の URL を更新 |
 
