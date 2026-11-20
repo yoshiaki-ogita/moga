@@ -182,16 +182,18 @@ RSpec.describe "わたしの轍（PR1：前の日に書く①〜③）", type: :
 
     it "保存した行に「実際は？」が出て、⑦に円グラフが出る" do
       get diary_path("2026-11-17")
-      expect(response.body).to include("🛏 実際は？", "⑦ 今日の24時間", "wadachi-clock__svg", "実際は夜に")
+      expect(response.body).to include("🛏 実際は？", "◎ 予定どおり", "○ 少しずれた", "△ できなかった",
+                                       "⑦ 今日の24時間", "wadachi-clock__svg", "実際は夜に")
+      expect(response.body).not_to include("ずれた時：")
     end
 
-    it "予定どおり✓と、ずれた時の実際の時刻を保存できる" do
+    it "◎○△ を1回押すだけで保存でき、円グラフの真ん中に、できた時間とほめる一言が出る（#123）" do
       patch diary_path("2026-11-17"), params: { diary: { diary_plans_attributes: {
-        "0" => { id: plan.id, starts_at: "07:30", ends_at: "10:00", window_id: window.id, actual_starts_at: "08:00", actual_ends_at: "10:30" }
+        "0" => { id: plan.id, starts_at: "07:30", ends_at: "10:00", window_id: window.id, outcome: "kept" }
       } } }
-      expect(plan.reload.actual_range.map { |t| t.strftime("%H:%M") }).to eq(%w[08:00 10:30])
+      expect(plan.reload.outcome).to eq "kept"
       follow_redirect!
-      expect(response.body).to include("予定 2.5時間 / 実際 2.5時間")
+      expect(response.body).to include("予定 2.5時間 / できた 2.5時間", "よく進みました！")
     end
 
     it "行動予定が無い日は、円グラフの代わりに案内が出る" do

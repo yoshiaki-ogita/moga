@@ -372,6 +372,94 @@
   white-space: nowrap;
 }
 
+/* 「実際は？」の ◎○△（#123）。丸を隠し、押せる札にする */
+.wadachi-outcome {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.wadachi-outcome legend {
+  float: left;
+  margin-right: 4px;
+}
+
+.wadachi-outcome__radio {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.wadachi-outcome__mark {
+  padding: 6px 12px;
+  border: 1px solid #90caf9;
+  border-radius: 999px;
+  background: #fff;
+  color: #1565c0;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.wadachi-outcome__radio:checked + .wadachi-outcome__mark {
+  background: #1565c0;
+  border-color: #1565c0;
+  color: #fff;
+}
+
+.wadachi-outcome__radio:focus-visible + .wadachi-outcome__mark {
+  outline: 2px solid #0d47a1;
+  outline-offset: 2px;
+}
+
+/* △ の予定を明日に回す（#123） */
+.wadachi-carry {
+  margin-top: 20px;
+  padding: 12px 16px;
+  border: 1px solid #90caf9;
+  border-radius: 12px;
+  background: #f5faff;
+}
+
+.wadachi-carry__title {
+  margin: 0 0 8px;
+  font-weight: bold;
+  color: #0d47a1;
+}
+
+.wadachi-carry__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.wadachi-carry__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 0;
+}
+
+.wadachi-carry__item form {
+  margin: 0;
+}
+
+.wadachi-carry__button {
+  padding: 6px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: #1565c0;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+}
+
 /* ⑦ 今日の24時間（円の後ろは白→灰の丸いグラデーションと影。SVGの中で描く） */
 .wadachi-clock__chart {
   max-width: 440px;

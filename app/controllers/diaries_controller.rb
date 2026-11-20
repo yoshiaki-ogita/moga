@@ -44,7 +44,7 @@ class DiariesController < ApplicationController
   end
 
   def diary_params
-    plan_fields = %i[id starts_at ends_at window_id memo as_planned actual_starts_at actual_ends_at _destroy]
+    plan_fields = %i[id starts_at ends_at window_id memo outcome _destroy]
     params.require(:diary).permit(:word, :must_do, *review_fields, *Diary::REDO_FIELDS, *Diary::CONFIDENCE_ITEMS.keys,
                                   diary_plans_attributes: plan_fields)
   end

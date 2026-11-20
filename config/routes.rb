@@ -28,6 +28,8 @@ Rails.application.routes.draw do
 
   # わたしの轍（真ん中の丸から開く毎日の日誌）。日付で開く（例：/diaries/2026-11-17）
   resources :diaries, only: %i[index show update], param: :date
+  # △ できなかった予定を、明日の轍へ写す（#123）
+  post "diary_plans/:id/carry", to: "diary_plans#carry", as: :carry_diary_plan
 
   # 大窓（局面）の画面と、名前の編集（#13）
   resources :phases, only: %i[show edit update] do

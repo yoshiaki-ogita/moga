@@ -36,7 +36,7 @@
     <section class="wadachi-section">
       <p class="wadachi-when wadachi-when--night">🌙 前の日の夜に書く</p>
       <h2>① 行動予定</h2>
-      <p class="wadachi-section__hint">時間帯ごとに、どの小窓に取り組むかを書きます（例：5:00〜6:30 H3 継続受講「Railsの復習」）。始まり・終わりは、押すと出る一覧から選びます（15分刻み）。空の行は保存されません。保存した行には「🛏 実際は？」が出ます。寝る前に、予定どおりなら✓、ずれた時だけ実際の時刻を書きます。</p>
+      <p class="wadachi-section__hint">時間帯ごとに、どの小窓に取り組むかを書きます（例：5:00〜6:30 H3 継続受講「Railsの復習」）。始まり・終わりは、押すと出る一覧から選びます（15分刻み）。空の行は保存されません。保存した行には「🛏 実際は？」が出ます。寝る前に ◎ 予定どおり／○ 少しずれた／△ できなかった を1つ押すだけです。</p>
       <table class="wadachi-plans">
         <thead>
           <tr><th class="wadachi-plans__time">始まり</th><th class="wadachi-plans__time">終わり</th><th class="wadachi-plans__window">小窓</th><th>ひと言</th><th class="wadachi-plans__delete">消す</th></tr>
@@ -57,18 +57,16 @@
               <td><%= pf.check_box :_destroy, aria: { label: "この行を消す" } if pf.object.persisted? %></td>
             </tr>
             <% if pf.object.persisted? %>
-              <%# 寝る前に：実際はどうだった？（予定どおりなら✓、ずれた時だけ実際の時刻） %>
+              <%# 寝る前に：実際はどうだった？ ◎○△を1回押すだけ（#123） %>
               <tr class="wadachi-plans__actual">
                 <td colspan="5">
-                  <span class="wadachi-actual__label">🛏 実際は？</span>
-                  <%= pf.check_box :as_planned, class: "wadachi-actual__check" %>
-                  <%= pf.label :as_planned, "予定どおり", class: "wadachi-actual__ok" %>
-                  <span class="wadachi-actual__times">
-                    <span class="wadachi-actual__or">ずれた時：</span>
-                    <%= pf.time_field :actual_starts_at, aria: { label: "実際の始まり" } %>
-                    〜
-                    <%= pf.time_field :actual_ends_at, aria: { label: "実際の終わり" } %>
-                  </span>
+                  <fieldset class="wadachi-outcome">
+                    <legend class="wadachi-actual__label">🛏 実際は？</legend>
+                    <% DiaryPlan::OUTCOMES.each do |value, label| %>
+                      <%= pf.radio_button :outcome, value, class: "wadachi-outcome__radio" %>
+                      <%= pf.label :outcome, label, value: value, class: "wadachi-outcome__mark wadachi-outcome__mark--#{value}" %>
+                    <% end %>
+                  </fieldset>
                 </td>
               </tr>
             <% end %>
@@ -140,7 +138,7 @@
 
     <section class="wadachi-section wadachi-clock">
       <h2>⑦ 今日の24時間</h2>
-      <p class="wadachi-section__hint">真上が0時、右回り。外の輪＝予定、内の輪＝実際。色は大窓ごとの青の濃淡（Aが一番濃く、Hが一番淡い）。保存すると描き直します。</p>
+      <p class="wadachi-section__hint">真上が0時、右回り。外の輪＝予定、内の輪＝できた（◎と○の行）。色は大窓ごとの青の濃淡（Aが一番濃く、Hが一番淡い）。保存すると描き直します。</p>
       <% if @diary.diary_plans.any?(&:persisted?) %>
         <div class="wadachi-clock__chart"><%= wadachi_clock(@diary) %></div>
       <% else %>
@@ -149,6 +147,22 @@
     </section>
 
     <%= f.submit "保存する", class: "button button--primary" %>
+  <% end %>
+
+  <%# △ できなかった予定を、1回押すだけで明日の轍へ（#123） %>
+  <% missed = @diary.diary_plans.select { |plan| plan.persisted? && plan.missed? } %>
+  <% if missed.any? %>
+    <section class="wadachi-carry">
+      <p class="wadachi-carry__title">△ の予定は、明日にもう一度</p>
+      <ul class="wadachi-carry__list">
+        <% missed.sort_by(&:starts_at).each do |plan| %>
+          <li class="wadachi-carry__item">
+            <span><%= plan.time_label %>　<%= plan.window_code %> <%= plan.window.title %></span>
+            <%= button_to "明日に回す ▶", carry_diary_plan_path(plan), class: "wadachi-carry__button" %>
+          </li>
+        <% end %>
+      </ul>
+    </section>
   <% end %>
 
   <% if @diary.persisted? && @diary.evening_written? %>
