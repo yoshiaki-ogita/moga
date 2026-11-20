@@ -28,17 +28,22 @@
         <% percent = window.progress_percent %>
         <%= link_to window_path(window), class: mandala_cell_class(percent), style: "--pct: #{percent};" do %>
           <span class="mandala__code"><%= number %></span>
+          <% if (role = window_role(number)) %><span class="mandala__role"><%= role %></span><% end %>
           <span class="mandala__name"><%= window.title %></span>
           <span class="mandala__percent"><%= percent %>%</span>
         <% end %>
       <% else %>
         <%= link_to new_phase_window_path(@phase, number: number), class: "mandala__cell mandala__cell--empty" do %>
           <span class="mandala__code"><%= number %></span>
+          <% if (role = window_role(number)) %><span class="mandala__role"><%= role %></span><% end %>
           <span class="mandala__name">＋ 小窓を作る</span>
         <% end %>
       <% end %>
     <% end %>
   </div>
+
+  <%# 小窓の配列の決まり（#117） %>
+  <p class="mandala__rule"><%= MandalaHelper::WINDOW_ROLE_RULE %></p>
 
   <%# 書いたメモを小さく出す（#145） %>
   <% if @phase.memo.present? %>
