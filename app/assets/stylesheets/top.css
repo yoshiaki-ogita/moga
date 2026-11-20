@@ -137,3 +137,59 @@
   color: #1565c0;
   font-weight: bold;
 }
+
+/* 「お試しで見る」（登録なし・見るだけ）の玄関 */
+.top__demo {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.top__demo form {
+  display: inline-block;
+  margin: 0;
+}
+
+.button--demo {
+  padding: 12px 20px;
+  border: 2px dashed #1565c0;
+  border-radius: 12px;
+  background: #fff;
+  color: #1565c0;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.top__demo-note {
+  margin: 8px 0 0;
+  font-size: 0.9rem;
+  color: #5b7fa3;
+}
+
+/* お試し中の帯（どの画面でも一番上に出す） */
+.demo-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 16px;
+  padding: 10px 16px;
+  background: #fff8e1;
+  border-bottom: 1px solid #ffe082;
+  color: #5d4037;
+  font-weight: bold;
+}
+
+.demo-banner form {
+  margin: 0;
+}
+
+.demo-banner__button {
+  padding: 6px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: #1565c0;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+}

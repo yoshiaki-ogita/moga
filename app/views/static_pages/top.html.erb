@@ -35,4 +35,10 @@
     <%= link_to "はじめる（ユーザー登録）", new_user_path, class: "button button--primary" %>
     <%= link_to "ログイン", login_path, class: "button button--secondary" %>
   </div>
+
+  <%# 登録なしで、見本の中をのぞける玄関（見るだけ） %>
+  <div class="top__demo">
+    <%= button_to "お試しで見る（登録なし・見るだけ）", demo_session_path, class: "button button--demo" %>
+    <p class="top__demo-note">見本の曼荼羅64と「わたしの轍」を、登録せずに見て回れます。</p>
+  </div>
 </main>
