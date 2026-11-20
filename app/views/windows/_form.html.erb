@@ -11,6 +11,8 @@
   <div class="form__field">
     <%= f.label :number %>
     <%= f.select :number, numbers.map { |n| [ "窓#{n}", n ] } %>
+    <%# 小窓の配列の決まり（#117） %>
+    <small><%= MandalaHelper::WINDOW_ROLE_RULE %></small>
   </div>
 
   <div class="form__field">
