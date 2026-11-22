@@ -22,8 +22,6 @@ Rails.application.routes.draw do
   get "login", to: "sessions#new", as: :login
   post "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy", as: :logout
-  # パスワードを変える（ログインしている本人だけ）
-  resource :password, only: %i[edit update]
   # 「お試しで見る」：登録なしで見本の曼荼羅を見る（見るだけ）
   post "demo", to: "demo_sessions#create", as: :demo_session
 
