@@ -10,7 +10,15 @@
 module TwoFactor
   extend ActiveSupport::Concern
 
+  included do
+    # 予備の鍵16個。利用者を消すと、予備の鍵も一緒に消える
+    has_many :otp_backup_codes, dependent: :delete_all
+  end
+
   ISSUER = "MOGA".freeze
+  # 予備の鍵の数と、使う文字（見間違えやすい 0 o 1 l i は使わない）
+  BACKUP_CODE_COUNT = 16
+  BACKUP_CODE_CHARS = "abcdefghjkmnpqrstuvwxyz23456789".chars.freeze
   # スマホの時計が少し遅れていても、ひとつ前の数字（30秒前まで）は受け付ける
   DRIFT_BEHIND = 30
 
@@ -26,7 +34,7 @@ module TwoFactor
     update!(otp_secret: ROTP::Base32.random)
   end
 
-  # スマホのアプリに種を渡すための文字列（次の PR で、これを QR コードにして画面に出す）
+  # スマホのアプリに種を渡すための文字列（設定の画面で、これを QR コードにして出す）
   def otp_provisioning_uri
     return if otp_secret.blank?
 
@@ -47,7 +55,32 @@ module TwoFactor
     return false unless authenticate(password)
     return false unless verify_otp(code)
 
-    update!(otp_secret: nil, otp_enabled_at: nil, otp_last_used_at: nil)
+    transaction do
+      otp_backup_codes.delete_all
+      update!(otp_secret: nil, otp_enabled_at: nil, otp_last_used_at: nil)
+    end
+  end
+
+  # 予備の鍵を16個作り直す（前の16個は使えなくなる）。
+  # 鍵そのものは保存せず、画面に一度だけ出すために返す
+  def regenerate_backup_codes!
+    codes = Array.new(BACKUP_CODE_COUNT) { new_backup_code }
+    transaction do
+      otp_backup_codes.delete_all
+      codes.each { |code| otp_backup_codes.create!(code_digest: OtpBackupCode.digest(code)) }
+    end
+    codes
+  end
+
+  # 予備の鍵を1つ使う。合っていて、まだ使っていなければ true（同じ鍵は2回使えない）
+  def consume_backup_code!(code)
+    return false if code.blank?
+
+    otp_backup_codes.unused.where(code_digest: OtpBackupCode.digest(code)).update_all(used_at: Time.current) == 1
+  end
+
+  def remaining_backup_codes_count
+    otp_backup_codes.unused.count
   end
 
   # 6桁が合っているか。合っていれば、その時刻を覚えて同じ6桁の使い回しを止める
@@ -73,5 +106,10 @@ module TwoFactor
 
   def totp
     ROTP::TOTP.new(otp_secret, issuer: ISSUER)
+  end
+
+  # 例：k7m2p-9qxdh（5文字・ハイフン・5文字）
+  def new_backup_code
+    Array.new(10) { BACKUP_CODE_CHARS[SecureRandom.random_number(BACKUP_CODE_CHARS.size)] }.join.insert(5, "-")
   end
 end

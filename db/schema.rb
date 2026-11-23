@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_23_000100) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_23_000200) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -72,6 +72,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_23_000100) do
     t.index ["window_id"], name: "index_entries_on_window_id"
   end
 
+  create_table "otp_backup_codes", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "code_digest", null: false
+    t.datetime "used_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "code_digest"], name: "index_otp_backup_codes_on_user_id_and_code_digest", unique: true
+  end
+
   create_table "phases", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "code", null: false
@@ -120,6 +129,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_23_000100) do
   add_foreign_key "diary_plans", "diaries"
   add_foreign_key "diary_plans", "windows"
   add_foreign_key "entries", "windows"
+  add_foreign_key "otp_backup_codes", "users"
   add_foreign_key "phases", "users"
   add_foreign_key "plans", "windows"
   add_foreign_key "windows", "phases"
