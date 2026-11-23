@@ -1,0 +1,33 @@
+<% content_for(:title, "二段の鍵を使う｜MOGA") %>
+
+<main class="form-page two-factor">
+  <h1 class="form-page__title">二段の鍵を使う</h1>
+
+  <ol class="two-factor__steps">
+    <li>スマホに、認証アプリを入れます（例：Google Authenticator、Microsoft Authenticator）。GitHub で使っているアプリがあれば、同じもので構いません。</li>
+    <li>アプリの「＋」を押し、下の QR コードをスマホのカメラで読みます。</li>
+    <li>アプリに「MOGA」が出て、6桁の数字が30秒ごとに変わります。今出ている6桁を、下の欄に入れて「使い始める」を押します。</li>
+  </ol>
+
+  <div class="two-factor__qr">
+    <%= otp_qr_svg(current_user.otp_provisioning_uri) %>
+  </div>
+
+  <details class="two-factor__manual">
+    <summary>QR コードが読めない時（手で入れる）</summary>
+    <p>アプリで「キーを入力」を選び、次の文字を入れてください。アカウント名は MOGA です。</p>
+    <p class="two-factor__secret"><%= otp_secret_for_reading(current_user.otp_secret) %></p>
+  </details>
+
+  <%# 予備の鍵の画面は、移動せずにその場で一度だけ出すため、Turbo を使わずにふつうに送る %>
+  <%= form_with url: two_factor_path, method: :post, class: "form", data: { turbo: false } do |f| %>
+    <div class="form__field">
+      <%= f.label :code, "アプリの6桁" %>
+      <%= f.text_field :code, inputmode: "numeric", autocomplete: "one-time-code", maxlength: 7, class: "two-factor__code-field" %>
+    </div>
+
+    <%= f.submit "使い始める", class: "button button--primary" %>
+  <% end %>
+
+  <p><%= link_to "やめて Home へ戻る", home_path %></p>
+</main>

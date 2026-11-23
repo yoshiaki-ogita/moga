@@ -1,0 +1,21 @@
+<% content_for(:title, "予備の鍵｜MOGA") %>
+
+<main class="form-page two-factor">
+  <h1 class="form-page__title">二段の鍵を使い始めました</h1>
+
+  <p class="two-factor__warning">下の16個は「予備の鍵」です。この画面は<strong>一度だけ</strong>しか出ません。今すぐ紙に写してください。</p>
+
+  <ul class="two-factor__codes">
+    <% @backup_codes.each do |code| %>
+      <li><%= code %></li>
+    <% end %>
+  </ul>
+
+  <ul class="two-factor__notes">
+    <li>スマホを失くした時や壊れた時に、6桁の代わりに使います。1つの鍵は1回だけ使えます。</li>
+    <li>写した紙には「MOGA の予備の鍵」と書き、パスワードとは別の、安全な場所にしまってください。</li>
+    <li>MOGA は、この16個をそのままでは覚えていません。スマホと予備の鍵の両方を失くすと、ログインできなくなり、作者にも元に戻せません。</li>
+  </ul>
+
+  <p><%= link_to "紙に写しました。Home へ戻る", home_path, class: "button button--primary" %></p>
+</main>
