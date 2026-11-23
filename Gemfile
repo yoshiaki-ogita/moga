@@ -39,6 +39,8 @@ gem "sentry-rails"
 
 # 二段の鍵（守り2、2026-11-23）：スマホのアプリが30秒ごとに出す6桁の数字を確かめる [https://github.com/mdp/rotp]
 gem "rotp"
+# 二段の鍵の設定画面に出す QR コードを作る（スマホのカメラで読むだけで種が入る）[https://github.com/whomwah/rqrcode]
+gem "rqrcode"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"
