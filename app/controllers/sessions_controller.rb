@@ -24,14 +24,11 @@ class SessionsController < ApplicationController
 
   def create
     user = User.find_by(email: params[:email].to_s.downcase)
-    if user&.authenticate(params[:password])
-      log_in(user)
-      redirect_to home_path, notice: "ログインしました"
-    else
-      # どちらが違うかは教えない（他人のメールアドレスを探られないため）
-      flash.now[:alert] = "メールアドレスかパスワードが正しくありません"
-      render :new, status: :unprocessable_content
-    end
+    return login_failed unless user&.authenticate(params[:password])
+    return start_two_factor(user) if user.otp_enabled?
+
+    log_in(user)
+    redirect_to home_path, notice: "ログインしました"
   end
 
   def destroy
@@ -40,6 +37,21 @@ class SessionsController < ApplicationController
   end
 
   private
+
+  # どちらが違うかは教えない（他人のメールアドレスを探られないため）
+  def login_failed
+    flash.now[:alert] = "メールアドレスかパスワードが正しくありません"
+    render :new, status: :unprocessable_content
+  end
+
+  # 二段の鍵を使っている人（守り2 ③）：パスワードが合っても、まだ中には入れない。
+  # 「パスワードは通った」という仮の札だけを持たせて、6桁を聞く画面へ
+  def start_two_factor(user)
+    reset_session
+    session[:otp_user_id] = user.id
+    session[:otp_started_at] = Time.current.to_i
+    redirect_to new_two_factor_login_path
+  end
 
   # 回数を超えた時：しばらく待ってもらう（パスワードが合っていても、この間はログインさせない）
   def too_many_attempts

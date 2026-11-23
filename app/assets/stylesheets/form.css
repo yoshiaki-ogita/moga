@@ -101,3 +101,4 @@ fieldset.form__field input[type="radio"] {
 .two-factor__warning { font-weight: bold; }
 .two-factor__codes { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 24px; font-family: monospace; font-size: 1.3rem; max-width: 26em; }
 .two-factor__notes { padding-left: 1.5em; line-height: 1.8; }
+.two-factor__off { margin: 24px 0 16px; }

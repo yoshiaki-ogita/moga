@@ -7,6 +7,22 @@
     <p class="two-factor__status two-factor__status--on">二段の鍵を使っています。</p>
     <p>ログインの時に、パスワードのあと、スマホのアプリの6桁を入れます。</p>
     <p>残りの予備の鍵：<strong><%= current_user.remaining_backup_codes_count %>個</strong>（16個のうち）</p>
+
+    <details class="two-factor__off">
+      <summary>二段の鍵をやめる</summary>
+      <p>やめると、次からはパスワードだけでログインします。紙の予備の鍵も使えなくなります。</p>
+      <%= form_with url: two_factor_path, method: :delete, class: "form" do |f| %>
+        <div class="form__field">
+          <%= f.label :current_password, "今のパスワード" %>
+          <%= f.password_field :current_password, autocomplete: "current-password" %>
+        </div>
+        <div class="form__field">
+          <%= f.label :code, "アプリの6桁（または予備の鍵）" %>
+          <%= f.text_field :code, autocomplete: "one-time-code", maxlength: 11, class: "two-factor__code-field" %>
+        </div>
+        <%= f.submit "やめる", class: "button button--secondary" %>
+      <% end %>
+    </details>
   <% else %>
     <p class="two-factor__status">二段の鍵は、まだ使っていません。</p>
     <p>パスワード（1本目の鍵）に加えて、スマホのアプリが30秒ごとに出す6桁の数字（2本目の鍵）でログインします。パスワードが知られても、あなたのスマホが無ければ中に入れません。</p>

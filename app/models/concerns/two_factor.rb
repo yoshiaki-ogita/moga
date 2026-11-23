@@ -49,16 +49,25 @@ module TwoFactor
     update!(otp_enabled_at: Time.current)
   end
 
-  # やめる時は、パスワードと6桁の両方が要る（他人が勝手に外せないように）
+  # やめる時は、パスワードと6桁（または予備の鍵）の両方が要る（他人が勝手に外せないように）
   def disable_otp!(password:, code:)
     return false unless otp_enabled?
     return false unless authenticate(password)
-    return false unless verify_otp(code)
+    return false unless verify_otp_or_backup_code(code)
 
     transaction do
       otp_backup_codes.delete_all
       update!(otp_secret: nil, otp_enabled_at: nil, otp_last_used_at: nil)
     end
+  end
+
+  # ログインの2本目の鍵：アプリの6桁か、予備の鍵のどちらかが合えば通る。
+  # 通った方を :otp か :backup_code で返す（合わなければ nil）
+  def verify_otp_or_backup_code(code)
+    return :otp if verify_otp(code)
+    return :backup_code if consume_backup_code!(code)
+
+    nil
   end
 
   # 予備の鍵を16個作り直す（前の16個は使えなくなる）。
