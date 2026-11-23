@@ -44,7 +44,7 @@ class SessionsController < ApplicationController
     render :new, status: :unprocessable_content
   end
 
-  # 二段の鍵を使っている人（守り2 ③）：パスワードが合っても、まだ中には入れない。
+  # 二段階認証を使っている人（守り2 ③）：パスワードが合っても、まだ中には入れない。
   # 「パスワードは通った」という仮の札だけを持たせて、6桁を聞く画面へ
   def start_two_factor(user)
     reset_session

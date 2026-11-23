@@ -1,7 +1,7 @@
 require "rails_helper"
 
 # ログインの2段目（守り2 ③）：パスワードのあと、アプリの6桁か予備の鍵
-RSpec.describe "二段の鍵のログイン", type: :request do
+RSpec.describe "二段階認証のログイン", type: :request do
   let!(:user) { create(:user, email: "hanako@example.com") }
   let!(:backup_codes) do
     user.prepare_otp!
@@ -81,7 +81,7 @@ RSpec.describe "二段の鍵のログイン", type: :request do
     expect(response).to have_http_status(:too_many_requests)
   end
 
-  it "二段の鍵を使わない人は、これまでどおりパスワードだけで入れる" do
+  it "二段階認証を使わない人は、これまでどおりパスワードだけで入れる" do
     create(:user, email: "taro@example.com")
     post login_path, params: { email: "taro@example.com", password: "password123" }
     expect(response).to redirect_to(home_path)

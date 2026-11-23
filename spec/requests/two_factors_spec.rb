@@ -1,7 +1,7 @@
 require "rails_helper"
 
-# 二段の鍵の設定画面（守り2 ②）
-RSpec.describe "二段の鍵の設定", type: :request do
+# 二段階認証の設定画面（守り2 ②）
+RSpec.describe "二段階認証の設定", type: :request do
   let!(:user) { create(:user, email: "hanako@example.com") }
 
   def log_in
@@ -20,13 +20,13 @@ RSpec.describe "二段の鍵の設定", type: :request do
   context "ログインしている時" do
     before { log_in }
 
-    it "今の様子の画面に「まだ使っていません」と「二段の鍵を使う」が出る" do
+    it "今の様子の画面に「まだ使っていません」と「二段階認証を使う」が出る" do
       get two_factor_path
-      expect(response.body).to include("二段の鍵は、まだ使っていません")
+      expect(response.body).to include("二段階認証は、まだ使っていません")
       expect(response.body).to include(new_two_factor_path)
     end
 
-    it "Home に「二段の鍵」の入口がある" do
+    it "Home に「二段階認証」の入口がある" do
       get home_path
       expect(response.body).to include(two_factor_path)
     end
@@ -53,7 +53,7 @@ RSpec.describe "二段の鍵の設定", type: :request do
       expect(user.remaining_backup_codes_count).to eq(16)
 
       get two_factor_path
-      expect(response.body).to include("二段の鍵を使っています")
+      expect(response.body).to include("二段階認証を使っています")
       expect(response.body).to include("16個")
       expect(response.body).not_to include(codes.first)
     end
@@ -87,7 +87,7 @@ RSpec.describe "二段の鍵の設定", type: :request do
     end
   end
 
-  it "お試しの見本の利用者は、二段の鍵の画面を使えない" do
+  it "お試しの見本の利用者は、二段階認証の画面を使えない" do
     post demo_session_path
     get new_two_factor_path
     expect(response).to redirect_to(home_path)

@@ -1,4 +1,4 @@
-# 二段の鍵の設定（守り2 ②）。使うかどうかは、利用者が選ぶ
+# 二段階認証の設定（守り2 ②）。使うかどうかは、利用者が選ぶ
 #   show   … 今の様子（使っているか・残りの予備の鍵の数）
 #   new    … QR コードを出し、スマホのアプリで読んでもらう
 #   create … アプリの6桁を1回合わせたら使い始め、予備の鍵16個を一度だけ出す
@@ -37,7 +37,7 @@ class TwoFactorsController < ApplicationController
 
   def destroy
     if current_user.disable_otp!(password: params[:current_password].to_s, code: params[:code])
-      redirect_to two_factor_path, notice: "二段の鍵をやめました。次からはパスワードだけでログインします", status: :see_other
+      redirect_to two_factor_path, notice: "二段階認証をやめました。次からはパスワードだけでログインします", status: :see_other
     else
       flash.now[:alert] = "パスワードか、6桁（予備の鍵）が合いません"
       render :show, status: :unprocessable_content
@@ -55,7 +55,7 @@ class TwoFactorsController < ApplicationController
   def redirect_if_enabled
     return unless current_user.otp_enabled?
 
-    redirect_to two_factor_path, notice: "二段の鍵は、もう使っています"
+    redirect_to two_factor_path, notice: "二段階認証は、もう使っています"
   end
 
   def too_many_attempts

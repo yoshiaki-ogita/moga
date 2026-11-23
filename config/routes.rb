@@ -24,7 +24,7 @@ Rails.application.routes.draw do
   delete "logout", to: "sessions#destroy", as: :logout
   # パスワードを変える（ログインしている本人だけ）
   resource :password, only: %i[edit update]
-  # 二段の鍵（守り2）：使うかどうかは本人が選ぶ。設定と、予備の鍵16個
+  # 二段階認証（守り2）：使うかどうかは本人が選ぶ。設定と、予備の鍵16個
   resource :two_factor, only: %i[show new create destroy]
   # ログインの2段目：パスワードのあと、アプリの6桁（または予備の鍵）を入れる
   resource :two_factor_login, only: %i[new create]
