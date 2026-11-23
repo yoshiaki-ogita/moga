@@ -30,5 +30,6 @@ RSpec.configure do |config|
   config.before do
     SessionsController::RATE_LIMIT_STORE.clear
     PasswordsController::RATE_LIMIT_STORE.clear
+    TwoFactorsController::RATE_LIMIT_STORE.clear
   end
 end

@@ -126,3 +126,50 @@ RSpec.describe TwoFactor, type: :model do
     expect(user.verify_otp("123456")).to be false
   end
 end
+
+RSpec.describe "予備の鍵（守り2 ②）", type: :model do
+  let(:user) { create(:user) }
+
+  it "16個作り、鍵そのものは保存しない（指紋だけ）" do
+    codes = user.regenerate_backup_codes!
+    expect(codes.size).to eq(16)
+    expect(codes.uniq.size).to eq(16)
+    expect(codes).to all(match(/\A[a-z2-9]{5}-[a-z2-9]{5}\z/))
+    expect(OtpBackupCode.where(user: user).pluck(:code_digest)).not_to include(*codes)
+  end
+
+  it "1つの鍵は1回だけ使える" do
+    code = user.regenerate_backup_codes!.first
+    expect(user.consume_backup_code!(code)).to be true
+    expect(user.consume_backup_code!(code)).to be false
+    expect(user.remaining_backup_codes_count).to eq(15)
+  end
+
+  it "全角・大文字・ハイフン抜きでも同じ鍵とみなす" do
+    code = user.regenerate_backup_codes!.first
+    typed = code.delete("-").upcase.tr("A-Z0-9", "Ａ-Ｚ０-９")
+    expect(user.consume_backup_code!(typed)).to be true
+  end
+
+  it "作り直すと、前の16個は使えなくなる" do
+    old_code = user.regenerate_backup_codes!.first
+    user.regenerate_backup_codes!
+    expect(user.consume_backup_code!(old_code)).to be false
+    expect(user.remaining_backup_codes_count).to eq(16)
+  end
+
+  it "ほかの人の予備の鍵は使えない" do
+    other_code = create(:user).regenerate_backup_codes!.first
+    expect(user.consume_backup_code!(other_code)).to be false
+  end
+
+  it "二段の鍵をやめると、予備の鍵も消える" do
+    user.prepare_otp!
+    user.enable_otp!(ROTP::TOTP.new(user.otp_secret).now)
+    user.regenerate_backup_codes!
+    travel 1.minute do
+      user.disable_otp!(password: "password123", code: ROTP::TOTP.new(user.otp_secret).now)
+    end
+    expect(user.otp_backup_codes.count).to eq(0)
+  end
+end
