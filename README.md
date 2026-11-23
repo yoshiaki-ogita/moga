@@ -12,7 +12,7 @@
 - **Stack**：Ruby 3.4 / Rails 8.1 / PostgreSQL（Neon） / Hotwire / Render
 - **CI**：GitHub Actions で RSpec 280+ examples・RuboCop・Brakeman・bundler-audit・importmap audit を PR ごとに実行。Dependabot、Bullet（N+1 検知）、Sentry（本番エラー監視）
 - **設計**：進捗率・24時間円グラフの幾何計算を app/services に分離（Fat Model / Helper を避ける）。1 Issue = 1 PR、main 直 push 禁止
-- **セキュリティ**：has_secure_password、CSP（nonce）、ログインとお試しの入口に rate_limit（3分10回）、Host Authorization、セッション2週間で失効、他人のリソースは current_user 経由でのみ取得
+- **セキュリティ**：has_secure_password、CSP（nonce）、ログインとお試しの入口に rate_limit（3分10回）、Host Authorization、セッション2週間で失効、他人のリソースは current_user 経由でのみ取得。作者の GitHub・Render・Neon は二段階認証（Render・Neon は GitHub ログインのみで、パスワードの入口なし）。README・コードの閲覧と「お試しで見る」は、これまでどおりログイン不要
 
 **本リリースに向けた整備（RUNTEQ 運営事務局からの17項目）：16 / 17 クリア**（2026-11-21 時点）
 
@@ -270,7 +270,7 @@ MVP の考え方：初心者の私が RUNTEQ で学んだ **基本中の基本**
 
 - 何が問題になりそうか：**進捗率の数字が1つでも間違うと**、窓 → 局面 → 全体と積み上がるため、自分の現在地・現在値の自己分析そのものが狂います。また、家計（局面C）や健康（局面D）の記録が他人に見えてしまうと信頼を失います
 - なぜそう思うか：MOGA は「数値化して客観視する」アプリなので、数字の正しさと記録の安全が、使う人の信頼のすべてです
-- 対策：進捗率の計算と「他人の窓は見られない」ことを、先にテスト（RSpec）で確かめてから作ります。実際に、進捗率の計算と、他人の大窓・小窓を開けない・作れない・直せないことを含む134件のテストがすべて通り、GitHub に送るたびに自動で確かめています
+- 対策：進捗率の計算と「他人の窓は見られない」ことを、先にテスト（RSpec）で確かめてから作ります。実際に、進捗率の計算と、他人の大窓・小窓を開けない・作れない・直せないことを含む134件のテストがすべて通り、GitHub に送るたびに自動で確かめています。本リリースに向けて、作者自身が GitHub・Render・Neon に二段の鍵を掛けて試しました（作者の感想：「初めは面倒だと思うが、慣れれば大丈夫だ」）。使う人向けの二段の鍵は、使いたい人だけが選べる形で準備します
 
 ### 懸念点③
 

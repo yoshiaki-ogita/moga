@@ -158,3 +158,23 @@
 .first-step__guide {
   margin-top: 8px;
 }
+
+/* 大切な記録を守るための注意（2026-11-23 守り6）。呼びかけの段落と同じ落ち着いた色で */
+.guide__safety {
+  margin: 0 0 24px;
+  padding: 16px 20px;
+  border-left: 4px solid #6baed6;
+  background: #f4f9fd;
+  font-size: 1.05rem;
+}
+
+.guide__safety-title {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+}
+
+.guide__safety-list {
+  margin: 0;
+  padding-left: 1.4em;
+  line-height: 1.8;
+}

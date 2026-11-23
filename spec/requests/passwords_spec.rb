@@ -26,7 +26,8 @@ RSpec.describe "パスワードを変える", type: :request do
     log_in_as_taro
     get edit_password_path
     expect(response).to have_http_status(:ok)
-    expect(response.body).to include("今のパスワード", "新しいパスワード（確認）")
+    expect(response.body).to include("今のパスワード", "新しいパスワード（確認）",
+                                     "16文字ほどの長い合言葉がお勧めです")
   end
 
   it "今のパスワードが合えば変わり、次から新しいパスワードでログインできる。記録はそのまま" do

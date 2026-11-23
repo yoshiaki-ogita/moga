@@ -22,6 +22,12 @@ RSpec.describe "使い方の画面（#115）", type: :request do
                                      "人生のどの季節にいる人にも、MOGA を届けたいと願っています。")
   end
 
+  it "大切な記録を守るための注意がある（守り6）" do
+    get guide_path
+    expect(response.body).to include("大切な記録を守るために", "16文字ほどの長い合言葉",
+                                     "マイナンバーは書かないでください", "使い終わったらログアウト")
+  end
+
   it "いちばん上に64の窓の図がある（押すと大きく見られる）" do
     get guide_path
     expect(response.body).to include("曼荼羅アート64の図", "guide_mandala64", 'target="_blank"')
