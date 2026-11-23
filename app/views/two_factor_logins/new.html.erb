@@ -1,0 +1,19 @@
+<% content_for(:title, "二段の鍵｜MOGA") %>
+
+<main class="form-page two-factor">
+  <h1 class="form-page__title">二段の鍵</h1>
+
+  <p>パスワードは合っています。スマホのアプリを開き、「MOGA」の6桁の数字を入れてください。</p>
+
+  <%= form_with url: two_factor_login_path, method: :post, class: "form" do |f| %>
+    <div class="form__field">
+      <%= f.label :code, "アプリの6桁" %>
+      <%= f.text_field :code, autocomplete: "one-time-code", maxlength: 11, autofocus: true, class: "two-factor__code-field" %>
+      <small>スマホが手元に無い時は、紙に写した「予備の鍵」（例：abcde-fghjk）を1つ入れてください。</small>
+    </div>
+
+    <%= f.submit "ログインする", class: "button button--primary" %>
+  <% end %>
+
+  <p><%= link_to "ログインの画面へ戻る", login_path %></p>
+</main>
