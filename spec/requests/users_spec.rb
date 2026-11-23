@@ -7,6 +7,11 @@ RSpec.describe "Users（ユーザー登録）", type: :request do
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("ユーザー登録")
     end
+
+    it "パスワードの欄に長い合言葉のお勧めが出る（守り6）" do
+      get new_user_path
+      expect(response.body).to include("16文字ほどの長い合言葉がお勧めです", "ほかの場所と同じパスワードは使わないでください")
+    end
   end
 
   describe "POST /users" do
