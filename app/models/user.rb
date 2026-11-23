@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   # パスワードは bcrypt でハッシュ化して password_digest に保存する
   has_secure_password
+  # 二段の鍵（守り2）。中身は app/models/concerns/two_factor.rb
+  include TwoFactor
 
   # 大窓（局面）A〜H。利用者を消すと大窓も一緒に消える
   has_many :phases, dependent: :destroy
