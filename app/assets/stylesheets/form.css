@@ -88,3 +88,16 @@ fieldset.form__field input[type="radio"] {
   font-size: 0.95rem;
   line-height: 1.7;
 }
+
+/* 二段の鍵（守り2） */
+.two-factor__status { font-weight: bold; }
+.two-factor__status--on { color: #2e7d32; }
+.two-factor__steps { padding-left: 1.5em; line-height: 1.8; }
+.two-factor__qr { background: #fff; display: inline-block; padding: 12px; border-radius: 8px; margin: 8px 0 16px; }
+.two-factor__qr-svg { display: block; width: 220px; height: 220px; }
+.two-factor__manual { margin-bottom: 16px; }
+.two-factor__secret { font-family: monospace; font-size: 1.2rem; letter-spacing: 0.05em; word-break: break-all; }
+.two-factor__code-field { font-size: 1.4rem; letter-spacing: 0.2em; max-width: 10em; }
+.two-factor__warning { font-weight: bold; }
+.two-factor__codes { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 24px; font-family: monospace; font-size: 1.3rem; max-width: 26em; }
+.two-factor__notes { padding-left: 1.5em; line-height: 1.8; }
