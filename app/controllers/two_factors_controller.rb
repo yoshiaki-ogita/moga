@@ -2,6 +2,7 @@
 #   show   … 今の様子（使っているか・残りの予備の鍵の数）
 #   new    … QR コードを出し、スマホのアプリで読んでもらう
 #   create … アプリの6桁を1回合わせたら使い始め、予備の鍵16個を一度だけ出す
+#   destroy … やめる（パスワードと、6桁または予備の鍵の両方が要る）
 class TwoFactorsController < ApplicationController
   # 6桁を総当たりで試されないよう、3分間に10回まで
   RATE_LIMIT_STORE = ActiveSupport::Cache::MemoryStore.new
@@ -11,7 +12,7 @@ class TwoFactorsController < ApplicationController
   before_action :require_login
   before_action :reject_demo
   before_action :redirect_if_enabled, only: %i[new create]
-  rate_limit to: LIMIT, within: WITHIN, only: :create, store: RATE_LIMIT_STORE,
+  rate_limit to: LIMIT, within: WITHIN, only: %i[create destroy], store: RATE_LIMIT_STORE,
              with: -> { too_many_attempts }
 
   def show
@@ -34,6 +35,15 @@ class TwoFactorsController < ApplicationController
     render :backup_codes
   end
 
+  def destroy
+    if current_user.disable_otp!(password: params[:current_password].to_s, code: params[:code])
+      redirect_to two_factor_path, notice: "二段の鍵をやめました。次からはパスワードだけでログインします", status: :see_other
+    else
+      flash.now[:alert] = "パスワードか、6桁（予備の鍵）が合いません"
+      render :show, status: :unprocessable_content
+    end
+  end
+
   private
 
   def reject_demo
@@ -50,6 +60,6 @@ class TwoFactorsController < ApplicationController
 
   def too_many_attempts
     flash.now[:alert] = "試みが多すぎます。しばらく待ってから、もう一度お試しください"
-    render :new, status: :too_many_requests
+    render(action_name == "destroy" ? :show : :new, status: :too_many_requests)
   end
 end
