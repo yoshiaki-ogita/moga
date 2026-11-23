@@ -46,9 +46,47 @@ RSpec.describe "Sessions（ログイン・ログアウト）", type: :request do
     end
 
     it "3分たつと、また正しいパスワードでログインできる" do
-      limit.times { post login_path, params: { email: "taro@example.com", password: "wrong-pass" } }
+      # 同じ機械から、別々のメールアドレスで10回（メールごとの番人には引っかからない形）
+      limit.times { |i| post login_path, params: { email: "someone#{i}@example.com", password: "wrong-pass" } }
       travel(SessionsController::LOGIN_WITHIN + 1.second) do
         post login_path, params: { email: "taro@example.com", password: "password123" }
+        expect(response).to redirect_to(home_path)
+      end
+    end
+  end
+
+  describe "POST /login のメールごとの回数制限（守り4）" do
+    let(:limit) { SessionsController::EMAIL_LIMIT }
+
+    # 毎回ちがう機械（IP アドレス）から試す＝1人目の番人（機械ごと）には引っかからない
+    def post_from(number, email:, password:)
+      post login_path, params: { email: email, password: password }, env: { "REMOTE_ADDR" => "203.0.113.#{number}" }
+    end
+
+    it "同じメールアドレスに、別々の機械から10回失敗すると、11回目は正しいパスワードでも断られる" do
+      limit.times { |i| post_from(i + 1, email: "taro@example.com", password: "wrong-pass") }
+      post_from(100, email: "taro@example.com", password: "password123")
+      expect(response).to have_http_status(:too_many_requests)
+      expect(response.body).to include("ログインの試みが多すぎます")
+    end
+
+    it "大文字・前後の空白を変えても、同じメールアドレスとして数える" do
+      limit.times { |i| post_from(i + 1, email: " Taro@Example.com ", password: "wrong-pass") }
+      post_from(100, email: "taro@example.com", password: "password123")
+      expect(response).to have_http_status(:too_many_requests)
+    end
+
+    it "別の人のメールアドレスは止まらない" do
+      create(:user, email: "hanako@example.com", password: "password456", password_confirmation: "password456")
+      limit.times { |i| post_from(i + 1, email: "taro@example.com", password: "wrong-pass") }
+      post_from(100, email: "hanako@example.com", password: "password456")
+      expect(response).to redirect_to(home_path)
+    end
+
+    it "15分たつと、また正しいパスワードでログインできる" do
+      limit.times { |i| post_from(i + 1, email: "taro@example.com", password: "wrong-pass") }
+      travel(SessionsController::EMAIL_WITHIN + 1.second) do
+        post_from(100, email: "taro@example.com", password: "password123")
         expect(response).to redirect_to(home_path)
       end
     end
