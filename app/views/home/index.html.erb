@@ -40,5 +40,10 @@
   <%# 使い方の画面への入口（#115） %>
   <p class="mandala-page__guide"><%= link_to "使い方を見る", guide_path %></p>
 
+  <%# パスワードを変える画面への入口（お試し中は出さない） %>
+  <% unless demo? %>
+    <p class="mandala-page__password"><%= link_to "パスワードを変える", edit_password_path %></p>
+  <% end %>
+
   <%= button_to "ログアウト", logout_path, method: :delete, class: "button button--secondary mandala-page__logout" %>
 </main>
