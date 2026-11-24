@@ -1,0 +1,17 @@
+<% content_for(:title, "二段階認証の注意点｜MOGA") %>
+
+<main class="guide">
+  <% if logged_in? %>
+    <%= breadcrumb(["Home", home_path], "二段階認証の注意点") %>
+  <% end %>
+
+  <%= render "shared/two_factor_notice" %>
+
+  <p class="guide__back">
+    <% if logged_in? %>
+      <%= link_to "二段階認証の画面へ", two_factor_path %>　<%= link_to "Homeへ戻る", home_path %>
+    <% else %>
+      <%= link_to "使い方を見る", guide_path %>　<%= link_to "TOPへ戻る", root_path %>
+    <% end %>
+  </p>
+</main>

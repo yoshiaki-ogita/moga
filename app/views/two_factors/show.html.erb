@@ -7,6 +7,7 @@
     <p class="two-factor__status two-factor__status--on">二段階認証を使っています。</p>
     <p>ログインの時に、パスワードのあと、スマホのアプリの6桁を入れます。</p>
     <p>残りの予備の鍵：<strong><%= current_user.remaining_backup_codes_count %>個</strong>（16個のうち）</p>
+    <p><%= link_to "二段階認証の注意点を読む", two_factor_notice_path %></p>
 
     <details class="two-factor__off">
       <summary>二段階認証をやめる</summary>
@@ -25,8 +26,8 @@
     </details>
   <% else %>
     <p class="two-factor__status">二段階認証は、まだ使っていません。</p>
-    <p>パスワード（1本目の鍵）に加えて、スマホのアプリが30秒ごとに出す6桁の数字（2本目の鍵）でログインします。パスワードが知られても、あなたのスマホが無ければ中に入れません。</p>
-    <p>使うかどうかは、あなたが選べます。使わなくても、これまでどおりパスワードだけでログインできます。</p>
+    <%# 始める前に、注意点を読んでもらう（2026-11-24 作者の決定） %>
+    <%= render "shared/two_factor_notice" %>
     <p><%= link_to "二段階認証を使う", new_two_factor_path, class: "button button--primary" %></p>
   <% end %>
 

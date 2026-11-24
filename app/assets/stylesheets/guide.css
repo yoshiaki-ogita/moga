@@ -178,3 +178,43 @@
   padding-left: 1.4em;
   line-height: 1.8;
 }
+
+.guide__safety-more {
+  margin: 8px 0 0;
+}
+
+/* 二段階認証の注意点（2026-11-24 作者の決めた文）。題はゴシック・太字・1行に収める */
+.tf-notice {
+  margin: 16px 0 24px;
+  padding: 16px 20px;
+  border: 1px solid #c6dbef;
+  border-radius: 8px;
+  background: #fff;
+  line-height: 1.8;
+}
+
+.tf-notice__title {
+  margin: 0 0 12px;
+  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", "IPAPGothic", sans-serif;
+  font-weight: 800;
+  font-size: clamp(0.8rem, 3.4vw, 1.2rem);
+  color: #1a1a1a;
+}
+
+.tf-notice__heading {
+  margin: 16px 0 4px;
+  font-size: 1.05rem;
+}
+
+.tf-notice__list {
+  margin: 0;
+  padding-left: 1.4em;
+}
+
+.tf-notice__list li + li {
+  margin-top: 4px;
+}
+
+.tf-notice p {
+  margin: 0;
+}

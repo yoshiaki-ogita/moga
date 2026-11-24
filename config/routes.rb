@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 
   # 使い方の画面（#115）。ログインしていなくても読める
   get "guide", to: "static_pages#guide", as: :guide
+  get "two_factor_notice", to: "static_pages#two_factor_notice", as: :two_factor_notice
 
   # ユーザー登録（S2）
   resources :users, only: %i[new create]
