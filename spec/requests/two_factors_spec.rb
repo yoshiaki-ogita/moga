@@ -58,6 +58,34 @@ RSpec.describe "二段階認証の設定", type: :request do
       expect(response.body).not_to include(codes.first)
     end
 
+    # 2026-11-24 本番：「使い始める」がほぼ同時に2回届き、予備の鍵が32個になった
+    it "「使い始める」が同じ6桁で2回届いても、予備の鍵は16個で、使えるのは最後に出た16個" do
+      get new_two_factor_path
+      code = current_code
+      post two_factor_path, params: { code: code }
+      first_codes = response.body.scan(/<li>([a-z2-9]{5}-[a-z2-9]{5})<\/li>/).flatten
+
+      post two_factor_path, params: { code: code }
+      expect(response).to have_http_status(:ok)
+      second_codes = response.body.scan(/<li>([a-z2-9]{5}-[a-z2-9]{5})<\/li>/).flatten
+
+      expect(second_codes.size).to eq(16)
+      expect(user.reload.remaining_backup_codes_count).to eq(16)
+      expect(user.consume_backup_code!(first_codes.first)).to be false
+      expect(user.consume_backup_code!(second_codes.first)).to be true
+    end
+
+    it "使い始めて時間がたった後に、使い始めと同じ6桁を送っても、予備の鍵は作り直さない" do
+      get new_two_factor_path
+      code = current_code
+      post two_factor_path, params: { code: code }
+      travel 3.minutes
+
+      post two_factor_path, params: { code: code }
+      expect(response).to redirect_to(two_factor_path)
+      expect(user.reload.remaining_backup_codes_count).to eq(16)
+    end
+
     it "違う6桁では使い始めない" do
       get new_two_factor_path
       wrong = current_code == "000000" ? "111111" : "000000"

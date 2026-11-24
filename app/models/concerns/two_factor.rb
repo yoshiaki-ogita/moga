@@ -21,6 +21,8 @@ module TwoFactor
   BACKUP_CODE_CHARS = "abcdefghjkmnpqrstuvwxyz23456789".chars.freeze
   # スマホの時計が少し遅れていても、ひとつ前の数字（30秒前まで）は受け付ける
   DRIFT_BEHIND = 30
+  # 「使い始める」が続けて2回届いた時に、同じ申し込みの出し直しとみなす長さ
+  RESEND_WINDOW = 2.minutes
 
   def otp_enabled?
     otp_enabled_at.present?
@@ -47,6 +49,28 @@ module TwoFactor
     return false unless verify_otp(code)
 
     update!(otp_enabled_at: Time.current)
+  end
+
+  # 使い始めて、予備の鍵16個を作る。画面に出す16個を返す（6桁が合わなければ nil）。
+  #
+  # 2026-11-24 の不具合：「使い始める」がほぼ同時に2回届き、予備の鍵が2組（32個）できた。
+  # そこで、この人の行に鍵をかけて（with_lock）2回目を1回目の後に並ばせる。
+  # 2回目が同じ6桁の出し直しなら、予備の鍵を作り直して出し直す。
+  # ブラウザが最後に見せるのは2回目の画面なので、使える16個と画面の16個がそろう
+  def start_otp!(code)
+    with_lock do
+      next regenerate_backup_codes! if same_start_resent?(code)
+      next nil unless enable_otp!(code)
+
+      regenerate_backup_codes!
+    end
+  end
+
+  # 使い始めた直後に、使い始めに使ったのと同じ6桁がもう一度届いたか
+  def same_start_resent?(code)
+    return false unless otp_enabled? && otp_last_used_at && otp_enabled_at > RESEND_WINDOW.ago
+
+    normalize_otp(code) == totp.at(otp_last_used_at)
   end
 
   # やめる時は、パスワードと6桁（または予備の鍵）の両方が要る（他人が勝手に外せないように）
@@ -97,7 +121,7 @@ module TwoFactor
   def verify_otp(code)
     return false if otp_secret.blank?
 
-    digits = code.to_s.unicode_normalize(:nfkc).gsub(/[\s-]/, "")
+    digits = normalize_otp(code)
     return false unless digits.match?(/\A\d{6}\z/)
 
     matched_at = totp.verify(digits, drift_behind: DRIFT_BEHIND, after: otp_last_used_at&.to_i)
@@ -112,6 +136,11 @@ module TwoFactor
   end
 
   private
+
+  # 全角の数字や、間の空白・ハイフンをならす
+  def normalize_otp(code)
+    code.to_s.unicode_normalize(:nfkc).gsub(/[\s-]/, "")
+  end
 
   def totp
     ROTP::TOTP.new(otp_secret, issuer: ISSUER)

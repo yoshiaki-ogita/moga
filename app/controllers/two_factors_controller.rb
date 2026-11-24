@@ -11,7 +11,7 @@ class TwoFactorsController < ApplicationController
 
   before_action :require_login
   before_action :reject_demo
-  before_action :redirect_if_enabled, only: %i[new create]
+  before_action :redirect_if_enabled, only: :new
   rate_limit to: LIMIT, within: WITHIN, only: %i[create destroy], store: RATE_LIMIT_STORE,
              with: -> { too_many_attempts }
 
@@ -24,12 +24,10 @@ class TwoFactorsController < ApplicationController
   end
 
   def create
-    unless current_user.enable_otp!(params[:code])
-      flash.now[:alert] = "6桁の数字が合いません。アプリに今出ている数字を入れてください"
-      return render :new, status: :unprocessable_content
-    end
+    # 2回続けて届いた時の出し直しは、使っている最中でも受ける（TwoFactor#start_otp!）
+    @backup_codes = current_user.start_otp!(params[:code])
+    return start_failed unless @backup_codes
 
-    @backup_codes = current_user.regenerate_backup_codes!
     # 予備の鍵が出た画面を、ブラウザに残さない（戻るボタンや履歴で他人に見られないように）
     response.headers["Cache-Control"] = "no-store"
     render :backup_codes
@@ -56,6 +54,13 @@ class TwoFactorsController < ApplicationController
     return unless current_user.otp_enabled?
 
     redirect_to two_factor_path, notice: "二段階認証は、もう使っています"
+  end
+
+  def start_failed
+    return redirect_if_enabled if current_user.otp_enabled?
+
+    flash.now[:alert] = "6桁の数字が合いません。アプリに今出ている数字を入れてください"
+    render :new, status: :unprocessable_content
   end
 
   def too_many_attempts
