@@ -1,6 +1,6 @@
 require "rails_helper"
 
-# 二段の鍵（守り2）の土台：種を作る・6桁を確かめる・使い始める・やめる
+# 二段階認証（守り2）の土台：種を作る・6桁を確かめる・使い始める・やめる
 RSpec.describe TwoFactor, type: :model do
   let(:user) { create(:user, email: "hanako@example.com") }
 
@@ -10,13 +10,13 @@ RSpec.describe TwoFactor, type: :model do
   end
 
   describe "#prepare_otp!" do
-    it "新しい種を作るが、まだ二段の鍵は効かない" do
+    it "新しい種を作るが、まだ二段階認証は効かない" do
       expect(user.prepare_otp!).to be true
       expect(user.otp_secret).to be_present
       expect(user.otp_enabled?).to be false
     end
 
-    it "お試しの見本の利用者は、二段の鍵を使えない" do
+    it "お試しの見本の利用者は、二段階認証を使えない" do
       demo = DemoAccount.prepare!
       expect(demo.prepare_otp!).to be false
       expect(demo.reload.otp_secret).to be_nil
@@ -40,7 +40,7 @@ RSpec.describe TwoFactor, type: :model do
   describe "#enable_otp!" do
     before { user.prepare_otp! }
 
-    it "正しい6桁で、二段の鍵を使い始める" do
+    it "正しい6桁で、二段階認証を使い始める" do
       expect(user.enable_otp!(code_for(user))).to be true
       expect(user.reload.otp_enabled?).to be true
     end
@@ -121,7 +121,7 @@ RSpec.describe TwoFactor, type: :model do
     end
   end
 
-  it "二段の鍵を使わない人は、これまでどおり（何も変わらない）" do
+  it "二段階認証を使わない人は、これまでどおり（何も変わらない）" do
     expect(user.otp_enabled?).to be false
     expect(user.verify_otp("123456")).to be false
   end
@@ -163,7 +163,7 @@ RSpec.describe "予備の鍵（守り2 ②）", type: :model do
     expect(user.consume_backup_code!(other_code)).to be false
   end
 
-  it "二段の鍵をやめると、予備の鍵も消える" do
+  it "二段階認証をやめると、予備の鍵も消える" do
     user.prepare_otp!
     user.enable_otp!(ROTP::TOTP.new(user.otp_secret).now)
     user.regenerate_backup_codes!

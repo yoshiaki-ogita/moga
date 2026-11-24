@@ -89,7 +89,7 @@ fieldset.form__field input[type="radio"] {
   line-height: 1.7;
 }
 
-/* 二段の鍵（守り2） */
+/* 二段階認証（守り2） */
 .two-factor__status { font-weight: bold; }
 .two-factor__status--on { color: #2e7d32; }
 .two-factor__steps { padding-left: 1.5em; line-height: 1.8; }

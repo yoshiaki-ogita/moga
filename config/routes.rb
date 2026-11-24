@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 
   # 使い方の画面（#115）。ログインしていなくても読める
   get "guide", to: "static_pages#guide", as: :guide
+  get "two_factor_notice", to: "static_pages#two_factor_notice", as: :two_factor_notice
 
   # ユーザー登録（S2）
   resources :users, only: %i[new create]
@@ -24,7 +25,7 @@ Rails.application.routes.draw do
   delete "logout", to: "sessions#destroy", as: :logout
   # パスワードを変える（ログインしている本人だけ）
   resource :password, only: %i[edit update]
-  # 二段の鍵（守り2）：使うかどうかは本人が選ぶ。設定と、予備の鍵16個
+  # 二段階認証（守り2）：使うかどうかは本人が選ぶ。設定と、予備の鍵16個
   resource :two_factor, only: %i[show new create destroy]
   # ログインの2段目：パスワードのあと、アプリの6桁（または予備の鍵）を入れる
   resource :two_factor_login, only: %i[new create]
